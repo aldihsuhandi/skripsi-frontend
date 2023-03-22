@@ -21,6 +21,6 @@ export const Avatar = ({ src, alt, rounded }: AvatarProps) => {
         "https://pbs.twimg.com/profile_images/1619599321912967168/jiaHG8w7_400x400.jpg"
       }
       alt={alt ?? "no alt provided"}
-    ></img>
+    />
   );
 };
