@@ -43,6 +43,6 @@ run `npm install`
 
 install plugin `ESLint, Prettier dan Tailwind CSS Intellisense`
 
-Uat Prettier kalau nggak jalan ikutin: https://play.tailwindcss.com/9SD0ME1rse
+Uat Prettier kalau nggak jalan ikutin: https://stackoverflow.com/a/69994038
 
 udah harusnya, klo ada gk jalan, berarti gw lupa sesuatu dalam setup WKWKWKKWK
