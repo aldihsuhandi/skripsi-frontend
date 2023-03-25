@@ -16,7 +16,7 @@ export const SearchBar = ({ label, ...props }: SearchBarProps) => {
           className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
           {...props}
         />
-        <div className="ml-2 rounded-lg bg-normal-magenta p-2">
+        <div className="ml-2 rounded-lg bg-normal-blue p-2">
           <SearchIcon htmlColor="#FFFFFF" />
         </div>
       </div>

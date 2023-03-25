@@ -21,7 +21,7 @@ export const NavBar = () => {
             className="h-16 w-24 lg:h-24 lg:w-32"
           />
         </Link>
-        <p className="hidden w-44 px-2 py-6 font-sans italic  text-normal-magenta lg:block">
+        <p className="hidden w-44 px-2 py-6 font-sans italic text-normal-blue lg:block">
           make getting into <br />a hobby easier!
         </p>
 
