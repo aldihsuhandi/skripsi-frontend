@@ -17,7 +17,7 @@ export const HeaderNavigation: HeaderNavigationProps[] = [
     href: "/ShoppingCart",
     icon: (
       <CartIcon
-        htmlColor={COLOR_HEX_STRING[Color.Purple]}
+        htmlColor={COLOR_HEX_STRING[Color.NormalMagenta]}
         classNameIcon="h-7 w-7"
       />
     ),
@@ -26,7 +26,7 @@ export const HeaderNavigation: HeaderNavigationProps[] = [
     href: "/ShoppingHistory",
     icon: (
       <HistoryIcon
-        htmlColor={COLOR_HEX_STRING[Color.Purple]}
+        htmlColor={COLOR_HEX_STRING[Color.NormalMagenta]}
         classNameIcon="h-7 w-7"
       />
     ),
@@ -35,7 +35,7 @@ export const HeaderNavigation: HeaderNavigationProps[] = [
     href: "/Forum",
     icon: (
       <ForumIcon
-        htmlColor={COLOR_HEX_STRING[Color.Purple]}
+        htmlColor={COLOR_HEX_STRING[Color.NormalMagenta]}
         classNameIcon="h-7 w-7"
       />
     ),
@@ -44,7 +44,7 @@ export const HeaderNavigation: HeaderNavigationProps[] = [
     href: "/Chat",
     icon: (
       <ChatIcon
-        htmlColor={COLOR_HEX_STRING[Color.Purple]}
+        htmlColor={COLOR_HEX_STRING[Color.NormalMagenta]}
         classNameIcon="h-7 w-7"
       />
     ),
