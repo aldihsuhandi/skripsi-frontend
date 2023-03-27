@@ -8,7 +8,8 @@ import { Avatar } from "../Avatar";
 export const NavBar = () => {
   const [dataa, setDataa] = useState("");
   return (
-    <nav className="sticky top-0 h-fit w-full bg-gray-100">
+    // <nav className="sticky top-0 h-fit w-full bg-gray-100">
+    <nav className="sticky top-0 h-fit w-full bg-bright-white">
       <div className="flex px-0 lg:px-2">
         <Link href="/" className="self-center lg:self-auto">
           <Image
@@ -20,7 +21,7 @@ export const NavBar = () => {
             className="h-16 w-24 lg:h-24 lg:w-32"
           />
         </Link>
-        <p className="hidden w-44 px-2 py-6 font-sans italic text-purple-600 lg:block">
+        <p className="hidden w-44 px-2 py-6 font-sans italic text-normal-blue lg:block">
           make getting into <br />a hobby easier!
         </p>
 
