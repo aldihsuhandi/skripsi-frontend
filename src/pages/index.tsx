@@ -1,6 +1,8 @@
 import Head from "next/head";
-import Image from "next/image";
 import { Inter } from "next/font/google";
+import { ProductCard } from "@/Components/ProductCard";
+import { TrendingIcon } from "@/Components/Icons/TrendingIcon";
+import { Color, COLOR_HEX_STRING } from "@/Components/Color";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,24 +16,31 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        {/* This div ceritanya layout ntar, klo screen gede ada margin, klo kecil nggak */}
-        <div className="m-0 bg-slate-600 lg:mx-auto lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
-          <div className="bg-red-500" style={{ height: "10000px" }}>
-            <p className="text-black">
-              Test
-              <br />
-              Test
-              <br />
-              Test
-              <br />
-              Test
-              <br />
-              Test
-              <br />
-              Test
-              <br />
-              Test
-              <br />
+        <div className="m-0 lg:mx-auto lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl ">
+          <div className="flex px-2 pt-3">
+            <p className="text-sm font-bold lg:text-lg">
+              Section Title, ini yang placeholder (Maybe jadiin component pisah
+              nanti)
+            </p>
+            <TrendingIcon
+              htmlColor={COLOR_HEX_STRING[Color.BrightYellow]}
+              classNameIcon="h-7 w-7"
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4  py-2 px-2 lg:grid-cols-5 lg:py-4">
+            {Array(13).fill(
+              <ProductCard
+                imageSrc="https://booth.pximg.net/users/324203/icon_image/58943d20-3c9a-4cf4-84cb-74d95c88a07d.png"
+                title="Dummy"
+                interestLevel="Dummy Interest Level"
+                price={69420000}
+              />
+            )}
+          </div>
+          <div className="flex px-2 pt-3">
+            <p className="text-sm font-bold lg:text-lg">
+              Section Title, ini call API (tapi masih kosong as of writing ni
+              text)
             </p>
           </div>
         </div>
