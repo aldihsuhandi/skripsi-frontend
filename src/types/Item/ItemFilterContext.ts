@@ -1,6 +1,5 @@
 // Ini mending di pisah, di wishlist pake juga
 export interface ItemFilterContext {
-  itemId?: string;
   itemName?: string;
   minItemPrice?: number;
   maxItemPrice?: number;
@@ -9,5 +8,4 @@ export interface ItemFilterContext {
   userInterestLevel?: string;
   hobby?: string;
   itemCategory?: string;
-  isApproved?: boolean;
 }
