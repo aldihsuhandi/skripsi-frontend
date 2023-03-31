@@ -1,9 +1,20 @@
 import Head from "next/head";
-import Image from "next/image";
-import { Inter } from "next/font/google";
+import { ProductCard } from "@/Components/ProductCard";
+import { TrendingIcon } from "@/Components/Icons/TrendingIcon";
+import { Color, COLOR_HEX_STRING } from "@/Components/Color";
+// import { GetStaticProps } from "next";
+// import { ItemQueryRequest } from "@/types";
+// import axios from "axios";
 
-const inter = Inter({ subsets: ["latin"] });
+// Masih any, soalnya gw blom bikin interface/types uat hasil query item
+// interface Props {
+//   anyData: any;
+// }
 
+/// !!! Yang commented itu yang attempt gw coba pake fitur nexjts dan axios
+// panggil API, bisa diapus tpi skrng msh ada biar gw masih bisa liat VVV: !!!
+
+// export default function Home({ anyData }: Props) {
 export default function Home() {
   return (
     <>
@@ -14,28 +25,76 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        {/* This div ceritanya layout ntar, klo screen gede ada margin, klo kecil nggak */}
-        <div className="m-0 bg-slate-600 lg:mx-auto lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
-          <div className="bg-red-500" style={{ height: "10000px" }}>
-            <p className="text-black">
-              Test
-              <br />
-              Test
-              <br />
-              Test
-              <br />
-              Test
-              <br />
-              Test
-              <br />
-              Test
-              <br />
-              Test
-              <br />
+        <div className="m-0 lg:mx-auto lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl ">
+          <div className="flex px-2 pt-3">
+            <p className="text-sm font-bold lg:text-lg">
+              Section Title, ini yang placeholder (Maybe jadiin component pisah
+              nanti)
+            </p>
+            <TrendingIcon
+              htmlColor={COLOR_HEX_STRING[Color.BrightYellow]}
+              classNameIcon="h-7 w-7"
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4  py-2 px-2 lg:grid-cols-5 lg:py-4">
+            {Array(13).fill(
+              <ProductCard
+                imageSrc="https://booth.pximg.net/users/324203/icon_image/58943d20-3c9a-4cf4-84cb-74d95c88a07d.png"
+                title="Dummy"
+                interestLevel="Dummy Interest Level"
+                price={69420000}
+              />
+            )}
+          </div>
+          {/* <div className="flex px-2 pt-3">
+            <p className="text-sm font-bold lg:text-lg">
+              Section Title, ini call API (tapi masih kosong items-nyaa of
+              writing ni text) (klo gk ada/kena error ya gk heran, gw call pake
+              clientId dan clientSecret yang di add manual)
             </p>
           </div>
+          <div className="flex flex-col items-start">
+            <button onClick={() => console.log(anyData)}>
+              Click to log to console
+            </button>
+            {JSON.stringify(anyData)}
+          </div> */}
         </div>
       </main>
     </>
   );
 }
+
+// TODO: baca2 lebih lanjut, pake ini vs getServerSideProps (GSSP).
+// Ngertiin perbedaan dan mending mana.
+// Ato bisa pake useEffect biasa... kalo ternyata fitur GSP dan GSSP gk cocok
+// export const getStaticProps: GetStaticProps<Props> = async () => {
+//   const PostBody: ItemQueryRequest = {
+//     head: {
+//       clientId: "dbf0201e-23a0-446b-8db3-40b1b6ed7c1f",
+//       clientSecret: "dycvervbrngjwhryugwduo",
+//     },
+//     body: {
+//       itemFilterContext: {},
+//     },
+//   };
+
+//   const res2 = await axios.post(
+//     "http://localhost:8080/item/query",
+//     JSON.stringify(PostBody),
+//     {
+//       headers: {
+//         "Content-Type": "application/json",
+//         "Accept-Type": "application/json",
+//       },
+//     }
+//   );
+
+//   const anyData2 = await res2.data;
+
+//   return {
+//     props: {
+//       anyData: anyData2,
+//     },
+//   };
+// };

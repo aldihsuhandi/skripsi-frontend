@@ -8,7 +8,6 @@ import { Avatar } from "../Avatar";
 export const NavBar = () => {
   const [dataa, setDataa] = useState("");
   return (
-    // <nav className="sticky top-0 h-fit w-full bg-gray-100">
     <nav className="sticky top-0 h-fit w-full bg-bright-white">
       <div className="flex px-0 lg:px-2">
         <Link href="/" className="self-center lg:self-auto">
@@ -27,16 +26,7 @@ export const NavBar = () => {
 
         {/* SearchBar Component here */}
         <div className="hidden grow self-center px-6 lg:block">
-          <form
-            onSubmit={(e: React.SyntheticEvent) => {
-              // INI TEST
-              e.preventDefault();
-              const target = e.target as typeof e.target & {
-                search_navbar: { value: string };
-              };
-              console.log(target.search_navbar.value);
-            }}
-          >
+          <form>
             <SearchBar
               id="search_navbar"
               value={dataa}
@@ -70,16 +60,7 @@ export const NavBar = () => {
       {/* NI DIBAWAH KLO KEKECILAN, pindahin search ke-bawah */}
       <div className="block px-1 lg:hidden">
         {/* <p className="text-white">Ceritanya searchbar klo kecil</p> */}
-        <form
-          onSubmit={(e: React.SyntheticEvent) => {
-            // INI TEST
-            e.preventDefault();
-            const target = e.target as typeof e.target & {
-              search_navbar: { value: string };
-            };
-            console.log(target.search_navbar.value);
-          }}
-        >
+        <form>
           <SearchBar
             id="search_navbar"
             value={dataa}
