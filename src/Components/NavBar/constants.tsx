@@ -1,11 +1,8 @@
 import React from "react";
 import { UrlObject } from "url";
 
-import { CartIcon } from "../Icons/CartIcon";
-import { HistoryIcon } from "../Icons/HistoryIcon";
-import { ForumIcon } from "../Icons/ForumIcon";
-import { ChatIcon } from "../Icons/ChatIcon";
 import { Color, COLOR_HEX_STRING } from "../Color";
+import { CartIcon, HistoryIcon, ForumIcon, ChatIcon } from "../Icons";
 
 export interface HeaderNavigationProps {
   href: string | UrlObject;
