@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 
 import { ItemAutoCompleteRequest, ItemAutoCompleteResult } from "@/types";
 import axios from "axios";
@@ -7,6 +7,7 @@ import Link from "next/link";
 import { SearchBar, SearchBarProps } from "../SearchBar";
 
 import { HighlightSuggestion } from "./HighlightSuggestion";
+import { useRouter } from "next/router";
 
 export type AutoCompleteProps = {
   autoCompleteOnChange?: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -16,6 +17,8 @@ export const AutoComplete = ({
   autoCompleteOnChange,
   ...props
 }: AutoCompleteProps) => {
+  // Uat redirect pas enter
+  const router = useRouter();
   // HANDLE CLICK DILUAR COMPONENT
   // ref uat deteksi klik diluar component
   const ref = useRef<HTMLDivElement>(null);
@@ -85,19 +88,27 @@ export const AutoComplete = ({
     }
   };
 
+  const handleEnter = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log("jalan gk sih");
+    router.push(`/search/${inputValue}`);
+  };
+
   return (
     <div className="relative w-full" ref={ref}>
-      <SearchBar
-        onChange={handleChange}
-        value={inputValue}
-        autoComplete="off"
-        onFocus={() => {
-          if (!isSearchBarFocused) {
-            setIsSearchBarFocused(true);
-          }
-        }}
-        {...props}
-      />
+      <form onSubmit={handleEnter}>
+        <SearchBar
+          onChange={handleChange}
+          value={inputValue}
+          autoComplete="off"
+          onFocus={() => {
+            if (!isSearchBarFocused) {
+              setIsSearchBarFocused(true);
+            }
+          }}
+          {...props}
+        />
+      </form>
       <div
         className={classNames(
           "absolute flex w-full flex-col rounded-lg border border-gray-300 bg-gray-50 text-gray-900 focus:border-blue-500 focus:ring-blue-500",

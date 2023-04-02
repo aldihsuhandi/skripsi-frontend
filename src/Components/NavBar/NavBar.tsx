@@ -27,17 +27,15 @@ export const NavBar = () => {
 
         {/* SearchBar Component here */}
         <div className="hidden grow self-center px-6 lg:block">
-          <form>
-            <AutoComplete
-              id="search_navbar"
-              name="search_navbar"
-              // Contoh pake autoCompleteOnChange
-              // autoCompleteOnChange={(e) => {
-              //   setDataa(e.target.value);
-              //   console.log(e.target.value, "A");
-              // }}
-            />
-          </form>
+          <AutoComplete
+            id="search_navbar"
+            name="search_navbar"
+            // Contoh pake autoCompleteOnChange
+            // autoCompleteOnChange={(e) => {
+            //   setDataa(e.target.value);
+            //   console.log(e.target.value, "A");
+            // }}
+          />
         </div>
 
         <div className="ml-auto self-center">
@@ -62,17 +60,15 @@ export const NavBar = () => {
       {/* NI DIBAWAH KLO KEKECILAN, pindahin search ke-bawah */}
       <div className="block px-1 lg:hidden">
         {/* <p className="text-white">Ceritanya searchbar klo kecil</p> */}
-        <form>
-          <AutoComplete
-            id="search_navbar"
-            name="search_navbar"
-            // Contoh pake autoCompleteOnChange
-            // autoCompleteOnChange={(e) => {
-            //   setDataa(e.target.value);
-            //   console.log(e.target.value, "A");
-            // }}
-          />
-        </form>
+        <AutoComplete
+          id="search_navbar"
+          name="search_navbar"
+          // Contoh pake autoCompleteOnChange
+          // autoCompleteOnChange={(e) => {
+          //   setDataa(e.target.value);
+          //   console.log(e.target.value, "A");
+          // }}
+        />
       </div>
     </nav>
   );
