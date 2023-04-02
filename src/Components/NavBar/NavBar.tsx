@@ -4,6 +4,7 @@ import Link from "next/link";
 import { SearchBar } from "../SearchBar";
 import { HeaderNavigation } from "./constants";
 import { Avatar } from "../Avatar";
+import { AutoComplete } from "../AutoComplete";
 
 export const NavBar = () => {
   const [dataa, setDataa] = useState("");
@@ -27,13 +28,14 @@ export const NavBar = () => {
         {/* SearchBar Component here */}
         <div className="hidden grow self-center px-6 lg:block">
           <form>
-            <SearchBar
+            <AutoComplete
               id="search_navbar"
-              value={dataa}
               name="search_navbar"
-              onChange={(e) => {
-                setDataa(e.target.value);
-              }}
+              // Contoh pake autoCompleteOnChange
+              // autoCompleteOnChange={(e) => {
+              //   setDataa(e.target.value);
+              //   console.log(e.target.value, "A");
+              // }}
             />
           </form>
         </div>
@@ -61,13 +63,14 @@ export const NavBar = () => {
       <div className="block px-1 lg:hidden">
         {/* <p className="text-white">Ceritanya searchbar klo kecil</p> */}
         <form>
-          <SearchBar
+          <AutoComplete
             id="search_navbar"
-            value={dataa}
             name="search_navbar"
-            onChange={(e) => {
-              setDataa(e.target.value);
-            }}
+            // Contoh pake autoCompleteOnChange
+            // autoCompleteOnChange={(e) => {
+            //   setDataa(e.target.value);
+            //   console.log(e.target.value, "A");
+            // }}
           />
         </form>
       </div>
