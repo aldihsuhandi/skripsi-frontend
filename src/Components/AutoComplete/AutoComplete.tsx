@@ -109,7 +109,6 @@ export const AutoComplete = ({
           autoCompleteSuggestion.itemName.length !== 0 ? (
             autoCompleteSuggestion.itemName.map((link) => (
               <Link key={link} href={`/search/${link}`} className="p-2">
-                {/* {link} */}
                 <HighlightSuggestion
                   wholeString={link}
                   subString={inputValue}
