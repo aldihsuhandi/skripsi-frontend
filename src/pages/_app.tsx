@@ -2,13 +2,20 @@ import { Footer } from "@/Components/Footer";
 import { NavBar } from "@/Components/NavBar/NavBar";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
+import { useRouter } from "next/router";
 
 export default function App({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+  const { pathname } = router;
+  const noNav = ["/login", "/register"];
+
   return (
     <>
-      <NavBar />
+      {/*Biar kgk ada navbar di login page */}
+      {noNav.includes(pathname) ? null : <NavBar />}{" "}
       <Component {...pageProps} />
-      <Footer />
+      {/*Biar kgk ada footer di login page */}
+      {noNav.includes(pathname) ? null : <Footer />}{" "}
     </>
   );
 }
