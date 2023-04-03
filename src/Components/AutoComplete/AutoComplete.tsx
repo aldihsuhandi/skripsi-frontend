@@ -90,8 +90,11 @@ export const AutoComplete = ({
 
   const handleEnter = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("jalan gk sih");
-    router.push(`/search/${inputValue}`);
+    // router.push(`/search/${inputValue}`);
+    router.push({
+      pathname: `/search`,
+      query: inputValue,
+    });
   };
 
   return (
@@ -119,7 +122,15 @@ export const AutoComplete = ({
         {autoCompleteSuggestion ? (
           autoCompleteSuggestion.itemName.length !== 0 ? (
             autoCompleteSuggestion.itemName.map((link) => (
-              <Link key={link} href={`/search/${link}`} className="p-2">
+              <Link
+                key={link}
+                // href={`/search/${link}`}
+                href={{
+                  pathname: `/search`,
+                  query: link,
+                }}
+                className="p-2"
+              >
                 <HighlightSuggestion
                   wholeString={link}
                   subString={inputValue}
