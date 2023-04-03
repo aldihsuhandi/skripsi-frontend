@@ -93,7 +93,7 @@ export const AutoComplete = ({
     // router.push(`/search/${inputValue}`);
     router.push({
       pathname: `/search`,
-      query: inputValue,
+      query: { q: inputValue },
     });
   };
 
@@ -127,7 +127,7 @@ export const AutoComplete = ({
                 // href={`/search/${link}`}
                 href={{
                   pathname: `/search`,
-                  query: link,
+                  query: { q: link },
                 }}
                 className="p-2"
               >
