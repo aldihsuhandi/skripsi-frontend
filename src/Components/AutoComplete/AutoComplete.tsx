@@ -52,7 +52,6 @@ export const AutoComplete = ({
   }
 
   const handleChange = async (event: ChangeEvent<HTMLInputElement>) => {
-    // TODO: SANITIZE DULU mungkin
     const unsanitized = event.target.value;
     const value = sanitize(unsanitized);
     setInputValue(value);
