@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { sanitize } from "dompurify";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 
 import { ItemAutoCompleteRequest, ItemAutoCompleteResult } from "@/types";
@@ -52,7 +53,8 @@ export const AutoComplete = ({
 
   const handleChange = async (event: ChangeEvent<HTMLInputElement>) => {
     // TODO: SANITIZE DULU mungkin
-    const value = event.target.value;
+    const unsanitized = event.target.value;
+    const value = sanitize(unsanitized);
     setInputValue(value);
     setAutoCompleteSuggestion(undefined);
     if (value.length >= 3) {
@@ -77,7 +79,6 @@ export const AutoComplete = ({
         }
       );
 
-      // TODO: Gw lupa itu limit 15 doang di FE ato BE... ask aldih later
       setAutoCompleteSuggestion(await autoCompleteResult.data);
     } else {
       setShowAutoComplete(false);
@@ -90,11 +91,12 @@ export const AutoComplete = ({
 
   const handleEnter = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // router.push(`/search/${inputValue}`);
-    router.push({
-      pathname: `/search`,
-      query: { q: inputValue },
-    });
+    router
+      .push({
+        pathname: `/search`,
+        query: { q: inputValue },
+      })
+      .then(() => setShowAutoComplete(false));
   };
 
   return (
@@ -124,10 +126,13 @@ export const AutoComplete = ({
             autoCompleteSuggestion.itemName.map((link) => (
               <Link
                 key={link}
-                // href={`/search/${link}`}
                 href={{
                   pathname: `/search`,
                   query: { q: link },
+                }}
+                onClick={() => {
+                  setShowAutoComplete(false);
+                  setInputValue(link);
                 }}
                 className="p-2"
               >
