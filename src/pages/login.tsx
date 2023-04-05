@@ -12,6 +12,7 @@ export default function Login() {
     <>
       <Head>
         <title>Login</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main>
         <div className="flex h-screen bg-bright-white">
@@ -30,7 +31,6 @@ export default function Login() {
             <div className="right flex flex-col justify-evenly">
               <div className="py-10 text-center">
                 <section className="mx-auto flex w-3/4 flex-col gap-10">
-                  {/*---> Title Login Form <---*/}
                   <div className="title">
                     <h1 className="py-4 text-2xl font-bold text-gray-800">
                       Welcome to ShumiShumi!
@@ -39,8 +39,7 @@ export default function Login() {
                       Please login to your account here.
                     </p>
                   </div>
-                  {/*---> LOGIN FORM <---*/}
-                  {/*---> Email Input <---*/}
+
                   <form className="flex flex-col gap-5">
                     <div className={styles.input_group}>
                       <input
@@ -53,7 +52,7 @@ export default function Login() {
                         <HiUser size={25} />
                       </span>
                     </div>
-                    {/*---> Password Input <---*/}
+
                     <div className={styles.input_group}>
                       <input
                         type={`${show ? "text" : "password"}`}
@@ -68,14 +67,14 @@ export default function Login() {
                         <HiFingerPrint size={25} />
                       </span>
                     </div>
-                    {/*---> Login Button <---*/}
+
                     <div className="input-button">
                       <button type="submit" className={styles.button}>
                         Login
                       </button>
                     </div>
                   </form>
-                  {/*---> Bagian bawah <---*/}
+
                   <p className="text-center text-red-600">Forgot Password</p>
                   <p className="text-center text-gray-400">
                     Don't have an account yet?
