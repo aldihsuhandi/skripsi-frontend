@@ -15,8 +15,8 @@ export default function Login() {
       </Head>
       <main>
         <div className="flex h-screen bg-bright-white">
-          <div className="m-auto grid h-3/4 w-3/5 overflow-hidden rounded-lg bg-bright-white shadow-2xl lg:grid-cols-2">
-            <div className="flex items-center rounded-l-lg bg-gradient-to-br from-blue-800 to-purple-800">
+          <div className="m-auto grid h-3/4 w-3/5 rounded-lg bg-bright-white shadow-2xl sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2">
+            <div className="flex auto-cols-auto items-center rounded-l-lg bg-gradient-to-br from-blue-800 to-purple-800">
               <div className="px-4 py-6 text-white md:mx-6 md:p-12">
                 <h1 className="mb-6 text-2xl font-semibold">
                   Make getting into a hobby easier!

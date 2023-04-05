@@ -1,11 +1,20 @@
 import Head from "next/head";
 import Link from "next/link";
 import styles from "../styles/Form.module.css";
-import { HiUser, HiFingerPrint, HiAtSymbol, HiPhone } from "react-icons/hi"; //import react icons
-import { useState } from "react";
+import {
+  HiUser,
+  HiFingerPrint,
+  HiAtSymbol,
+  HiPhone,
+  HiFolderAdd,
+} from "react-icons/hi"; //import react icons
+import { useRef, useState } from "react";
+import React from "react";
 
 export default function register() {
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(false); //Untuk icon-icon yg di bagian register form
+  const [picture, setPicture] = useState("");
+  const img = React.useRef() as React.MutableRefObject<HTMLInputElement>; //Help me
 
   return (
     <>
@@ -15,45 +24,38 @@ export default function register() {
       <main>
         <div className="flex h-screen bg-bright-white">
           <div className="m-auto grid h-3/4 w-3/5 overflow-hidden rounded-lg bg-bright-white shadow-2xl lg:grid-cols-2">
-            <div className="flex items-center rounded-l-lg bg-gradient-to-br from-blue-800 to-purple-800">
+            <div className="flex auto-cols-auto flex-col items-center justify-evenly rounded-l-lg bg-gradient-to-br from-blue-800 to-purple-800">
               {/*---> Upload Image Form <---*/}
-              {/*V V  Coba-coba 1  V V*/}
-              {/* <form className="flex items-center space-x-4">
-                <div className="shrink-0">
+              <div className="relative flex max-w-lg flex-col text-center">
+                <h1 className="py-4 text-xl font-bold text-normal-white">
+                  Upload Your Profile Image
+                </h1>
+                <div className="relative flex h-64 w-64 flex-col">
                   <img
-                    className="h-32 w-32 rounded-full object-cover"
-                    src="https://i.imgur.com/HhrNVzz.jpeg"
-                    alt="Current Profile Photo"
-                  />
-                </div>
-                <label className="block">
-                  <span className="sr-only">Choose Image</span>
-                  <input
-                    type="file"
-                    name="image"
-                    accept="image/png, image/jpg, image/jpeg"
-                    className="block w-full text-sm text-slate-500"
-                  />
-                </label>
-              </form> */}
-              {/*V V  Coba-coba 2  V V*/}
-              {/* <div className="left flex flex-col justify-center">
-                <div className="items-center">
-                  <div className="mb-3 w-96">
-                    <label
-                      htmlFor="formFile"
-                      className="mb-2 inline-block text-neutral-700 dark:text-neutral-200"
+                    className="h-full w-full rounded-full shadow-md"
+                    src={picture ? picture : "https://i.imgur.com/HYCmY98.jpeg"}
+                  ></img>
+                  <div className="absolute bottom-1 right-3 z-10 flex items-center justify-center rounded-full bg-white p-1">
+                    <div
+                      className="cursor-pointer rounded-full bg-blue-500 p-[2px]"
+                      onClick={() => img.current.click()}
                     >
-                      Upload your profile image
-                    </label>
-                    <input
-                      className="focus:border-primary focus:shadow-primary relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-clip-padding py-[0.32rem] px-3 text-base font-normal text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.32rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[margin-inline-end:0.75rem] file:[border-inline-end-width:1px] hover:file:bg-neutral-200 focus:text-neutral-700 focus:shadow-[0_0_0_1px] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:file:bg-neutral-700 dark:file:text-neutral-100"
-                      type="file"
-                      id="formFile"
-                    />
+                      <HiFolderAdd size={30} color="white" />
+                      <input
+                        ref={img}
+                        type="file"
+                        id="image_upload"
+                        hidden
+                        accept="image/png, image/jpg, image/jpeg"
+                        onChange={(e) => {
+                          let pic = URL.createObjectURL(e.target.files![0]);
+                          setPicture(pic);
+                        }}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div> */}
+              </div>
             </div>
             <div className="right flex flex-col justify-evenly">
               <div className="py-10 text-center">
