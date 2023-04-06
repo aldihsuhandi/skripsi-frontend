@@ -3,5 +3,5 @@
 export interface ItemQueryHead {
   clientId: string;
   clientSecret: string;
-  sessionId: string;
+  sessionId?: string;
 }
