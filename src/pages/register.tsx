@@ -23,7 +23,7 @@ export default function register() {
       </Head>
       <main>
         <div className="flex h-screen bg-bright-white">
-          <div className="m-auto grid h-3/4 w-3/5 overflow-hidden rounded-lg bg-bright-white shadow-2xl lg:grid-cols-2">
+          <form className="m-auto grid h-3/4 w-3/5 overflow-hidden rounded-lg bg-bright-white shadow-2xl lg:grid-cols-2">
             <div className="flex auto-cols-auto flex-col items-center justify-evenly rounded-l-lg bg-gradient-to-br from-blue-800 to-purple-800">
               {/*---> Upload Image Form <---*/}
               <div className="relative flex max-w-lg flex-col text-center">
@@ -33,7 +33,11 @@ export default function register() {
                 <div className="relative flex h-64 w-64 flex-col">
                   <img
                     className="h-full w-full rounded-full shadow-md"
-                    src={picture ? picture : "https://i.imgur.com/HYCmY98.jpeg"}
+                    src={
+                      picture
+                        ? picture
+                        : "https://pbs.twimg.com/media/FRPL-HkXMAU0EQ_.png"
+                    }
                   ></img>
                   <div className="absolute bottom-1 right-3 z-10 flex items-center justify-center rounded-full bg-white p-1">
                     <div
@@ -71,7 +75,7 @@ export default function register() {
                   </div>
                   {/*---> REGISTER FORM <---*/}
                   {/*---> Email Input <---*/}
-                  <form className="flex flex-col gap-5">
+                  <div className="flex flex-col gap-5">
                     {/*---> Email Input <---*/}
                     <div className={styles.input_group}>
                       <input
@@ -129,7 +133,7 @@ export default function register() {
                         Register
                       </button>
                     </div>
-                  </form>
+                  </div>
                   {/*---> Bagian bawah <---*/}
                   <p className="text-center text-gray-400">
                     Already have an account?
@@ -140,7 +144,7 @@ export default function register() {
                 </section>
               </div>
             </div>
-          </div>
+          </form>
         </div>
       </main>
     </>
