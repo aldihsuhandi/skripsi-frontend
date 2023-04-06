@@ -22,8 +22,8 @@ export default function register() {
         <title>Register</title>
       </Head>
       <main>
-        <div className="flex h-screen bg-bright-white">
-          <form className="m-auto grid h-3/4 w-3/5 overflow-hidden rounded-lg bg-bright-white shadow-2xl lg:grid-cols-2">
+        <div className="flex h-screen bg-gray-200">
+          <form className="m-auto grid h-3/4 w-3/5 rounded-lg bg-bright-white shadow-2xl lg:grid-cols-2">
             <div className="flex auto-cols-auto flex-col items-center justify-evenly rounded-l-lg bg-gradient-to-br from-blue-800 to-purple-800">
               {/*---> Upload Image Form <---*/}
               <div className="relative flex max-w-lg flex-col text-center">
@@ -61,9 +61,9 @@ export default function register() {
                 </div>
               </div>
             </div>
-            <div className="right flex flex-col justify-evenly">
+            <div className="right flex auto-cols-auto flex-col justify-evenly">
               <div className="py-10 text-center">
-                <section className="mx-auto flex w-3/4 flex-col gap-10">
+                <section className="mx-auto flex w-3/4 flex-col gap-6">
                   {/*---> Title Register Form <---*/}
                   <div className="title">
                     <h1 className="py-4 text-2xl font-bold text-gray-800">
@@ -75,7 +75,7 @@ export default function register() {
                   </div>
                   {/*---> REGISTER FORM <---*/}
                   {/*---> Email Input <---*/}
-                  <div className="flex flex-col gap-5">
+                  <div className="flex flex-col gap-3">
                     {/*---> Email Input <---*/}
                     <div className={styles.input_group}>
                       <input
@@ -118,6 +118,21 @@ export default function register() {
                         type={`${show ? "text" : "password"}`}
                         name="password"
                         placeholder="Password"
+                        className={styles.input_text}
+                      />
+                      <span
+                        className="icon flex items-center px-4"
+                        onClick={() => setShow(!show)}
+                      >
+                        <HiFingerPrint size={25} />
+                      </span>
+                    </div>
+                    {/*---> Confirm Password Input <---*/}
+                    <div className={styles.input_group}>
+                      <input
+                        type={`${show ? "text" : "password"}`}
+                        name="confirm_password"
+                        placeholder="Confirm Password"
                         className={styles.input_text}
                       />
                       <span

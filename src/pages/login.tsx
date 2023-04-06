@@ -15,10 +15,10 @@ export default function Login() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main>
-        <div className="flex h-screen bg-bright-white">
-          <div className="m-auto grid h-3/4 w-3/5 rounded-lg bg-bright-white shadow-2xl sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2">
+        <div className="flex h-screen bg-gray-200">
+          <div className="m-auto grid h-3/4 w-3/5 grid-cols-2 overflow-hidden rounded-lg bg-bright-white shadow-2xl sm:max-lg:flex">
             <div className="flex auto-cols-auto items-center rounded-l-lg bg-gradient-to-br from-blue-800 to-purple-800">
-              <div className="px-4 py-6 text-white md:mx-6 md:p-12">
+              <div className="mx-6 p-10 px-4 py-12 text-white">
                 <h1 className="mb-6 text-2xl font-semibold">
                   Make getting into a hobby easier!
                 </h1>
@@ -28,9 +28,9 @@ export default function Login() {
                 </p>
               </div>
             </div>
-            <div className="right flex flex-col justify-evenly">
-              <div className="py-10 text-center">
-                <section className="mx-auto flex w-3/4 flex-col gap-10">
+            <div className="right flex auto-cols-auto flex-col justify-evenly rounded-r-lg">
+              <div className="py-6 text-center">
+                <section className="mx-auto flex w-3/4 flex-col gap-6">
                   <div className="title">
                     <h1 className="py-4 text-2xl font-bold text-gray-800">
                       Welcome to ShumiShumi!
