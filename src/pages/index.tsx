@@ -3,6 +3,7 @@ import { ProductCard } from "@/Components/ProductCard";
 import { TrendingIcon } from "@/Components/Icons/TrendingIcon";
 import { Color, COLOR_HEX_STRING } from "@/Components/Color";
 // import { GetStaticProps } from "next";
+// import { GetServerSideProps } from "next";
 // import { ItemQueryRequest } from "@/types";
 // import axios from "axios";
 
@@ -68,6 +69,41 @@ export default function Home() {
 // TODO: baca2 lebih lanjut, pake ini vs getServerSideProps (GSSP).
 // Ngertiin perbedaan dan mending mana.
 // Ato bisa pake useEffect biasa... kalo ternyata fitur GSP dan GSSP gk cocok
+
+// export const getServerSideProps: GetServerSideProps<Props> = async (
+//   context
+// ) => {
+//   // console.log(context);
+//   const PostBody: ItemQueryRequest = {
+//     head: {
+//       clientId: "dbf0201e-23a0-446b-8db3-40b1b6ed7c1f",
+//       clientSecret: "dycvervbrngjwhryugwduo",
+//     },
+//     body: {
+//       itemFilterContext: {},
+//     },
+//   };
+
+//   const res2 = await axios.post(
+//     "http://localhost:8080/item/query",
+//     JSON.stringify(PostBody),
+//     {
+//       headers: {
+//         "Content-Type": "application/json",
+//         "Accept-Type": "application/json",
+//       },
+//     }
+//   );
+
+//   const anyData2 = await res2.data;
+
+//   return {
+//     props: {
+//       anyData: anyData2,
+//     },
+//   };
+// };
+
 // export const getStaticProps: GetStaticProps<Props> = async () => {
 //   const PostBody: ItemQueryRequest = {
 //     head: {
