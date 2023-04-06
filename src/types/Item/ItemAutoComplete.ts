@@ -1,5 +1,5 @@
 import { ItemQueryHead } from "./ItemQueryHead";
-import { ResultContext } from "./ResultContext";
+import { ResultContext } from "../ResultContext";
 
 // Request
 
