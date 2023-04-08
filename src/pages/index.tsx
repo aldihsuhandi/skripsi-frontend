@@ -5,7 +5,9 @@ import { Color, COLOR_HEX_STRING } from "@/Components/Color";
 // import { GetStaticProps } from "next";
 // import { GetServerSideProps } from "next";
 // import { ItemQueryRequest } from "@/types";
-// import axios from "axios";
+import axios from "axios";
+import { CLIENT_ID, CLIENT_SECRET } from "@/types";
+import { useEffect, useState } from "react";
 
 // Masih any, soalnya gw blom bikin interface/types uat hasil query item
 // interface Props {
@@ -15,8 +17,103 @@ import { Color, COLOR_HEX_STRING } from "@/Components/Color";
 /// !!! Yang commented itu yang attempt gw coba pake fitur nexjts dan axios
 // panggil API, bisa diapus tpi skrng msh ada biar gw masih bisa liat VVV: !!!
 
+const Please = async () => {
+  const POST_BODY = {
+    imageId: "e2f244c4-cf98-4908-b6bf-03aeb762b99d",
+  };
+
+  const { data } = await axios.post(
+    "http://localhost:8080/image/download",
+    POST_BODY,
+    {
+      headers: {
+        clientId: CLIENT_ID,
+        clientSecret: CLIENT_SECRET,
+        // "Accept-Type": "image/png",
+        "Accept-Type": "image/jpeg",
+        // "Accept-Type": "multipart/form-data",
+        // "Content-Type": "image/png",
+      },
+      responseType: "arraybuffer",
+    }
+  );
+
+  return data;
+};
+
 // export default function Home({ anyData }: Props) {
 export default function Home() {
+  const [imeg, setImeg] = useState<any>();
+
+  useEffect(() => {
+    async function yeah() {
+      const data = await Please();
+      // console.log(data);
+
+      //   .then(response => {
+      //     const byteArray = new Uint8Array(response.data);
+      //     const blob = new Blob([byteArray], { type: 'image/jpeg' });
+      //     const imgUrl = URL.createObjectURL(blob);
+      //     const img = new Image();
+      //     img.src = imgUrl;
+      //     document.body.appendChild(img);
+      // })
+      // .catch(error => {
+      //     console.error(error);
+      // });
+
+      // Jalan, dpt. Tapi hasilnya kek blob.text()
+      const byteArray = new Uint8Array(data);
+      const blobs = new Blob([byteArray], { type: "image/jpeg" });
+      const imgUrl = URL.createObjectURL(blobs);
+      // console.log(imgUrl, "img url ea");
+
+      setImeg(imgUrl);
+
+      // not working
+      // const blobb = new Blob([data], { type: "image/png" });
+
+      // setImeg(blobb);
+
+      // nope
+      // const tampung = btoa(data);
+      // setImeg(data);
+
+      // const imageUrl = URL.createObjectURL(data);
+      // setImeg(imageUrl);
+      // return () => {
+      //   URL.revokeObjectURL(imageUrl);
+      // };
+
+      // // byte list
+      // console.log(data, "dataaa");
+      // console.log(typeof data, "dataaa TYPE OF");
+
+      // const data_array_of_bytes = Uint8Array.from(Buffer.from(data, "hex"));
+      // const uint8Array = new Uint8Array(data_array_of_bytes);
+      // console.log(uint8Array, "please");
+      // const blob2 = new Blob([uint8Array], { type: "image/png" });
+
+      // const url = URL.createObjectURL(blob2);
+      // console.log("adqweqw");
+      // console.log(blob2, "blob");
+      // console.log(url, "please");
+      // setImeg(url);
+    }
+    yeah();
+  }, []);
+
+  // const aaa = Please();
+  // console.log(aaa);
+  console.log("Type of imeg:");
+  console.log(typeof imeg);
+  console.log(imeg);
+
+  // const pls = new Blob([imeg], {type: 'image/jpeh'});
+  // console.log(pls, " please ")
+
+  console.log("LOH");
+
   return (
     <>
       <Head>
@@ -45,6 +142,13 @@ export default function Home() {
                 interestLevel="Dummy Interest Level"
                 price={69420000}
               />
+            )}
+            {imeg ? (
+              <img src={imeg} alt="harusnya disini" />
+            ) : (
+              // <div>Mmm</div>
+              // <img src={URL.createObjectURL(imeg)} alt="harusnya disini" />
+              <div>sabar</div>
             )}
           </div>
           {/* <div className="flex px-2 pt-3">
