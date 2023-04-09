@@ -8,12 +8,14 @@ import { AutoComplete } from "../AutoComplete";
 
 export const NavBar = () => {
   const [dataa, setDataa] = useState("");
+  // const [isLoggedIn, setIsLoggedIn] = useState(false); //buat liat apakh usernya dah login ato belom
+
   return (
-    <nav className="sticky top-0 h-fit w-full bg-bright-white">
-      <div className="flex px-0 lg:px-2">
+    <nav className="sticky top-0 h-fit w-full bg-white shadow-lg">
+      <div className="flex px-0 py-1 lg:px-2 lg:py-2">
         <Link href="/" className="self-center lg:self-auto">
           <Image
-            src="/ShumiShumiLogo-Smaller.png"
+            src="/Logo-without-text-color-fixed-small.png"
             alt="ShumiShumi Logo"
             width="0"
             height="0"
@@ -21,8 +23,8 @@ export const NavBar = () => {
             className="h-16 w-24 lg:h-24 lg:w-32"
           />
         </Link>
-        <p className="hidden w-44 px-2 py-6 font-sans italic text-normal-blue lg:block">
-          make getting into <br />a hobby easier!
+        <p className="hidden w-44 px-2 py-6 font-sans font-semibold italic text-normal-blue lg:block">
+          Make getting into <br />a hobby easier!
         </p>
 
         {/* SearchBar Component here */}
@@ -41,6 +43,7 @@ export const NavBar = () => {
         <div className="ml-auto self-center">
           {/* Navigation Buttons */}
           <div className="flex ">
+            {/*--- Bwt munculin Navigation Buttons nya ---*/}
             {HeaderNavigation.map((item, index) => (
               <Link href={item.href} key={index} className="h-fit w-fit px-2">
                 {item.icon}
