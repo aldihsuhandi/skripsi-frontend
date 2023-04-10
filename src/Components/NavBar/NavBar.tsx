@@ -90,11 +90,28 @@ export const NavBar = () => {
         </div>
         <div className="mx-4 flex self-center">
           {/* User Avatar */}
-          <Avatar
-            src="https://yt3.googleusercontent.com/kwT5VgMOSuYmGQif7clzISmM0xUYXdEQEDyZqBVL4_SQ1fTPtCpUj1xJlXtmuq7x9eY48EGrusI=s900-c-k-c0x00ffffff-no-rj"
-            alt="harusnya millie"
-            rounded
-          />
+          {/*===> CONDITIONAL STATEMENT KALO USER DAH LOGIN/BELOM (By default statement nya gw set ke true) <=== */}
+          {isLoggedIn ? ( //Klo udh login render ini
+            <Avatar
+              src="https://yt3.googleusercontent.com/kwT5VgMOSuYmGQif7clzISmM0xUYXdEQEDyZqBVL4_SQ1fTPtCpUj1xJlXtmuq7x9eY48EGrusI=s900-c-k-c0x00ffffff-no-rj"
+              alt="harusnya millie"
+              rounded
+            />
+          ) : (
+            //Klo blm login render ini
+            <>
+              <div className="mx-1 rounded-md border border-normal-blue bg-normal-blue">
+                <button className="h-8 w-16 px-1 text-bright-white hover:border-bright-blue hover:bg-bright-blue">
+                  Login
+                </button>
+              </div>
+              <div className="mx-1 rounded-md border border-normal-blue bg-white hover:border-bright-blue hover:bg-bright-blue">
+                <button className="h-8 w-16 px-1 text-normal-blue hover:text-white">
+                  Register
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
       {/* NI DIBAWAH KLO KEKECILAN, pindahin search ke-bawah */}
