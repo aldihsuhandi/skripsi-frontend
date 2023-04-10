@@ -5,10 +5,14 @@ import { SearchBar } from "../SearchBar";
 import { HeaderNavigation } from "./constants";
 import { Avatar } from "../Avatar";
 import { AutoComplete } from "../AutoComplete";
+import { NonLoginHeaderNav } from "./nonlogin_constants";
 
 export const NavBar = () => {
   const [dataa, setDataa] = useState("");
-  // const [isLoggedIn, setIsLoggedIn] = useState(false); //buat liat apakh usernya dah login ato belom
+
+  //---> nge set apakh usernya dah login ato belom <---
+  const [isLoggedIn, setIsLoggedIn] = useState(true); //default state true
+  //-----------------------><-------------------------
 
   return (
     <nav className="sticky top-0 h-fit w-full bg-white shadow-lg">
@@ -44,11 +48,44 @@ export const NavBar = () => {
           {/* Navigation Buttons */}
           <div className="flex ">
             {/*--- Bwt munculin Navigation Buttons nya ---*/}
-            {HeaderNavigation.map((item, index) => (
+            {/* {HeaderNavigation.map((item, index) => (
               <Link href={item.href} key={index} className="h-fit w-fit px-2">
                 {item.icon}
               </Link>
-            ))}
+            ))} */}
+
+            {/*===> CONDITIONAL STATEMENT KALO USER DAH LOGIN/BELOM (By default statement nya gw set ke true) <=== */}
+            {/*--- Rubah2 aja lagi nanti ---*/}
+            {isLoggedIn
+              ? HeaderNavigation.map(
+                  (
+                    item,
+                    index //Kalo user udh login render ini
+                  ) => (
+                    <Link
+                      href={item.href}
+                      key={index}
+                      className="h-fit w-fit px-2"
+                    >
+                      {item.icon}
+                    </Link>
+                  )
+                )
+              : NonLoginHeaderNav.map(
+                  (
+                    item,
+                    index //Kalo user blm login render ini
+                  ) => (
+                    <Link
+                      href={item.href}
+                      key={index}
+                      className="h-fit w-fit px-2"
+                    >
+                      {item.icon}
+                    </Link>
+                  )
+                )}
+            {/*Maaf aja kalo caranya rada tolol wkowakoawok ~Seto */}
           </div>
         </div>
         <div className="mx-4 flex self-center">
