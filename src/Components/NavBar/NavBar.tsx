@@ -106,7 +106,7 @@ export const NavBar = () => {
                 </button>
               </div>
               <div className="mx-1 rounded-md border border-normal-blue bg-white hover:border-bright-blue hover:bg-bright-blue">
-                <button className="h-8 w-16 px-1 text-normal-blue hover:text-white">
+                <button className="h-8 px-1 text-normal-blue hover:text-white">
                   Register
                 </button>
               </div>
