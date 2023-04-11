@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const { pathname } = router;
-  const noNav = ["/login", "/register"];
+  const noNav = ["/login", "/register", "/activate"];
 
   return (
     <>

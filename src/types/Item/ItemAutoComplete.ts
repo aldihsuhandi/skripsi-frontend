@@ -1,13 +1,15 @@
-import { ItemQueryHead } from "./ItemQueryHead";
 import { ResultContext } from "../ResultContext";
 
 // Request
 
+/**
+ * Di Headers:
+ *  clientId
+ *  clientSecret
+ */
+
 export interface ItemAutoCompleteRequest {
-  head: Pick<ItemQueryHead, "clientId" | "clientSecret">;
-  body: {
-    autocomplete: string;
-  };
+  autocomplete: string;
 }
 
 // Result

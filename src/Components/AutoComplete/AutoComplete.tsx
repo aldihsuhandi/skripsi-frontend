@@ -66,13 +66,7 @@ export const AutoComplete = ({
     if (value.length >= 3) {
       setShowAutoComplete(true);
       const PostBody: ItemAutoCompleteRequest = {
-        head: {
-          clientId: CLIENT_ID,
-          clientSecret: CLIENT_SECRET,
-        },
-        body: {
-          autocomplete: value,
-        },
+        autocomplete: value,
       };
 
       const { data } = await axios.post<ItemAutoCompleteResult>(
@@ -80,6 +74,8 @@ export const AutoComplete = ({
         JSON.stringify(PostBody),
         {
           headers: {
+            clientId: CLIENT_ID,
+            clientSecret: CLIENT_SECRET,
             "Content-Type": "application/json",
             "Accept-Type": "application/json",
           },

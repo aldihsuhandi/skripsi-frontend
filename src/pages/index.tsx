@@ -6,6 +6,8 @@ import { Color, COLOR_HEX_STRING } from "@/Components/Color";
 // import { GetServerSideProps } from "next";
 // import { ItemQueryRequest } from "@/types";
 // import axios from "axios";
+// import { CLIENT_ID, CLIENT_SECRET } from "@/types";
+// import { useEffect, useState } from "react";
 
 // Masih any, soalnya gw blom bikin interface/types uat hasil query item
 // interface Props {
@@ -15,8 +17,44 @@ import { Color, COLOR_HEX_STRING } from "@/Components/Color";
 /// !!! Yang commented itu yang attempt gw coba pake fitur nexjts dan axios
 // panggil API, bisa diapus tpi skrng msh ada biar gw masih bisa liat VVV: !!!
 
+// const Please = async () => {
+//   const POST_BODY = {
+//     imageId: "e2f244c4-cf98-4908-b6bf-03aeb762b99d",
+//   };
+
+//   const { data } = await axios.post(
+//     "http://localhost:8080/image/download",
+//     POST_BODY,
+//     {
+//       headers: {
+//         clientId: CLIENT_ID,
+//         clientSecret: CLIENT_SECRET,
+//         "Accept-Type": "image/jpeg",
+//       },
+//       responseType: "arraybuffer",
+//     }
+//   );
+
+//   return data;
+// };
+
 // export default function Home({ anyData }: Props) {
 export default function Home() {
+  // const [imeg, setImeg] = useState<any>();
+
+  // useEffect(() => {
+  //   async function yeah() {
+  //     const data = await Please();
+
+  //     const byteArray = new Uint8Array(data);
+  //     const blobs = new Blob([byteArray], { type: "image/jpeg" });
+  //     const imgUrl = URL.createObjectURL(blobs);
+
+  //     setImeg(imgUrl);
+  //   }
+  //   yeah();
+  // }, []);
+
   return (
     <>
       <Head>
@@ -46,6 +84,7 @@ export default function Home() {
                 price={69420000}
               />
             )}
+            {/* {imeg ? <img src={imeg} alt="harusnya disini" /> : <div>sabar</div>} */}
           </div>
           {/* <div className="flex px-2 pt-3">
             <p className="text-sm font-bold lg:text-lg">
