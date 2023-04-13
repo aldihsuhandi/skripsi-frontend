@@ -2,59 +2,8 @@ import Head from "next/head";
 import { ProductCard } from "@/Components/ProductCard";
 import { TrendingIcon } from "@/Components/Icons/TrendingIcon";
 import { Color, COLOR_HEX_STRING } from "@/Components/Color";
-// import { GetStaticProps } from "next";
-// import { GetServerSideProps } from "next";
-// import { ItemQueryRequest } from "@/types";
-// import axios from "axios";
-// import { CLIENT_ID, CLIENT_SECRET } from "@/types";
-// import { useEffect, useState } from "react";
 
-// Masih any, soalnya gw blom bikin interface/types uat hasil query item
-// interface Props {
-//   anyData: any;
-// }
-
-/// !!! Yang commented itu yang attempt gw coba pake fitur nexjts dan axios
-// panggil API, bisa diapus tpi skrng msh ada biar gw masih bisa liat VVV: !!!
-
-// const Please = async () => {
-//   const POST_BODY = {
-//     imageId: "e2f244c4-cf98-4908-b6bf-03aeb762b99d",
-//   };
-
-//   const { data } = await axios.post(
-//     "http://localhost:8080/image/download",
-//     POST_BODY,
-//     {
-//       headers: {
-//         clientId: CLIENT_ID,
-//         clientSecret: CLIENT_SECRET,
-//         "Accept-Type": "image/jpeg",
-//       },
-//       responseType: "arraybuffer",
-//     }
-//   );
-
-//   return data;
-// };
-
-// export default function Home({ anyData }: Props) {
 export default function Home() {
-  // const [imeg, setImeg] = useState<any>();
-
-  // useEffect(() => {
-  //   async function yeah() {
-  //     const data = await Please();
-
-  //     const byteArray = new Uint8Array(data);
-  //     const blobs = new Blob([byteArray], { type: "image/jpeg" });
-  //     const imgUrl = URL.createObjectURL(blobs);
-
-  //     setImeg(imgUrl);
-  //   }
-  //   yeah();
-  // }, []);
-
   return (
     <>
       <Head>
@@ -84,92 +33,9 @@ export default function Home() {
                 price={69420000}
               />
             )}
-            {/* {imeg ? <img src={imeg} alt="harusnya disini" /> : <div>sabar</div>} */}
           </div>
-          {/* <div className="flex px-2 pt-3">
-            <p className="text-sm font-bold lg:text-lg">
-              Section Title, ini call API (tapi masih kosong items-nyaa of
-              writing ni text) (klo gk ada/kena error ya gk heran, gw call pake
-              clientId dan clientSecret yang di add manual)
-            </p>
-          </div>
-          <div className="flex flex-col items-start">
-            <button onClick={() => console.log(anyData)}>
-              Click to log to console
-            </button>
-            {JSON.stringify(anyData)}
-          </div> */}
         </div>
       </main>
     </>
   );
 }
-
-// TODO: baca2 lebih lanjut, pake ini vs getServerSideProps (GSSP).
-// Ngertiin perbedaan dan mending mana.
-// Ato bisa pake useEffect biasa... kalo ternyata fitur GSP dan GSSP gk cocok
-
-// export const getServerSideProps: GetServerSideProps<Props> = async (
-//   context
-// ) => {
-//   // console.log(context);
-//   const PostBody: ItemQueryRequest = {
-//     head: {
-//       clientId: "dbf0201e-23a0-446b-8db3-40b1b6ed7c1f",
-//       clientSecret: "dycvervbrngjwhryugwduo",
-//     },
-//     body: {
-//       itemFilterContext: {},
-//     },
-//   };
-
-//   const res2 = await axios.post(
-//     "http://localhost:8080/item/query",
-//     JSON.stringify(PostBody),
-//     {
-//       headers: {
-//         "Content-Type": "application/json",
-//         "Accept-Type": "application/json",
-//       },
-//     }
-//   );
-
-//   const anyData2 = await res2.data;
-
-//   return {
-//     props: {
-//       anyData: anyData2,
-//     },
-//   };
-// };
-
-// export const getStaticProps: GetStaticProps<Props> = async () => {
-//   const PostBody: ItemQueryRequest = {
-//     head: {
-//       clientId: "dbf0201e-23a0-446b-8db3-40b1b6ed7c1f",
-//       clientSecret: "dycvervbrngjwhryugwduo",
-//     },
-//     body: {
-//       itemFilterContext: {},
-//     },
-//   };
-
-//   const res2 = await axios.post(
-//     "http://localhost:8080/item/query",
-//     JSON.stringify(PostBody),
-//     {
-//       headers: {
-//         "Content-Type": "application/json",
-//         "Accept-Type": "application/json",
-//       },
-//     }
-//   );
-
-//   const anyData2 = await res2.data;
-
-//   return {
-//     props: {
-//       anyData: anyData2,
-//     },
-//   };
-// };

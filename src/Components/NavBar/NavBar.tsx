@@ -80,7 +80,7 @@ export const NavBar = () => {
             width="0"
             height="0"
             sizes="100vw"
-            className="h-12 w-16 lg:h-12 lg:w-16"
+            className="h-16 w-16 lg:h-16 lg:w-16"
           />
         </Link>
         <p className="hidden w-44 px-2 py-2 font-sans font-semibold italic text-normal-blue lg:block">
