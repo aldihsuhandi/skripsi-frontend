@@ -26,7 +26,6 @@ export const NavBar = () => {
       if (sessionString) {
         // Kalo session ada di local, check validity atau dah expired
         const sessionInfo = await SessionInfoCall({ sessionId: sessionString });
-        console.log(sessionString);
         if (sessionInfo.resultContext.success) {
           // ambil email
           const emailUser = sessionInfo.sessionSummary.email;
@@ -74,17 +73,17 @@ export const NavBar = () => {
   return (
     <nav className="sticky top-0 h-fit w-full bg-white shadow-lg">
       <div className="flex px-0 py-1 lg:px-2 lg:py-2">
-        <Link href="/" className="self-center lg:self-auto">
+        <Link href="/" className="self-center lg:self-center">
           <Image
             src="/Logo-without-text-color-fixed-small.png"
             alt="ShumiShumi Logo"
             width="0"
             height="0"
             sizes="100vw"
-            className="h-16 w-24 lg:h-24 lg:w-32"
+            className="h-12 w-16 lg:h-12 lg:w-16"
           />
         </Link>
-        <p className="hidden w-44 px-2 py-6 font-sans font-semibold italic text-normal-blue lg:block">
+        <p className="hidden w-44 px-2 py-2 font-sans font-semibold italic text-normal-blue lg:block">
           Make getting into <br />a hobby easier!
         </p>
 
