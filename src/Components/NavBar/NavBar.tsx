@@ -1,18 +1,75 @@
-import React, { useState } from "react";
+import { SessionInfoCall } from "@/helper/SessionInfoCall";
+import { Session_Local_Key } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
-import { SearchBar } from "../SearchBar";
-import { HeaderNavigation } from "./constants";
-import { Avatar } from "../Avatar";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { AutoComplete } from "../AutoComplete";
+import { Avatar } from "../Avatar";
+import { HeaderNavigation } from "./constants";
 import { NonLoginHeaderNav } from "./nonlogin_constants";
+import { UserQuery } from "@/helper/UserQueryCall";
+import { ImageDownload } from "@/helper/ImageDownloadCall";
+import { LogoutCall } from "@/helper/LogoutCall";
+import { ProcessImgBE } from "@/helper/ProcessImgBE";
 
 export const NavBar = () => {
-  const [dataa, setDataa] = useState("");
-
+  const router = useRouter();
   //---> nge set apakh usernya dah login ato belom <---
-  const [isLoggedIn, setIsLoggedIn] = useState(true); //default state true
-  //-----------------------><-------------------------
+  const [isLoggedIn, setIsLoggedIn] = useState(false); //default state true, CW: gw jadiin false ye
+  const [img, setImg] = useState<string | undefined>(undefined);
+
+  // useEffect check session
+  useEffect(() => {
+    const sessionString = localStorage.getItem(Session_Local_Key);
+    async function sessionAPI() {
+      if (sessionString) {
+        // Kalo session ada di local, check validity atau dah expired
+        const sessionInfo = await SessionInfoCall({ sessionId: sessionString });
+        console.log(sessionString);
+        if (sessionInfo.resultContext.success) {
+          // ambil email
+          const emailUser = sessionInfo.sessionSummary.email;
+
+          // panggil user/query, uat profilePicutre Id
+          const userData = await UserQuery({
+            key: emailUser,
+            identifier: "email",
+          });
+
+          // panggil image/download
+          if (userData.userInfo.profilePicture) {
+            const imgUsable = await ImageDownload({
+              imageId: userData.userInfo.profilePicture,
+            });
+
+            const imgUrl = await ProcessImgBE(imgUsable);
+
+            setImg(imgUrl);
+          }
+          // set Logged in
+          setIsLoggedIn(true);
+        } else if (!sessionInfo.resultContext.success) {
+          // Klo gk success, for misal SESSION_EXPIRED, apis dri local yang stale
+          localStorage.removeItem(Session_Local_Key);
+
+          router.reload();
+        }
+      } else {
+        // kalo nggak ada, set false di hook `isLoggedIn`
+        setIsLoggedIn(false);
+      }
+    }
+    sessionAPI();
+  }, []);
+
+  const onLogoutClick = async () => {
+    const sessionString = localStorage.getItem(Session_Local_Key);
+    if (sessionString) {
+      await LogoutCall({ sessionId: sessionString });
+    }
+    router.reload();
+  };
 
   return (
     <nav className="sticky top-0 h-fit w-full bg-white shadow-lg">
@@ -31,31 +88,14 @@ export const NavBar = () => {
           Make getting into <br />a hobby easier!
         </p>
 
-        {/* SearchBar Component here */}
+        {/* AutoComplete (includes SearchBar) Component here */}
         <div className="hidden grow self-center px-6 lg:block">
-          <AutoComplete
-            id="search_navbar"
-            name="search_navbar"
-            // Contoh pake autoCompleteOnChange
-            // autoCompleteOnChange={(e) => {
-            //   setDataa(e.target.value);
-            //   console.log(e.target.value, "A");
-            // }}
-          />
+          <AutoComplete id="search_navbar" name="search_navbar" />
         </div>
 
         <div className="ml-auto self-center">
           {/* Navigation Buttons */}
           <div className="flex ">
-            {/*--- Bwt munculin Navigation Buttons nya ---*/}
-            {/* {HeaderNavigation.map((item, index) => (
-              <Link href={item.href} key={index} className="h-fit w-fit px-2">
-                {item.icon}
-              </Link>
-            ))} */}
-
-            {/*===> CONDITIONAL STATEMENT KALO USER DAH LOGIN/BELOM (By default statement nya gw set ke true) <=== */}
-            {/*--- Rubah2 aja lagi nanti ---*/}
             {isLoggedIn
               ? HeaderNavigation.map(
                   (
@@ -92,23 +132,33 @@ export const NavBar = () => {
           {/* User Avatar */}
           {/*===> CONDITIONAL STATEMENT KALO USER DAH LOGIN/BELOM (By default statement nya gw set ke true) <=== */}
           {isLoggedIn ? ( //Klo udh login render ini
-            <Avatar
-              src="https://yt3.googleusercontent.com/kwT5VgMOSuYmGQif7clzISmM0xUYXdEQEDyZqBVL4_SQ1fTPtCpUj1xJlXtmuq7x9eY48EGrusI=s900-c-k-c0x00ffffff-no-rj"
-              alt="harusnya millie"
-              rounded
-            />
+            <>
+              <Avatar src={img} alt="harusnya millie" rounded />
+              <div className="mx-1 self-center rounded-md border border-normal-blue bg-white hover:border-bright-blue hover:bg-bright-blue">
+                <button
+                  onClick={onLogoutClick}
+                  className="h-8 px-1 text-xs text-normal-blue hover:text-white"
+                >
+                  Logout
+                </button>
+              </div>
+            </>
           ) : (
             //Klo blm login render ini
             <>
               <div className="mx-1 rounded-md border border-normal-blue bg-normal-blue">
-                <button className="h-8 w-16 px-1 text-bright-white hover:border-bright-blue hover:bg-bright-blue">
-                  Login
-                </button>
+                <Link href="/login">
+                  <button className="h-8 w-16 px-1 text-bright-white hover:border-bright-blue hover:bg-bright-blue">
+                    Login
+                  </button>
+                </Link>
               </div>
               <div className="mx-1 rounded-md border border-normal-blue bg-white hover:border-bright-blue hover:bg-bright-blue">
-                <button className="h-8 px-1 text-normal-blue hover:text-white">
-                  Register
-                </button>
+                <Link href="/register">
+                  <button className="h-8 px-1 text-normal-blue hover:text-white">
+                    Register
+                  </button>
+                </Link>
               </div>
             </>
           )}
