@@ -101,12 +101,7 @@ export default function Register() {
                 setShowError("");
 
                 // NOTE: yep haram, di sprint 3, kita akan halal-in
-                // send otp to email
                 // NOTE: Kalo gagal biarin, tetep redirect, di page /activate ada button resend juga
-                await OtpSend({
-                  email: values.email,
-                  otpType: "USER_ACTIVATION",
-                });
 
                 // redirect
                 router.push({
