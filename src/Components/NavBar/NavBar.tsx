@@ -67,7 +67,7 @@ export const NavBar = () => {
     if (sessionString) {
       await LogoutCall({ sessionId: sessionString });
     }
-    router.reload();
+    router.push("/login");
   };
 
   return (
