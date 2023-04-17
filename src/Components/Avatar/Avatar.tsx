@@ -18,7 +18,7 @@ export const Avatar = ({ src, alt, rounded }: AvatarProps) => {
       )}
       src={
         src ??
-        "https://pbs.twimg.com/profile_images/1619599321912967168/jiaHG8w7_400x400.jpg"
+        "https://st3.depositphotos.com/4111759/13425/v/600/depositphotos_134255710-stock-illustration-avatar-vector-male-profile-gray.jpg"
       }
       alt={alt ?? "no alt provided"}
     />

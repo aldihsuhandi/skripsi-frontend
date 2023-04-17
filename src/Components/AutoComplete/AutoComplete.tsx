@@ -2,13 +2,18 @@ import classNames from "classnames";
 import { sanitize } from "dompurify";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 
-import { ItemAutoCompleteRequest, ItemAutoCompleteResult } from "@/types";
+import {
+  CLIENT_ID,
+  CLIENT_SECRET,
+  ItemAutoCompleteRequest,
+  ItemAutoCompleteResult,
+} from "@/types";
 import axios from "axios";
 import Link from "next/link";
 import { SearchBar, SearchBarProps } from "../SearchBar";
 
-import { HighlightSuggestion } from "./HighlightSuggestion";
 import { useRouter } from "next/router";
+import { HighlightSuggestion } from "./HighlightSuggestion";
 
 export type AutoCompleteProps = {
   autoCompleteOnChange?: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -27,11 +32,13 @@ export const AutoComplete = ({
   const [isSearchBarFocused, setIsSearchBarFocused] = useState(false);
 
   // DATA
+  const [error, setError] = useState<string | undefined>(undefined);
   const [inputValue, setInputValue] = useState("");
   // maybe uat ini taro interface/type return dari API
   const [autoCompleteSuggestion, setAutoCompleteSuggestion] = useState<
-    ItemAutoCompleteResult | undefined
+    string[] | undefined
   >();
+
   const [showAutoComplete, setShowAutoComplete] = useState(false);
 
   useEffect(() => {
@@ -59,26 +66,29 @@ export const AutoComplete = ({
     if (value.length >= 3) {
       setShowAutoComplete(true);
       const PostBody: ItemAutoCompleteRequest = {
-        head: {
-          clientId: "dbf0201e-23a0-446b-8db3-40b1b6ed7c1f",
-          clientSecret: "dycvervbrngjwhryugwduo",
-        },
-        body: {
-          autocomplete: value,
-        },
+        autocomplete: value,
       };
-      const autoCompleteResult = await axios.post(
+
+      const { data } = await axios.post<ItemAutoCompleteResult>(
         "http://localhost:8080/item/autocomplete",
         JSON.stringify(PostBody),
         {
           headers: {
+            clientId: CLIENT_ID,
+            clientSecret: CLIENT_SECRET,
             "Content-Type": "application/json",
             "Accept-Type": "application/json",
           },
         }
       );
 
-      setAutoCompleteSuggestion(await autoCompleteResult.data);
+      if (data.resultContext.success) {
+        setAutoCompleteSuggestion(data.itemName);
+      } else {
+        // TODO: CREATE YANG LBH CAKEP DRI INI
+        AlertPlaceholder(data.resultContext);
+        setError(data.resultContext.resultCode);
+      }
     } else {
       setShowAutoComplete(false);
     }
@@ -96,6 +106,36 @@ export const AutoComplete = ({
         query: { q: inputValue },
       })
       .then(() => setShowAutoComplete(false));
+  };
+
+  // pisah sini biar bisa pake if else
+  const AutoCompletePart = ({
+    suggestion,
+  }: {
+    suggestion: string[] | undefined;
+  }) => {
+    if (suggestion && suggestion.length !== 0) {
+      return suggestion.map((link) => (
+        <Link
+          key={link}
+          href={{
+            pathname: `/search`,
+            query: { q: link },
+          }}
+          onClick={() => {
+            setShowAutoComplete(false);
+            setInputValue(link);
+          }}
+          className="p-2"
+        >
+          <HighlightSuggestion wholeString={link} subString={inputValue} />
+        </Link>
+      ));
+    } else if (suggestion && suggestion.length === 0) {
+      return <p className="p-2">No Suggestion Found</p>;
+    } else {
+      return <p className="p-2">Loading...</p>;
+    }
   };
 
   return (
@@ -120,34 +160,16 @@ export const AutoComplete = ({
           { hidden: !showAutoComplete || !isSearchBarFocused }
         )}
       >
-        {autoCompleteSuggestion ? (
-          autoCompleteSuggestion.itemName.length !== 0 ? (
-            autoCompleteSuggestion.itemName.map((link) => (
-              <Link
-                key={link}
-                href={{
-                  pathname: `/search`,
-                  query: { q: link },
-                }}
-                onClick={() => {
-                  setShowAutoComplete(false);
-                  setInputValue(link);
-                }}
-                className="p-2"
-              >
-                <HighlightSuggestion
-                  wholeString={link}
-                  subString={inputValue}
-                />
-              </Link>
-            ))
-          ) : (
-            <p className="p-2">No Suggestion Found</p>
-          )
+        {!error ? (
+          AutoCompletePart({ suggestion: autoCompleteSuggestion })
         ) : (
-          <p className="p-2">Loading...</p>
+          <p className="p-2">An Error Occured...</p>
         )}
       </div>
     </div>
   );
+};
+
+const AlertPlaceholder = (error: ItemAutoCompleteResult["resultContext"]) => {
+  alert(`${error.resultMsg}`);
 };

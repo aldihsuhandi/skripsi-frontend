@@ -1,11 +1,10 @@
 import Head from "next/head";
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { useRouter } from "next/router";
 
-interface SearchTestProps {
-  query?: string | string[];
-}
+export default function Search() {
+  const router = useRouter();
+  const { q } = router.query;
 
-export default function Search({ query }: SearchTestProps) {
   return (
     <>
       <Head>
@@ -15,23 +14,8 @@ export default function Search({ query }: SearchTestProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <div>QUERY: {query} DUAR QUERY</div>
+        <div>QUERY: {q} DUAR QUERY</div>
       </main>
     </>
   );
 }
-
-export const getServerSideProps: GetServerSideProps<SearchTestProps> = async (
-  context: GetServerSidePropsContext
-) => {
-  const { query } = context;
-  const { q } = query; // Get the value of the "q" parameter
-
-  // Use the value of the "q" parameter to perform a search or some other action
-
-  return {
-    props: {
-      query: q,
-    },
-  };
-};
