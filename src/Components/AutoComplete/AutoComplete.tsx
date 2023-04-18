@@ -159,7 +159,7 @@ export const AutoComplete = ({
           { block: showAutoComplete && isSearchBarFocused },
           { hidden: !showAutoComplete || !isSearchBarFocused }
         )}
-        style={{ height: "50vh" }}
+        style={{ maxHeight: "50vh" }}
       >
         {!error ? (
           AutoCompletePart({ suggestion: autoCompleteSuggestion })
