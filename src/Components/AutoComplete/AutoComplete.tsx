@@ -155,10 +155,11 @@ export const AutoComplete = ({
       </form>
       <div
         className={classNames(
-          "absolute flex w-full flex-col rounded-lg border border-gray-300 bg-gray-50 text-gray-900 focus:border-blue-500 focus:ring-blue-500",
+          "absolute flex w-full flex-col overflow-auto rounded-lg border border-gray-300 bg-gray-50 text-gray-900 focus:border-blue-500 focus:ring-blue-500",
           { block: showAutoComplete && isSearchBarFocused },
           { hidden: !showAutoComplete || !isSearchBarFocused }
         )}
+        style={{ height: "50vh" }}
       >
         {!error ? (
           AutoCompletePart({ suggestion: autoCompleteSuggestion })
