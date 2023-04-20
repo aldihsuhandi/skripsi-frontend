@@ -14,6 +14,7 @@ import { SearchBar, SearchBarProps } from "../SearchBar";
 
 import { useRouter } from "next/router";
 import { HighlightSuggestion } from "./HighlightSuggestion";
+import { urlFirstString } from "@/helper";
 
 export type AutoCompleteProps = {
   autoCompleteOnChange?: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -25,6 +26,7 @@ export const AutoComplete = ({
 }: AutoCompleteProps) => {
   // Uat redirect pas enter
   const router = useRouter();
+  const { q } = router.query;
   // HANDLE CLICK DILUAR COMPONENT
   // ref uat deteksi klik diluar component
   const ref = useRef<HTMLDivElement>(null);
@@ -44,12 +46,15 @@ export const AutoComplete = ({
   useEffect(() => {
     // Add event listener for clicks on the document
     document.addEventListener("click", handleClickOutside);
+    if (router.isReady) {
+      setInputValue(urlFirstString(q) ?? "");
+    }
 
     // Cleanup function to remove the event listener
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
-  }, []);
+  }, [router.isReady]);
 
   function handleClickOutside(event: MouseEvent) {
     // Deteksi klik diluar Component
