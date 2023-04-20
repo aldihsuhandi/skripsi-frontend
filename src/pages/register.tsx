@@ -10,7 +10,6 @@ import {
 } from "react-icons/hi"; //import react icons
 import styles from "../styles/Form.module.css";
 
-import { OtpSend } from "@/helper/OtpSend";
 import { RegisterPOST } from "@/helper/RegisterCall";
 import {
   RegisterFormValues,
@@ -199,11 +198,7 @@ export default function Register() {
                             <HiAtSymbol size={25} />
                           </span>
                         </div>
-                        {errors.email && touched.email && (
-                          <div>
-                            <p className="text-red-600">{errors.email}</p>
-                          </div>
-                        )}
+
                         {/*---> Username Input <---*/}
                         <div className={styles.input_group}>
                           <Field
@@ -216,11 +211,7 @@ export default function Register() {
                             <HiUser size={25} />
                           </span>
                         </div>
-                        {errors.username && touched.username && (
-                          <div>
-                            <p className="text-red-600">{errors.username}</p>
-                          </div>
-                        )}
+
                         {/*---> Phone Number Input <---*/}
                         <div className={styles.input_group}>
                           <div className="self-center pl-2">08</div>
@@ -234,11 +225,7 @@ export default function Register() {
                             <HiPhone size={25} />
                           </span>
                         </div>
-                        {errors.phoneNumber && touched.phoneNumber && (
-                          <div>
-                            <p className="text-red-600">{errors.phoneNumber}</p>
-                          </div>
-                        )}
+
                         {/*---> Password Input <---*/}
                         <div className={styles.input_group}>
                           <Field
@@ -254,11 +241,7 @@ export default function Register() {
                             <HiFingerPrint size={25} />
                           </span>
                         </div>
-                        {errors.password && touched.password && (
-                          <div>
-                            <p className="text-red-600">{errors.password}</p>
-                          </div>
-                        )}
+
                         {/*---> Confirm Password Input <---*/}
                         <div className={styles.input_group}>
                           <Field
@@ -274,19 +257,48 @@ export default function Register() {
                             <HiFingerPrint size={25} />
                           </span>
                         </div>
-                        {errors.confirmPassword && touched.confirmPassword && (
-                          <div>
-                            <p className="text-red-600">
-                              {errors.confirmPassword}
-                            </p>
-                          </div>
-                        )}
 
-                        {showError && (
-                          <div>
-                            <p className="text-red-600">{showError}</p>
-                          </div>
-                        )}
+                        <div>
+                          {errors.email && touched.email && (
+                            <div>
+                              <p className="text-red-600">{errors.email}</p>
+                            </div>
+                          )}
+                          {errors.username && touched.username && (
+                            <div>
+                              <p className="text-red-600">{errors.username}</p>
+                            </div>
+                          )}
+
+                          {showError && (
+                            <div>
+                              <p className="text-red-600">{showError}</p>
+                            </div>
+                          )}
+
+                          {errors.phoneNumber && touched.phoneNumber && (
+                            <div>
+                              <p className="text-red-600">
+                                {errors.phoneNumber}
+                              </p>
+                            </div>
+                          )}
+
+                          {errors.password && touched.password && (
+                            <div>
+                              <p className="text-red-600">{errors.password}</p>
+                            </div>
+                          )}
+
+                          {errors.confirmPassword &&
+                            touched.confirmPassword && (
+                              <div>
+                                <p className="text-red-600">
+                                  {errors.confirmPassword}
+                                </p>
+                              </div>
+                            )}
+                        </div>
 
                         {/*---> Register Button <---*/}
                         <div className="input-button">

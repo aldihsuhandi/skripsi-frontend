@@ -81,8 +81,6 @@ export default function Login() {
                     initialValues={initialValues}
                     validationSchema={LoginSchema}
                     onSubmit={async (values) => {
-                      console.log(values, "ALL LOGIN FORM FIELDS");
-
                       const user_Login_Data: LoginRequest = {
                         email: values.email,
                         password: values.password,

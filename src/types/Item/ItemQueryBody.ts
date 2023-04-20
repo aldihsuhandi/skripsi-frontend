@@ -1,4 +1,4 @@
-import { ItemFilterContext } from "./ItemFilterContext";
+import { ItemFilterContext } from "./ItemQuery";
 
 // Gw liat semua Request item body ini sama
 export interface ItemQueryBody {

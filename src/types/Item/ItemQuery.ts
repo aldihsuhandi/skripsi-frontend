@@ -1,21 +1,70 @@
-import { ItemQueryBody } from "./ItemQueryBody";
+import { ResultContext } from "../ResultContext";
+import { UserSummary } from "../User";
 
-// NOTE: ntar item query yang lain headnya sama,
-// tpi sessionId mandatory, soalnya logged in user doang yang bisa ada akses wishlist dkk
-// Sooooo yeah maybe perlu bikin
-export interface ItemQueryHeadHomePage {
-  clientId: string;
-  clientSecret: string;
-  /**
-   *  need to pass sessionId if user is login.
-   *  can be null because home page can be accessed by non-logged-in users
-   */
-  sessionId?: string;
+// Request
+
+/**
+ * Di headers:
+ *  clientId
+ *  clientSecret
+ *  sessionId      Not mandatory
+ */
+
+export interface ItemFilterContext {
+  itemId?: string;
+  itemName?: string;
+  minItemPrice?: number;
+  maxItemPrice?: number;
+  merchantEmail?: string;
+  merchantInterestLevel?: string;
+  userInterestLevel?: string;
+  hobby?: string;
+  itemCategory?: string;
 }
 
 export interface ItemQueryRequest {
-  head: ItemQueryHeadHomePage;
-  body: ItemQueryBody;
+  /**
+   * default === 1
+   */
+  pageNumber?: number;
+  /**
+   * default === 10
+   */
+  numberOfItem?: number;
+  itemFilterContext?: ItemFilterContext;
 }
 
-//TODO: Tambah Item response (NOT HERE, pisah2 ke file biar lbh robust dan modular)
+export interface PagingContext {
+  pageNumber: number;
+  numberOfItem: number;
+  hasNext: boolean;
+  /**
+   * Kalo gk muat number, bigint
+   */
+  totalItem?: number;
+  totalPage?: number;
+}
+
+export interface ItemSummary {
+  itemId: string;
+  itemName: string;
+  /**
+   * Kalo gk muat number, bigint
+   */
+  itemPrice: number;
+  itemDescription: string;
+  itemQuantity: number;
+  itemCategory: string;
+  hobby: string;
+  merchantInfo: UserSummary;
+  merchantLevel: string;
+  itemImages: string[];
+  gmtCreate: Date;
+  gmtModified: Date;
+}
+
+export interface ItemQueryResult {
+  resultContext: ResultContext;
+  pagingContext: PagingContext;
+  items: ItemSummary[];
+}
