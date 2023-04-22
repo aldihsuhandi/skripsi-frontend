@@ -19,34 +19,34 @@ export default function Search() {
   const [testChildUpdate, setTestChildUpdate] = useState("Blom");
 
   useEffect(() => {
-    setQString(urlFirstString(q));
-    console.log("===========================");
-    console.log(pMin, "search");
-    console.log(pMax, "search");
-    console.log(pSort, "search");
-    console.log(hob, "search");
-    console.log(itemCat, "search");
-    console.log(inLev, "search");
+    const fetchQueriesName = async () => {
+      setQString(urlFirstString(q));
+    };
 
     const initialRenderResult = async () => {
       const pMinNumber = parseNumberUndefined(urlFirstString(pMin));
       const pMaxNumber = parseNumberUndefined(urlFirstString(pMax));
 
       setIsLoading(true);
-      const itemQueried = await ItemFilterQuery({
-        itemName: qString || "",
-        pMin: pMinNumber,
-        pMax: pMaxNumber,
-        hob: urlFirstString(hob),
-        itemCat: urlFirstString(itemCat),
-        inLev: urlFirstString(inLev),
-      });
-      setIsLoading(false);
-      setTestChildUpdate(JSON.stringify(itemQueried.items));
+      await fetchQueriesName();
+      if (urlFirstString(q) === qString) {
+        const itemQueried = await ItemFilterQuery({
+          itemName: qString || "",
+          pMin: pMinNumber,
+          pMax: pMaxNumber,
+          hob: urlFirstString(hob),
+          itemCat: urlFirstString(itemCat),
+          inLev: urlFirstString(inLev),
+        });
+        setIsLoading(false);
+        setTestChildUpdate(JSON.stringify(itemQueried.items));
+      }
     };
 
-    initialRenderResult();
-  }, [pMin, pMax, pSort, hob, itemCat, inLev]);
+    if (router.isReady) {
+      initialRenderResult();
+    }
+  }, [router.isReady, q, qString]);
 
   function UpdateDiChild(replace_in_parent: string) {
     console.log("trigered", "yeah");
@@ -71,9 +71,6 @@ export default function Search() {
           />
           {isLoading ? <>Loading Placeholder</> : <>{testChildUpdate}</>}
         </div>
-
-        {/* Add Query Results */}
-        {/* NOTE: add loading state klo msh fetching */}
       </main>
     </>
   );
