@@ -8,6 +8,7 @@ import {
   ItemFilterQuery,
 } from "@/helper";
 import { ItemFilterFormValues } from "@/types/ItemFilter";
+import { ItemQueryResult } from "@/types";
 
 export type ItemFilterBarProps = {
   searchQuery?: string;
@@ -15,7 +16,7 @@ export type ItemFilterBarProps = {
   /**
    * Run the setState given from Parent
    */
-  setQueryResult: (replace_in_parent: string) => void;
+  setQueryResult: (replace_in_parent: ItemQueryResult) => void;
 };
 
 export const ItemFilterBar = ({
@@ -134,7 +135,7 @@ export const ItemFilterBar = ({
         // TODO: Yeah sblm itu bikin dlu hook useState-nya di parent trus edit
         // function yang di pass kesini
         // setQueryResult("test");
-        setQueryResult(JSON.stringify(itemQueried.items));
+        setQueryResult(itemQueried);
 
         router.push({
           pathname: `/${page}`,
@@ -143,7 +144,7 @@ export const ItemFilterBar = ({
       }}
     >
       {/* Masih unused, errors keknya ntar uat price min ama max aja, bikin validation schema uat itu, sisanya nggak ush keknya */}
-      {({ errors, touched, setFieldValue }) => (
+      {({ setFieldValue }) => (
         <Form>
           <div className="grid grid-cols-1 lg:grid-cols-4 lg:gap-2">
             <div className="col-span-4">

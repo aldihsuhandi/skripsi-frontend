@@ -1,9 +1,11 @@
 import { ItemFilterBar } from "@/Components/ItemFilterBar";
+import { ProductCard } from "@/Components/ProductCard";
 import {
   ItemFilterQuery,
   parseNumberUndefined,
   urlFirstString,
 } from "@/helper";
+import { ItemQueryResult } from "@/types";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -16,7 +18,7 @@ export default function Search() {
   const [qString, setQString] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const [testChildUpdate, setTestChildUpdate] = useState("Blom");
+  const [items, setItems] = useState<ItemQueryResult | undefined>();
 
   useEffect(() => {
     const fetchQueriesName = async () => {
@@ -39,7 +41,7 @@ export default function Search() {
           inLev: urlFirstString(inLev),
         });
         setIsLoading(false);
-        setTestChildUpdate(JSON.stringify(itemQueried.items));
+        setItems(itemQueried);
       }
     };
 
@@ -48,9 +50,9 @@ export default function Search() {
     }
   }, [router.isReady, q, qString]);
 
-  function UpdateDiChild(replace_in_parent: string) {
+  function UpdateDiChild(replace_in_parent: ItemQueryResult) {
     console.log("trigered", "yeah");
-    setTestChildUpdate(replace_in_parent);
+    setItems(replace_in_parent);
   }
 
   return (
@@ -69,7 +71,28 @@ export default function Search() {
             searchQuery={qString}
             setQueryResult={UpdateDiChild}
           />
-          {isLoading ? <>Loading Placeholder</> : <>{testChildUpdate}</>}
+          {isLoading ? (
+            <>Loading Placeholder</>
+          ) : items?.resultContext.success ? (
+            <>
+              {/* {JSON.stringify(items)} */}
+              {items.items.map((data) => {
+                // Image msh placeholder, belum ada seeders
+                // Dan masih pake yang gw, bukan card seto
+                // sooo TODO: Pake card bikinan seto
+                return (
+                  <ProductCard
+                    imageSrc="https://i1.sndcdn.com/artworks-dCikqEVyCfTCgdq0-0hSQRQ-t500x500.jpg"
+                    title={data.itemName}
+                    interestLevel={data.merchantLevel}
+                    price={data.itemPrice}
+                  />
+                );
+              })}
+            </>
+          ) : (
+            <>Error! {items?.resultContext.resultMsg}</>
+          )}
         </div>
       </main>
     </>
