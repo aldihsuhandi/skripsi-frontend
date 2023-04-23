@@ -30,7 +30,7 @@ export default function Home() {
                 imageSrc="https://booth.pximg.net/users/324203/icon_image/58943d20-3c9a-4cf4-84cb-74d95c88a07d.png"
                 title="Dummy"
                 interestLevel="Dummy Interest Level"
-                price={69420000}
+                price={69420666}
               />
             )}
           </div>
