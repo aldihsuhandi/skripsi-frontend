@@ -56,11 +56,8 @@ export default function Login() {
           <div className="m-0 grid h-full w-full rounded-lg bg-bright-white shadow-2xl sm:grid-cols-1 md:grid-cols-1 lg:m-auto lg:h-3/4 lg:w-3/5 lg:grid-cols-2">
             <div className="flex auto-cols-auto items-center bg-gradient-to-br from-blue-800 to-purple-800 lg:rounded-l-lg">
               <div className="px-4 py-6 text-white md:mx-6 md:p-12">
-                <img
-                  className="h-full w-full"
-                  src="/LOGO-with-text-small.png"
-                />
-                <h1 className="mb-2 text-2xl font-semibold">SHUMISHUMI</h1>
+                <img className="h-full w-full" src="/LOGO-w-text-small.png" />
+                <h1 className="mb-2 mt-2 text-2xl font-semibold">SHUMISHUMI</h1>
                 <h1 className="mb-6 text-xl font-light italic">
                   Make getting into a hobby easier!
                 </h1>

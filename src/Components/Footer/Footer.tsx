@@ -7,8 +7,8 @@ export const Footer = () => {
         <div className="flex items-center p-0 lg:px-4 lg:py-8">
           {/* © SHUMISHUMI Application <br /> Contents nanti, ni muncul tiap page */}
           <img
-            className="h-full w-14"
-            src="/Logo-without-text-color-fixed-small.png"
+            className="h-full w-14 p-1"
+            src="/Logo-no-text-color-fixed-small.png"
           />
           <p>© 2023 SHUMISHUMI Application. All Rights Reserved</p>
         </div>
