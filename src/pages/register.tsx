@@ -114,7 +114,7 @@ export default function Register() {
             }}
           >
             {({ setFieldValue, errors, touched }) => (
-              <Form className="m-0 block h-full  w-full overflow-scroll  bg-bright-white shadow-2xl lg:m-auto lg:grid lg:h-3/4 lg:w-3/5 lg:grid-cols-2 lg:overflow-hidden lg:rounded-lg">
+              <Form className="m-0 block h-full  w-full overflow-scroll bg-bright-white shadow-2xl lg:m-auto lg:grid lg:h-3/4 lg:w-3/5 lg:grid-cols-2 lg:overflow-hidden lg:rounded-lg">
                 <div className="flex auto-cols-auto flex-col items-center justify-evenly bg-gradient-to-br from-blue-800 to-purple-800 lg:rounded-l-lg">
                   {/*---> Upload Image Form <---*/}
                   <div className="relative flex max-w-lg flex-col text-center">
@@ -171,6 +171,12 @@ export default function Register() {
                         <p className="text-red-600">{errors.profilePicture}</p>
                       </div>
                     )}
+                  </div>
+                  <div className="bottom-1">
+                    <img
+                      className="h-full w-40"
+                      src="/LOGO-with-text-smaller.png"
+                    />
                   </div>
                 </div>
                 <div className="right flex flex-col justify-evenly overflow-scroll">

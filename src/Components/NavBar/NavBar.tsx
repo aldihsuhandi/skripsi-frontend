@@ -75,7 +75,7 @@ export const NavBar = () => {
       <div className="flex px-0 py-1 lg:px-2 lg:py-2">
         <Link href="/" className="self-center lg:self-center">
           <Image
-            src="/Logo-without-text-color-fixed-small.png"
+            src="/Logo-no-text-color-fixed-small.png"
             alt="ShumiShumi Logo"
             width="0"
             height="0"
