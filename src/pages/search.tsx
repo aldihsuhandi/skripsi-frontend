@@ -71,28 +71,32 @@ export default function Search() {
             searchQuery={qString}
             setQueryResult={UpdateDiChild}
           />
-          {isLoading ? (
-            <>Loading Placeholder</>
-          ) : items?.resultContext.success ? (
-            <>
-              {/* {JSON.stringify(items)} */}
-              {items.items.map((data) => {
-                // Image msh placeholder, belum ada seeders
-                // Dan masih pake yang gw, bukan card seto
-                // sooo TODO: Pake card bikinan seto
-                return (
-                  <ProductCard
-                    imageSrc="https://i1.sndcdn.com/artworks-dCikqEVyCfTCgdq0-0hSQRQ-t500x500.jpg"
-                    title={data.itemName}
-                    interestLevel={data.merchantLevel}
-                    price={data.itemPrice}
-                  />
-                );
-              })}
-            </>
-          ) : (
-            <>Error! {items?.resultContext.resultMsg}</>
-          )}
+          <div className="grid grid-cols-2 gap-4 py-2 px-2 lg:grid-cols-5 lg:py-4">
+            {isLoading ? (
+              <>Loading Placeholder</>
+            ) : items?.resultContext.success ? (
+              <>
+                {/* {JSON.stringify(items)} */}
+                {items.items.map((data) => {
+                  // Image msh placeholder, belum ada seeders
+                  // Dan masih pake yang gw, bukan card seto
+                  // sooo TODO: Pake card bikinan seto
+                  return (
+                    <ProductCard
+                      imageSrc="https://i1.sndcdn.com/artworks-dCikqEVyCfTCgdq0-0hSQRQ-t500x500.jpg"
+                      title={data.itemName}
+                      interestLevel={data.merchantLevel}
+                      price={data.itemPrice}
+                      itemCategory={data.itemCategory}
+                      hobbyType={data.hobby}
+                    />
+                  );
+                })}
+              </>
+            ) : (
+              <>Error! {items?.resultContext.resultMsg}</>
+            )}
+          </div>
         </div>
       </main>
     </>
