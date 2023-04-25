@@ -195,7 +195,7 @@ export const ItemFilterBar = ({
                     }}
                     className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                   >
-                    <option value={undefined}>Price Sorting</option>
+                    <option value="">Price Sorting</option>
                     <option value="desc">Decending</option>
                     <option value="asc">Ascending</option>
                   </Field>
@@ -220,7 +220,7 @@ export const ItemFilterBar = ({
                     }}
                     className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                   >
-                    <option value={undefined}>Choose</option>
+                    <option value="">Choose</option>
                     <option value="Keyboard">Keyboard</option>
                     <option value="GPU">GPU</option>
                     <option value="music">Music</option>
@@ -249,7 +249,7 @@ export const ItemFilterBar = ({
                     }}
                     className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                   >
-                    <option value={undefined}>Choose</option>
+                    <option value="">Choose</option>
                     <option value="Guitar">Guitar</option>
                     <option value="AMD">AMD</option>
                   </Field>
@@ -269,7 +269,7 @@ export const ItemFilterBar = ({
                     }}
                     className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                   >
-                    <option value={undefined}>Choose</option>
+                    <option value="">Choose</option>
                     <option value="Beginner">Beginner</option>
                     <option value="Intermediate">Intermediate</option>
                     <option value="Enthusiaist">Enthusiaist</option>
