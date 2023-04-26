@@ -31,29 +31,33 @@ export const ProductCard = ({ itemData, ...props }: ProductCardProps) => {
   }, []);
   return (
     // Otw bikin pages2 nya dlu
-    <Link href="/duar">
+    <Link
+      href={`/merchant/${itemData.merchantInfo.username}/item/${itemData.itemId}`}
+    >
       <div
         className="flex h-full w-full flex-col rounded-lg border-2 border-solid border-normal-white hover:shadow-lg"
         {...props}
       >
         <div className="flex flex-col p-3">
           <img
-            className="h-60 w-60 self-center rounded-md"
+            className="h-60 w-60 self-center rounded-md object-scale-down lg:h-32 xl:h-40 2xl:h-60"
             src={
               image ??
               "https://i1.sndcdn.com/artworks-dCikqEVyCfTCgdq0-0hSQRQ-t500x500.jpg"
             }
             alt="ProductCardImage"
           />
-          <p className="font-sans text-sm font-semibold lg:text-xl">
+          <p className="font-sans text-sm font-semibold lg:text-base xl:text-lg">
             {itemData.itemName}
           </p>
-          <p className="font-sans text-sm lg:text-lg">
+          <p className="font-sans text-sm lg:text-base">
             {itemData.merchantLevel}
           </p>
-          <p className="font-sans text-sm lg:text-lg">{itemData.itemPrice}</p>
-          <p className="font-sans text-sm lg:text-lg">{itemData.hobby}</p>
-          <p className="font-sans text-sm lg:text-lg">
+          <p className="font-sans text-sm lg:text-base">
+            {itemData.itemCategory}
+          </p>
+          <p className="font-sans text-sm lg:text-base">{itemData.hobby}</p>
+          <p className="font-sans text-sm lg:text-base">
             Rp. {itemData.itemPrice.toLocaleString()}
           </p>
         </div>
