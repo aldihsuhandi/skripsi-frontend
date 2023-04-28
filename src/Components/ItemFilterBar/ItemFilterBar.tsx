@@ -131,10 +131,6 @@ export const ItemFilterBar = ({
         });
 
         // 3. setState variable parent pake setQueryResult():
-        // TODO: do this, msh blom ada item before, pas ada seeder check
-        // TODO: Yeah sblm itu bikin dlu hook useState-nya di parent trus edit
-        // function yang di pass kesini
-        // setQueryResult("test");
         setQueryResult(itemQueried);
 
         router.push({
@@ -143,7 +139,6 @@ export const ItemFilterBar = ({
         });
       }}
     >
-      {/* Masih unused, errors keknya ntar uat price min ama max aja, bikin validation schema uat itu, sisanya nggak ush keknya */}
       {({ setFieldValue }) => (
         <Form>
           <div className="grid grid-cols-1 lg:grid-cols-4 lg:gap-2">

@@ -75,11 +75,7 @@ export default function Search() {
               <>Loading Placeholder</>
             ) : items?.resultContext.success ? (
               <>
-                {/* {JSON.stringify(items)} */}
                 {items.items.map((data) => {
-                  // Image msh placeholder, belum ada seeders
-                  // Dan masih pake yang gw, bukan card seto
-                  // sooo TODO: Pake card bikinan seto
                   return <ProductCard itemData={data} />;
                 })}
               </>
