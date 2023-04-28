@@ -3,6 +3,8 @@ import axios from "axios";
 import { ItemQueryResult, Session_Local_Key } from "@/types";
 import { ItemFilterValues } from "@/types/ItemFilter";
 import { CLIENT_ID, CLIENT_SECRET } from "@/types";
+import { CheckExistSessionLocal } from "./SessionHelper";
+import { CheckSessionValid } from "./SessionHelper/CheckSessionValid";
 
 export const ItemFilterQuery = async (filters: ItemFilterValues) => {
   const headers = {
@@ -12,9 +14,13 @@ export const ItemFilterQuery = async (filters: ItemFilterValues) => {
     "Accept-Type": "application/json",
   };
 
-  const sessionString = localStorage.getItem(Session_Local_Key);
+  // Check klo ada gk session local
+  const sessionString = CheckExistSessionLocal();
   if (sessionString) {
-    Object.assign(headers, { sessionId: sessionString });
+    const validSession = await CheckSessionValid(sessionString);
+    if (validSession) {
+      Object.assign(headers, { sessionId: sessionString });
+    }
   }
 
   const { data } = await axios.post<ItemQueryResult>(
