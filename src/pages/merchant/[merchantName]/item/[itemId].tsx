@@ -1,8 +1,24 @@
-import { ItemQuery, urlFirstString } from "@/helper";
+import { COLOR_HEX_STRING, Color } from "@/Components/Color";
+import { ChatIcon } from "@/Components/Icons";
+import { ForumIcon } from "@/Components/Icons";
+import { ItemImage } from "@/Components/ItemImage";
+import { ItemImagesMultiple } from "@/Components/ItemImagesMultiple";
+import { MerchantInfo } from "@/Components/MerchantInfo";
+import { ItemQuery, capitalizeFirstLetter, urlFirstString } from "@/helper";
 import { ItemQueryResult } from "@/types";
+import classNames from "classnames";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
+import {
+  HiStar,
+  HiShare,
+  HiHeart,
+  HiUserGroup,
+  HiPlusCircle,
+  HiMinusCircle,
+} from "react-icons/hi";
+import { HiBuildingStorefront } from "react-icons/hi2";
 
 export default function MerchantItem() {
   // Ini spesific 1 item dari sebuah merchang
@@ -11,10 +27,11 @@ export default function MerchantItem() {
 
   const { itemId } = router.query;
 
-  //   const pageTitle = `Search ${urlFirstString(q) ?? ""}`;
   const [itemData, setItemData] = useState<ItemQueryResult | undefined>();
   const [pageTitle, setPageTitle] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const [quantityToCart, setQuantityToCart] = useState(1);
 
   useEffect(() => {
     const fetchItemData = async () => {
@@ -26,17 +43,41 @@ export default function MerchantItem() {
         setItemData(itemDataFetch);
         // klo dari itemId harusnya cuman satu, tpi masih array/list karena useCase nya bisa
         // uat search/query yang banyak hasilnya
-        setPageTitle(
-          itemDataFetch.items[0].itemName +
-            "from" +
-            itemDataFetch.items[0].merchantInfo.username
-        );
+        if (itemDataFetch.items[0]) {
+          setPageTitle(
+            itemDataFetch.items[0].itemName +
+              " from" +
+              itemDataFetch.items[0].merchantInfo.username
+          );
+        }
         setIsLoading(false);
       }
     };
 
     fetchItemData();
   }, [itemId]);
+
+  const InterestLevelComponent = ({
+    logo,
+    level,
+    description,
+  }: {
+    logo: ReactNode;
+    level: string;
+    description: string;
+  }) => {
+    return (
+      <div className="flex flex-col">
+        <div className="flex flex-row">
+          {logo}{" "}
+          <span className="self-center text-xl font-bold text-purple-900">
+            {level}
+          </span>
+        </div>
+        <div className="self-center text-normal-yellow">{description}</div>
+      </div>
+    );
+  };
 
   return (
     <>
@@ -47,7 +88,190 @@ export default function MerchantItem() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <div>{JSON.stringify(itemData)}</div>
+        {/* <div>{JSON.stringify(itemData)}</div> */}
+        {/* If nggak loading dan itemData nggak falsy (undefined gitu2) */}
+        {!isLoading && itemData && itemData.items[0] ? (
+          <div className="m-0 flex min-h-screen flex-col py-0 lg:mx-auto lg:max-w-screen-lg lg:py-11 xl:max-w-screen-xl 2xl:max-w-screen-2xl">
+            {/* 1. Row isi most of the content, kek images, merchant, interest dkk */}
+            <div className="mx-auto flex flex-col lg:flex-row">
+              {/* 1.1. Images */}
+              <div className="flex flex-col px-3">
+                {/* 1.1.1 Image(s) */}
+                <ItemImagesMultiple imageIds={itemData.items[0].itemImages} />
+              </div>
+              {/* 1.2. Title, Interest Level, Item Desc, Rating, Cat, Hob, Merchant Info */}
+              <div className="flex flex-col px-0 lg:px-14">
+                {/* 1.2.1 Title */}
+                <h3 className="mb-2 text-2xl font-bold">
+                  {itemData.items[0].itemName}
+                </h3>
+                {/* 1.2.2 Rating (PLACEHOLDER FOR NOW) */}
+                <div>
+                  <HiStar
+                    style={{
+                      color: "yellow",
+                      display: "inline",
+                      height: "1.5em",
+                      width: "1.5em",
+                    }}
+                  />
+                  <span className="font-bold">4.6 / 5</span> <br />
+                  <span className="font-bold">Overall Product Review</span>
+                </div>
+
+                <h1 className="py-3 text-3xl font-bold">
+                  Rp. {itemData.items[0].itemPrice.toLocaleString()}
+                </h1>
+
+                {/* 1.2.3 Category */}
+                <h4 className="text-purple-500">
+                  Category:{" "}
+                  <span className="font-bold">
+                    {itemData.items[0].itemCategory}
+                  </span>
+                </h4>
+                {/* 1.2.4 Hobby */}
+                <h4 className="text-bright-cyan">
+                  Hobby:{" "}
+                  <span className="font-bold">{itemData.items[0].hobby}</span>
+                </h4>
+                {/* 1.2.5 Interest Level (Bru Merchant doang) */}
+                <div className="flex flex-row justify-between">
+                  <InterestLevelComponent
+                    logo={
+                      <HiBuildingStorefront
+                        style={{
+                          height: "3em",
+                          width: "3em",
+                          color: "#581C87",
+                        }}
+                      />
+                    }
+                    level={capitalizeFirstLetter(
+                      itemData.items[0].merchantLevel
+                    )}
+                    description={"Merchant Rating"}
+                  />
+                  <InterestLevelComponent
+                    logo={
+                      <HiUserGroup
+                        style={{
+                          height: "3em",
+                          width: "3em",
+                          color: "#581C87",
+                        }}
+                      />
+                    }
+                    level={"Placeholder"}
+                    description={"Community Rating"}
+                  />
+                </div>
+                {/* 1.2.6 Item Desc (if any) */}
+                <span className="font-bold">Description:</span>
+                <h5>
+                  {itemData.items[0].itemDescription.length !== 0
+                    ? itemData.items[0].itemDescription
+                    : "No Description Given"}
+                </h5>
+                <MerchantInfo
+                  data={itemData.items[0].merchantInfo}
+                  className="pt-4"
+                />
+              </div>
+              {/* 1.3. Quantity/Stock, buttons add to card/wishlist ect */}
+              <div className="flex h-fit w-80 flex-col self-center rounded-lg shadow-xl lg:self-start">
+                {/* Quantity -- Stock, Button */}
+                <div className="m-auto flex flex-col self-center py-2">
+                  <span className="self-center">Quantity</span>
+                  <div className="flex flex-row items-center self-center">
+                    <HiMinusCircle
+                      className={classNames("text-normal-blue", {
+                        "cursor-pointer": quantityToCart > 1,
+                        "cursor-not-allowed": quantityToCart === 1,
+                      })}
+                      style={{ height: "1.5em", width: "1.5em" }}
+                      onClick={() => {
+                        if (quantityToCart > 1) {
+                          setQuantityToCart(quantityToCart - 1);
+                        }
+                      }}
+                    />
+                    <div className="mx-2 rounded-lg border border-black px-4">
+                      {quantityToCart}
+                    </div>
+                    <HiPlusCircle
+                      className={classNames("text-normal-blue", {
+                        "cursor-pointer":
+                          quantityToCart < itemData.items[0].itemQuantity,
+                        "cursor-not-allowed":
+                          quantityToCart === itemData.items[0].itemQuantity,
+                      })}
+                      style={{ height: "1.5em", width: "1.5em" }}
+                      onClick={() => {
+                        if (quantityToCart < itemData.items[0].itemQuantity) {
+                          setQuantityToCart(quantityToCart + 1);
+                        }
+                      }}
+                    />
+                  </div>
+                  <span className="self-center">
+                    Stock: {itemData.items[0].itemQuantity}
+                  </span>
+                </div>
+                {/* Total Price */}
+                <span className="self-center text-lg font-bold">
+                  Total: Rp.{" "}
+                  {(
+                    quantityToCart * itemData.items[0].itemPrice
+                  ).toLocaleString()}
+                </span>
+                {/* Add to Cart Button */}
+                <div className="px-4 pt-2 pb-1">
+                  <button className="w-full rounded bg-normal-blue py-2 px-4 font-bold text-white hover:bg-blue-700">
+                    Add to Cart
+                  </button>
+                </div>
+                {/* Buy Now Button */}
+                <div className="px-4 pt-1 pb-2">
+                  <button className="w-full rounded bg-normal-blue py-2 px-4 font-bold text-white hover:bg-blue-700">
+                    Buy Now
+                  </button>
+                </div>
+                {/* Buttons, Wishlist, Chat, Forum, Share */}
+                <div className="flex flex-row justify-evenly pb-2">
+                  <div className="rounded bg-normal-blue px-1">
+                    <HiHeart
+                      className="text-white"
+                      style={{ height: "1.7em", width: "1.7em" }}
+                    />
+                  </div>
+                  <div className="rounded bg-normal-blue px-1">
+                    <ForumIcon
+                      classNameIcon="h-7 w-7"
+                      htmlColor={COLOR_HEX_STRING[Color.BrightWhite]}
+                    />
+                  </div>
+                  <div className="rounded bg-normal-blue px-1">
+                    <ChatIcon
+                      classNameIcon="h-7 w-7"
+                      htmlColor={COLOR_HEX_STRING[Color.BrightWhite]}
+                    />
+                  </div>
+                  <div className="rounded bg-normal-blue px-1">
+                    <HiShare
+                      className="text-white"
+                      style={{ height: "1.7em", width: "1.7em" }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : itemData?.items[0] ? (
+          <>Loading</>
+        ) : (
+          <>Item Not Found</>
+        )}
       </main>
     </>
   );

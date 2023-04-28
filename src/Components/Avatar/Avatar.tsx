@@ -1,13 +1,13 @@
-import React from "react";
+import React, { ImgHTMLAttributes } from "react";
 import classNames from "classnames";
 
-export interface AvatarProps {
+export interface AvatarProps extends ImgHTMLAttributes<HTMLImageElement> {
   src?: string;
   alt?: string;
   rounded?: boolean;
 }
 
-export const Avatar = ({ src, alt, rounded }: AvatarProps) => {
+export const Avatar = ({ src, alt, rounded, ...props }: AvatarProps) => {
   // bla
   return (
     <img
@@ -21,6 +21,7 @@ export const Avatar = ({ src, alt, rounded }: AvatarProps) => {
         "https://st3.depositphotos.com/4111759/13425/v/600/depositphotos_134255710-stock-illustration-avatar-vector-male-profile-gray.jpg"
       }
       alt={alt ?? "no alt provided"}
+      {...props}
     />
   );
 };

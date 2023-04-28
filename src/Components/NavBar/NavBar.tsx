@@ -42,7 +42,7 @@ export const NavBar = () => {
               imageId: userData.userInfo.profilePicture,
             });
 
-            const imgUrl = await ProcessImgBE(imgUsable);
+            const imgUrl = await ProcessImgBE(imgUsable?.data);
 
             setImg(imgUrl);
           }

@@ -272,7 +272,7 @@ export const ItemFilterBar = ({
                     <option value="">Choose</option>
                     <option value="Beginner">Beginner</option>
                     <option value="Intermediate">Intermediate</option>
-                    <option value="Enthusiaist">Enthusiaist</option>
+                    <option value="Enthusiast">Enthusiast</option>
                   </Field>
                 </div>
               </div>

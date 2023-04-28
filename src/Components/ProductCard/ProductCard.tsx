@@ -9,19 +9,19 @@ export interface ProductCardProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const ProductCard = ({ itemData, ...props }: ProductCardProps) => {
-  const [image, setImage] = useState<any | undefined>();
+  const [image, setImage] = useState<string | undefined>();
+  const [merchantEncoded, setMerchantEncoded] = useState<string | undefined>();
   useEffect(() => {
     async function yeah() {
       const response = await ProcessImage({
         imageIdCom: itemData.itemImages[0],
       });
-      timeout(2000);
-      // console.log("await kelar");
       if (response?.status === 200 && response.data.byteLength !== 0) {
         const byteArray = new Uint8Array(response.data);
         const blobs = new Blob([byteArray], { type: "image/jpeg" });
         const imgUrl = URL.createObjectURL(blobs);
 
+        setMerchantEncoded(encodeURIComponent(itemData.merchantInfo.username));
         setImage(imgUrl);
       } else {
         setImage(undefined);
@@ -31,9 +31,7 @@ export const ProductCard = ({ itemData, ...props }: ProductCardProps) => {
   }, []);
   return (
     // Otw bikin pages2 nya dlu
-    <Link
-      href={`/merchant/${itemData.merchantInfo.username}/item/${itemData.itemId}`}
-    >
+    <Link href={`/merchant/${merchantEncoded}/item/${itemData.itemId}`}>
       <div
         className="flex h-full w-full flex-col rounded-lg border-2 border-solid border-normal-white hover:shadow-lg"
         {...props}
@@ -107,7 +105,3 @@ const ProcessImage = async ({ imageIdCom }: { imageIdCom: string }) => {
     return null;
   }
 };
-
-function timeout(delay: number) {
-  return new Promise((res) => setTimeout(res, delay));
-}

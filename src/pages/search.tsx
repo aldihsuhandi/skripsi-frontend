@@ -64,7 +64,7 @@ export default function Search() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <div className="m-0 lg:mx-auto lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl ">
+        <div className="m-0 min-h-screen lg:mx-auto lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
           <ItemFilterBar
             page="search"
             searchQuery={qString}
@@ -80,17 +80,7 @@ export default function Search() {
                   // Image msh placeholder, belum ada seeders
                   // Dan masih pake yang gw, bukan card seto
                   // sooo TODO: Pake card bikinan seto
-                  return (
-                    <ProductCard
-                      itemData={data}
-                      // imageId={data.itemImages[0]}
-                      // title={data.itemName}
-                      // interestLevel={data.merchantLevel}
-                      // price={data.itemPrice}
-                      // itemCategory={data.itemCategory}
-                      // hobbyType={data.hobby}
-                    />
-                  );
+                  return <ProductCard itemData={data} />;
                 })}
               </>
             ) : (
