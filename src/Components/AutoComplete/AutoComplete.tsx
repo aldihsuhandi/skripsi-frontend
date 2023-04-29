@@ -14,6 +14,7 @@ import { SearchBar, SearchBarProps } from "../SearchBar";
 
 import { useRouter } from "next/router";
 import { HighlightSuggestion } from "./HighlightSuggestion";
+import { urlFirstString } from "@/helper";
 
 export type AutoCompleteProps = {
   autoCompleteOnChange?: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -25,6 +26,7 @@ export const AutoComplete = ({
 }: AutoCompleteProps) => {
   // Uat redirect pas enter
   const router = useRouter();
+  const { q } = router.query;
   // HANDLE CLICK DILUAR COMPONENT
   // ref uat deteksi klik diluar component
   const ref = useRef<HTMLDivElement>(null);
@@ -44,12 +46,15 @@ export const AutoComplete = ({
   useEffect(() => {
     // Add event listener for clicks on the document
     document.addEventListener("click", handleClickOutside);
+    if (router.isReady) {
+      setInputValue(urlFirstString(q) ?? "");
+    }
 
     // Cleanup function to remove the event listener
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
-  }, []);
+  }, [router.isReady]);
 
   function handleClickOutside(event: MouseEvent) {
     // Deteksi klik diluar Component
@@ -155,10 +160,11 @@ export const AutoComplete = ({
       </form>
       <div
         className={classNames(
-          "absolute flex w-full flex-col rounded-lg border border-gray-300 bg-gray-50 text-gray-900 focus:border-blue-500 focus:ring-blue-500",
+          "absolute flex w-full flex-col overflow-auto rounded-lg border border-gray-300 bg-gray-50 text-gray-900 focus:border-blue-500 focus:ring-blue-500",
           { block: showAutoComplete && isSearchBarFocused },
           { hidden: !showAutoComplete || !isSearchBarFocused }
         )}
+        style={{ maxHeight: "50vh" }}
       >
         {!error ? (
           AutoCompletePart({ suggestion: autoCompleteSuggestion })

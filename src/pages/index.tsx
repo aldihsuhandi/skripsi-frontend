@@ -2,8 +2,32 @@ import Head from "next/head";
 import { ProductCard } from "@/Components/ProductCard";
 import { TrendingIcon } from "@/Components/Icons/TrendingIcon";
 import { Color, COLOR_HEX_STRING } from "@/Components/Color";
+import { ItemSummary } from "@/types";
 
 export default function Home() {
+  const mockData: ItemSummary = {
+    itemId: "test",
+    itemName: "Test Name",
+    itemPrice: 69420,
+    itemDescription: "Test Desc",
+    itemQuantity: 10,
+    itemCategory: "Test Cat",
+    hobby: "Test Hob",
+    merchantInfo: {
+      email: "testEmail@mail.com",
+      phoneNumber: "085674566685",
+      username: "test",
+      role: "MERCHANT",
+      profilePicture: undefined,
+      gmtCreate: new Date("2023-04-24 12:17:53"),
+      gmtModified: new Date("2023-04-24 12:18:00"),
+    },
+    merchantLevel: "BEGINNER",
+    itemImages: [],
+    gmtCreate: new Date("2023-04-25 12:17:53"),
+    gmtModified: new Date("2023-04-25 12:18:00"),
+  };
+
   return (
     <>
       <Head>
@@ -25,14 +49,7 @@ export default function Home() {
             />
           </div>
           <div className="grid grid-cols-2 gap-4  py-2 px-2 lg:grid-cols-5 lg:py-4">
-            {Array(13).fill(
-              <ProductCard
-                imageSrc="https://booth.pximg.net/users/324203/icon_image/58943d20-3c9a-4cf4-84cb-74d95c88a07d.png"
-                title="Dummy"
-                interestLevel="Dummy Interest Level"
-                price={69420666}
-              />
-            )}
+            {Array(13).fill(<ProductCard itemData={mockData} />)}
           </div>
         </div>
       </main>
