@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { ItemQueryResult, Session_Local_Key } from "@/types";
+import { ItemQueryResult } from "@/types";
 import { ItemFilterValues } from "@/types/ItemFilter";
 import { CLIENT_ID, CLIENT_SECRET } from "@/types";
 import { CheckExistSessionLocal, CheckSessionValid } from "./SessionHelper";
