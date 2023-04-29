@@ -60,7 +60,7 @@ export const ProductCard = ({ itemData, ...props }: ProductCardProps) => {
           </p>
         </div>
         <div className="mt-auto flex flex-row justify-end gap-2 p-3">
-          <div className="group relative w-max">
+          <div className="group w-max">
             <button
               className="rounded-full bg-normal-blue p-2 hover:bg-bright-blue"
               type="button"
