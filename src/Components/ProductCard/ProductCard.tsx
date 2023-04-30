@@ -1,11 +1,11 @@
 import { WishlistAdd } from "@/helper";
-import { SessionValidate } from "@/helper/SessionHelper";
 import { CLIENT_ID, CLIENT_SECRET, ItemSummary } from "@/types";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { HTMLAttributes, useEffect, useState } from "react";
 import { HiHeart } from "react-icons/hi";
+import { toast } from "react-toastify";
 
 export interface ProductCardProps extends HTMLAttributes<HTMLDivElement> {
   itemData: ItemSummary;
@@ -69,17 +69,23 @@ export const ProductCard = ({ itemData, ...props }: ProductCardProps) => {
               type="button"
               onClick={async (e) => {
                 e.preventDefault();
-                const isSessionValid = await SessionValidate();
-                if (isSessionValid) {
-                  console.log("valid, masukin wishlist (WIP)");
-                  const result = await WishlistAdd({
-                    itemId: itemData.itemId,
+                const result = await WishlistAdd({
+                  itemId: itemData.itemId,
+                });
+                if (result.resultContext.success) {
+                  toast.success("Successfully added!", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    theme: "colored",
                   });
-                  if (result.resultContext.resultCode === "SESSION_EXPIRED") {
-                    router.push("/login");
-                  }
-                } else {
+                } else if (
+                  result.resultContext.resultCode === "SESSION_EXPIRED"
+                ) {
                   router.push("/login");
+                } else if (result.resultContext.resultCode === "SYSTEM_ERROR") {
+                  // Ntar bikin dialog alert (or something) uat handle system error
+                  window.alert("An Unexpected error occured");
                 }
               }}
             >
