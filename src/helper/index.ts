@@ -10,3 +10,4 @@ export * from "./SessionInfoCall";
 export * from "./UserQueryCall";
 export * from "./ItemQueryFilterCall";
 export * from "./ItemQueryCall";
+export * from "./WishlistCalls";

@@ -1,6 +1,9 @@
+import { WishlistAdd } from "@/helper";
+import { SessionValidate } from "@/helper/SessionHelper";
 import { CLIENT_ID, CLIENT_SECRET, ItemSummary } from "@/types";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { HTMLAttributes, useEffect, useState } from "react";
 import { HiHeart } from "react-icons/hi";
 
@@ -9,6 +12,7 @@ export interface ProductCardProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const ProductCard = ({ itemData, ...props }: ProductCardProps) => {
+  const router = useRouter();
   const [image, setImage] = useState<string | undefined>();
   const [merchantEncoded, setMerchantEncoded] = useState<string | undefined>();
   useEffect(() => {
@@ -28,9 +32,8 @@ export const ProductCard = ({ itemData, ...props }: ProductCardProps) => {
       }
     }
     yeah();
-  }, []);
+  }, [itemData]);
   return (
-    // Otw bikin pages2 nya dlu
     <Link href={`/merchant/${merchantEncoded}/item/${itemData.itemId}`}>
       <div
         className="flex h-full w-full flex-col rounded-lg border-2 border-solid border-normal-white hover:shadow-lg"
@@ -64,10 +67,20 @@ export const ProductCard = ({ itemData, ...props }: ProductCardProps) => {
             <button
               className="rounded-full bg-normal-blue p-2 hover:bg-bright-blue"
               type="button"
-              onClick={(e) => {
-                // !!! Penting supaya bisa di klik, klo nggak yang ke-trigger <Link/> diatas doang
+              onClick={async (e) => {
                 e.preventDefault();
-                console.log("button wish");
+                const isSessionValid = await SessionValidate();
+                if (isSessionValid) {
+                  console.log("valid, masukin wishlist (WIP)");
+                  const result = await WishlistAdd({
+                    itemId: itemData.itemId,
+                  });
+                  if (result.resultContext.resultCode === "SESSION_EXPIRED") {
+                    router.push("/login");
+                  }
+                } else {
+                  router.push("/login");
+                }
               }}
             >
               <HiHeart size={20} className="fill-white" />

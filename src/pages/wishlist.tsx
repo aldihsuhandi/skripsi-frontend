@@ -1,8 +1,90 @@
-import Head from "next/head";
-import { Color, COLOR_HEX_STRING } from "@/Components/Color";
+import { SearchBar } from "@/Components/SearchBar";
 import { WishlistCard } from "@/Components/WishlistCard";
+import { WishlistFilterBar } from "@/Components/WishlistFilterBar";
+import { WishlistQuery, parseNumberUndefined, urlFirstString } from "@/helper";
+import { SessionValidate } from "@/helper/SessionHelper";
+import { WishlistQueryResult } from "@/types/Wishlist";
+import { sanitize } from "dompurify";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
 export default function Wishlist() {
+  const router = useRouter();
+
+  const { q, pMin, pMax, pSort, hob, itemCat, inLev } = router.query;
+  const [qString, setQString] = useState<string>();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const [inputValue, setInputValue] = useState("");
+
+  const [items, setItems] = useState<WishlistQueryResult | undefined>();
+
+  useEffect(() => {
+    // Check session, klo nggak valid
+    const sessionCheck = async () => {
+      const isValidSession = await SessionValidate();
+      if (isValidSession) {
+        initialRenderResult();
+      } else {
+        router.push("/login");
+      }
+    };
+
+    if (router.isReady) {
+      sessionCheck();
+    }
+
+    const fetchQueriesName = async () => {
+      setQString(urlFirstString(q));
+    };
+
+    const initialRenderResult = async () => {
+      const pMinNumber = parseNumberUndefined(urlFirstString(pMin));
+      const pMaxNumber = parseNumberUndefined(urlFirstString(pMax));
+
+      setIsLoading(true);
+      await fetchQueriesName();
+      if (urlFirstString(q) === qString) {
+        const itemQueried = await WishlistQuery({
+          itemName: qString || "",
+          pMin: pMinNumber,
+          pMax: pMaxNumber,
+          hob: urlFirstString(hob),
+          itemCat: urlFirstString(itemCat),
+          inLev: urlFirstString(inLev),
+        });
+        console.log(itemQueried.resultContext.success);
+        if (itemQueried.resultContext.success) {
+          setIsLoading(false);
+          setItems(itemQueried);
+        } else if (itemQueried.resultContext.resultCode === "SESSION_EXPIRED") {
+          router.push("/login");
+        } else {
+          alert("System is Busy!");
+        }
+      }
+    };
+    console.log(qString);
+  }, [router.isReady, q, qString]);
+
+  function UpdateDiChild(replace_in_parent: WishlistQueryResult) {
+    setItems(replace_in_parent);
+  }
+
+  const handleChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    const unsanitized = event.target.value;
+    const value = sanitize(unsanitized);
+    setInputValue(value);
+  };
+
+  const handleEnter = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    router.push({
+      pathname: `/wishlist`,
+      query: { q: inputValue },
+    });
+  };
   return (
     <>
       <Head>
@@ -13,26 +95,56 @@ export default function Wishlist() {
       </Head>
       <main>
         <div className="m-0 lg:mx-auto lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
-          <div className="flex px-2 pt-3">
-            <p className="text-sm font-bold lg:text-lg">
-              Placeholder (Diatas ini dijadiin tempat bwt filter-filter mungkin
-              ntar? idk aowkokaowk)
-            </p>
-          </div>
-          <div className="grid grid-cols-2 gap-4 py-2 px-2 lg:grid-cols-5 lg:py-4">
-            {Array(12).fill(
-              <WishlistCard
-                imageSrc="https://i.imgur.com/HYCmY98.jpeg"
-                title="Dummy Name"
-                interestLevel="Dummy Interest Level"
-                itemCategory="Category Item Here"
-                hobbyType="Hobby Name Here"
-                price={69420666}
+          <div className="flex flex-col px-2 pt-3">
+            <p className="text-sm font-bold lg:text-lg">Wishlist</p>
+            <form onSubmit={handleEnter}>
+              <SearchBar
+                onChange={handleChange}
+                value={inputValue}
+                autoComplete="off"
               />
-            )}
+            </form>
+            <WishlistFilterBar
+              page="wishlist"
+              searchQuery={qString}
+              setQueryResult={UpdateDiChild}
+            />
           </div>
+
+          {/* <div className="grid grid-cols-2 gap-4 py-2 px-2 lg:grid-cols-5 lg:py-4">
+            {isLoading ? (
+              <>Loading Placeholder</>
+            ) : items?.resultContext.success ? (
+              <>
+                {items.wishlistItems.map((data) => {
+                  return <WishlistCard itemData={data} />;
+                })}
+              </>
+            ) : (
+              <>Error! {items?.resultContext.resultMsg}</>
+            )}
+          </div> */}
+
+          {isLoading ? (
+            <>Loading Placeholder</>
+          ) : (
+            <div className="grid grid-cols-2 gap-4 py-2 px-2 lg:grid-cols-5 lg:py-4">
+              {items?.wishlistItems.length !== 0 && items ? (
+                <>
+                  {items.wishlistItems.map((data) => {
+                    return <WishlistCard itemData={data} />;
+                  })}
+                </>
+              ) : (
+                <>KOSONG PLACEHOLDER</>
+              )}
+            </div>
+          )}
         </div>
       </main>
     </>
   );
 }
+
+// Ntar
+const RenderContent = () => {};
