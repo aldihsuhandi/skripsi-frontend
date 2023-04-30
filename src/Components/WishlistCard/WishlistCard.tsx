@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { HTMLAttributes, useEffect, useState } from "react";
 import { HiShoppingCart, HiTrash } from "react-icons/hi";
+import { DialogConfrim } from "../DialogConfirm";
+import { WishlistRemove } from "@/helper";
 
 export interface WishlistCardProps extends HTMLAttributes<HTMLDivElement> {
   itemData: ItemSummary;
@@ -73,12 +75,33 @@ export const WishlistCard = ({ itemData, ...props }: WishlistCardProps) => {
             </span>
           </div>
           <div className="group relative w-max">
-            <button
-              className="rounded-full bg-red-500 p-2 hover:bg-red-400"
-              type="button"
-            >
-              <HiTrash size={20} className="fill-white" />
-            </button>
+            <DialogConfrim
+              trigger={
+                <button
+                  className="rounded-full bg-red-500 p-2 hover:bg-red-400"
+                  type="button"
+                  onClick={(e) => e.preventDefault()}
+                >
+                  <HiTrash size={20} className="fill-white" />
+                </button>
+              }
+              title="Apakah anda yakin ingin menghapus dari Wishlist?"
+              onConfirm={async () => {
+                const result = await WishlistRemove({
+                  itemId: itemData.itemId,
+                });
+                if (result.resultContext.success) {
+                  router.reload();
+                } else if (
+                  result.resultContext.resultCode === "SESSION_EXPIRED"
+                ) {
+                  router.push("/login");
+                } else if (result.resultContext.resultCode === "SYSTEM_ERROR") {
+                  // Ntar bikin dialog alert (or something) uat handle system error
+                  window.alert("An Unexpected error occured");
+                }
+              }}
+            />
             <span className="pointer-events-none absolute -top-7 left-0 w-max rounded-md p-1 text-sm font-light opacity-0 transition-opacity group-hover:bg-bright-white group-hover:opacity-100">
               Remove Item
             </span>

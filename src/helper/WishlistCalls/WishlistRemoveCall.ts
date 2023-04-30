@@ -4,7 +4,7 @@ import { WishlistAddResult } from "@/types";
 import { CLIENT_ID, CLIENT_SECRET } from "@/types";
 import { CheckExistSessionLocal, CheckSessionValid } from "../SessionHelper";
 
-export const WishlistAdd = async ({ itemId }: { itemId: string }) => {
+export const WishlistRemove = async ({ itemId }: { itemId: string }) => {
   const headers = {
     clientId: CLIENT_ID,
     clientSecret: CLIENT_SECRET,
@@ -21,7 +21,7 @@ export const WishlistAdd = async ({ itemId }: { itemId: string }) => {
   }
 
   const { data } = await axios.post<WishlistAddResult>(
-    "http://localhost:8080/item/wishlist/add",
+    "http://localhost:8080/item/wishlist/remove",
     {
       itemId,
     },
