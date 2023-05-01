@@ -12,12 +12,14 @@ import { UserQuery } from "@/helper/UserQueryCall";
 import { ImageDownload } from "@/helper/ImageDownloadCall";
 import { LogoutCall } from "@/helper/LogoutCall";
 import { ProcessImgBE } from "@/helper/ProcessImgBE";
+import { UserMenu } from "../UserMenu/UserMenu";
+import { UserSummary } from "@/types/User";
 
 export const NavBar = () => {
   const router = useRouter();
   //---> nge set apakh usernya dah login ato belom <---
   const [isLoggedIn, setIsLoggedIn] = useState(false); //default state true, CW: gw jadiin false ye
-  const [img, setImg] = useState<string | undefined>(undefined);
+  const [userData, setUserData] = useState<UserSummary | undefined>(undefined);
 
   // useEffect check session
   useEffect(() => {
@@ -34,18 +36,10 @@ export const NavBar = () => {
           const userData = await UserQuery({
             key: emailUser,
             identifier: "email",
+          }).then((userData) => {
+            setUserData(userData.userInfo);
           });
 
-          // panggil image/download
-          if (userData.userInfo.profilePicture) {
-            const imgUsable = await ImageDownload({
-              imageId: userData.userInfo.profilePicture,
-            });
-
-            const imgUrl = await ProcessImgBE(imgUsable?.data);
-
-            setImg(imgUrl);
-          }
           // set Logged in
           setIsLoggedIn(true);
         } else if (!sessionInfo.resultContext.success) {
@@ -130,18 +124,12 @@ export const NavBar = () => {
         <div className="mx-4 flex self-center">
           {/* User Avatar */}
           {/*===> CONDITIONAL STATEMENT KALO USER DAH LOGIN/BELOM (By default statement nya gw set ke true) <=== */}
-          {isLoggedIn ? ( //Klo udh login render ini
-            <>
-              <Avatar src={img} alt="harusnya millie" rounded />
-              <div className="mx-1 self-center rounded-md border border-normal-blue bg-white hover:border-bright-blue hover:bg-bright-blue">
-                <button
-                  onClick={onLogoutClick}
-                  className="h-8 px-1 text-xs text-normal-blue hover:text-white"
-                >
-                  Logout
-                </button>
-              </div>
-            </>
+          {isLoggedIn && userData ? ( //Klo udh login render ini
+            <UserMenu userData={userData} onLogoutClick={onLogoutClick}>
+              <Link href="/wishlist">
+                <span>Wishlist (WIP)</span>
+              </Link>
+            </UserMenu>
           ) : (
             //Klo blm login render ini
             <>

@@ -1,14 +1,18 @@
+import { WishlistAdd } from "@/helper";
 import { CLIENT_ID, CLIENT_SECRET, ItemSummary } from "@/types";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { HTMLAttributes, useEffect, useState } from "react";
 import { HiHeart } from "react-icons/hi";
+import { toast } from "react-toastify";
 
 export interface ProductCardProps extends HTMLAttributes<HTMLDivElement> {
   itemData: ItemSummary;
 }
 
 export const ProductCard = ({ itemData, ...props }: ProductCardProps) => {
+  const router = useRouter();
   const [image, setImage] = useState<string | undefined>();
   const [merchantEncoded, setMerchantEncoded] = useState<string | undefined>();
   useEffect(() => {
@@ -28,9 +32,8 @@ export const ProductCard = ({ itemData, ...props }: ProductCardProps) => {
       }
     }
     yeah();
-  }, []);
+  }, [itemData]);
   return (
-    // Otw bikin pages2 nya dlu
     <Link href={`/merchant/${merchantEncoded}/item/${itemData.itemId}`}>
       <div
         className="flex h-full w-full flex-col rounded-lg border-2 border-solid border-normal-white hover:shadow-lg"
@@ -60,14 +63,30 @@ export const ProductCard = ({ itemData, ...props }: ProductCardProps) => {
           </p>
         </div>
         <div className="mt-auto flex flex-row justify-end gap-2 p-3">
-          <div className="group relative w-max">
+          <div className="group w-max">
             <button
               className="rounded-full bg-normal-blue p-2 hover:bg-bright-blue"
               type="button"
-              onClick={(e) => {
-                // !!! Penting supaya bisa di klik, klo nggak yang ke-trigger <Link/> diatas doang
+              onClick={async (e) => {
                 e.preventDefault();
-                console.log("button wish");
+                const result = await WishlistAdd({
+                  itemId: itemData.itemId,
+                });
+                if (result.resultContext.success) {
+                  toast.success("Successfully added!", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    theme: "colored",
+                  });
+                } else if (
+                  result.resultContext.resultCode === "SESSION_EXPIRED"
+                ) {
+                  router.push("/login");
+                } else if (result.resultContext.resultCode === "SYSTEM_ERROR") {
+                  // Ntar bikin dialog alert (or something) uat handle system error
+                  window.alert("An Unexpected error occured");
+                }
               }}
             >
               <HiHeart size={20} className="fill-white" />

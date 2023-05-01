@@ -1,11 +1,11 @@
 import axios from "axios";
 
-import { ItemQueryResult } from "@/types";
+import { WishlistQueryResult } from "@/types";
 import { ItemFilterValues } from "@/types/ItemFilter";
 import { CLIENT_ID, CLIENT_SECRET } from "@/types";
-import { CheckExistSessionLocal, CheckSessionValid } from "./SessionHelper";
+import { CheckExistSessionLocal, CheckSessionValid } from "../SessionHelper";
 
-export const ItemFilterQuery = async (filters: ItemFilterValues) => {
+export const WishlistQuery = async (filters: ItemFilterValues) => {
   const headers = {
     clientId: CLIENT_ID,
     clientSecret: CLIENT_SECRET,
@@ -13,7 +13,6 @@ export const ItemFilterQuery = async (filters: ItemFilterValues) => {
     "Accept-Type": "application/json",
   };
 
-  // Check klo ada gk session local
   const sessionString = CheckExistSessionLocal();
   if (sessionString) {
     const validSession = await CheckSessionValid(sessionString);
@@ -22,8 +21,8 @@ export const ItemFilterQuery = async (filters: ItemFilterValues) => {
     }
   }
 
-  const { data } = await axios.post<ItemQueryResult>(
-    "http://localhost:8080/item/query",
+  const { data } = await axios.post<WishlistQueryResult>(
+    "http://localhost:8080/item/wishlist/query",
     {
       itemFilterContext: {
         itemName: filters.itemName,
