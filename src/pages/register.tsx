@@ -19,6 +19,7 @@ import {
 import { Field, Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import * as Yup from "yup";
+import { EncryptEmail } from "@/helper/EncryptDecrypt";
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
@@ -99,13 +100,17 @@ export default function Register() {
               if (resultFromCall.resultContext.success) {
                 setShowError("");
 
-                // NOTE: yep haram, di sprint 3, kita akan halal-in
                 // NOTE: Kalo gagal biarin, tetep redirect, di page /activate ada button resend juga
+
+                // Encrypt Email
+                const encryptedEmail = await EncryptEmail({
+                  email: values.email,
+                });
 
                 // redirect
                 router.push({
                   pathname: "/activate",
-                  query: { e: values.email },
+                  query: { e: encryptedEmail.uuid },
                 });
               } else {
                 // berarti ada error

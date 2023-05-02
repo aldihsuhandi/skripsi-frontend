@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { HiKey } from "react-icons/hi"; //import react icons
 import * as Yup from "yup";
 import styles from "../styles/Form.module.css";
+import { DecryptEmail } from "@/helper/EncryptDecrypt";
 
 const initialValues: ActivateFormValues = {
   otpCode: "",
@@ -30,14 +31,14 @@ export default function Activate() {
     undefined
   );
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [decryptedEmail, setDecryptedEmail] = useState("");
 
   // Storing the timeoutId for clean up
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | undefined>(
     undefined
   );
 
-  // !!! MASIH HARAM !!!
-  // ini dptin email dari URL
+  // ambil uuid dari router
   const e = router.query.e as string;
 
   const ResendCode = async () => {
@@ -51,12 +52,22 @@ export default function Activate() {
 
   // Timer Clean Up
   useEffect(() => {
+    const DecryptFunction = async () => {
+      const decryptedEmailResult = await DecryptEmail({ uuid: e });
+      setDecryptedEmail(decryptedEmailResult.email);
+    };
+
+    // decrypt uuid ke email
+    if (router.isReady) {
+      DecryptFunction();
+    }
+
     return () => {
       if (timeoutId !== undefined) {
         clearTimeout(timeoutId);
       }
     };
-  }, [timeoutId]);
+  }, [timeoutId, e, router.isReady]);
 
   return (
     <>
@@ -96,7 +107,7 @@ export default function Activate() {
                     validationSchema={ActivateSchema}
                     onSubmit={async (values) => {
                       const data_Activate: ActivateRequest = {
-                        email: e,
+                        email: decryptedEmail,
                         otp: values.otpCode,
                       };
 
