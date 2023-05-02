@@ -160,11 +160,21 @@ export default function Activate() {
                             >
                               {resultMessage}
                             </p>
+                            {decryptedEmail === "" ? (
+                              <p>Please Wait, fetching the email</p>
+                            ) : (
+                              ""
+                            )}
                           </div>
                         )}
 
                         <div className="input-button">
-                          <button type="submit" className={styles.button}>
+                          <button
+                            type="submit"
+                            className={styles.button}
+                            // Disabled klo blm di update dari decrypt
+                            disabled={decryptedEmail === ""}
+                          >
                             Activate
                           </button>
                         </div>
