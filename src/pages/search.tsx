@@ -12,6 +12,10 @@ import { useEffect, useState } from "react";
 
 export default function Search() {
   const router = useRouter();
+  // Uat Dropdown filter klo kecil (dibawah lg a.k.a 1024px)
+  const [windowWidth, setWindowWidth] = useState(0);
+  // Uat Dropwdown filter klo kecil
+  const [isOpen, setIsOpen] = useState(false);
 
   const { q, pMin, pMax, pSort, hob, itemCat, inLev } = router.query;
   const pageTitle = `Search ${urlFirstString(q) ?? ""}`;
@@ -48,6 +52,18 @@ export default function Search() {
     if (router.isReady) {
       initialRenderResult();
     }
+
+    // Update screensize klo dirubah
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, [router.isReady, q, qString]);
 
   function UpdateDiChild(replace_in_parent: ItemQueryResult) {
@@ -64,12 +80,37 @@ export default function Search() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <div className="m-0 min-h-screen lg:mx-auto lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
-          <ItemFilterBar
-            page="search"
-            searchQuery={qString}
-            setQueryResult={UpdateDiChild}
-          />
+        <div className="m-0 min-h-screen lg:mx-auto lg:flex lg:max-w-screen-lg  xl:max-w-screen-xl 2xl:max-w-screen-2xl">
+          {windowWidth <= 1024 ? (
+            // Dropdown wrapper
+            <div className="mx-4 mt-4 mb-3 ">
+              {/* Dropdown "button"  */}
+              <div
+                className="cursor-pointer rounded bg-normal-blue"
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                <div className="flex items-center justify-center px-5 py-2 text-white">
+                  Filters
+                </div>
+              </div>
+              {/* Content, filters */}
+              {isOpen && (
+                <div className="pt-4">
+                  <ItemFilterBar
+                    page="search"
+                    searchQuery={qString}
+                    setQueryResult={UpdateDiChild}
+                  />
+                </div>
+              )}
+            </div>
+          ) : (
+            <ItemFilterBar
+              page="search"
+              searchQuery={qString}
+              setQueryResult={UpdateDiChild}
+            />
+          )}
           <div className="grid grid-cols-2 gap-4 py-2 px-2 lg:grid-cols-5 lg:py-4">
             {isLoading ? (
               <>Loading Placeholder</>

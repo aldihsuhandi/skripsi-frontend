@@ -143,10 +143,10 @@ export const WishlistFilterBar = ({
       }}
     >
       {({ setFieldValue }) => (
-        <Form>
-          <div className="grid grid-cols-1 lg:grid-cols-4 lg:gap-2">
-            <div className="col-span-4">
-              <div className="grid grid-cols-3 gap-2 px-3 pb-2">
+        <Form className="">
+          <div className="grid grid-cols-1 lg:flex lg:flex-col">
+            <div>
+              <div className="grid grid-cols-2 gap-2 px-3 pb-2 lg:flex lg:flex-col">
                 <div>
                   <label
                     htmlFor="pMin"

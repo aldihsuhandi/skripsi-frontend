@@ -11,6 +11,10 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
 export default function Wishlist() {
   const router = useRouter();
+  // Uat Dropdown filter klo kecil (dibawah lg a.k.a 1024px)
+  const [windowWidth, setWindowWidth] = useState(0);
+  // Uat Dropwdown filter klo kecil
+  const [isOpen, setIsOpen] = useState(false);
 
   const { q, pMin, pMax, pSort, hob, itemCat, inLev } = router.query;
   const [qString, setQString] = useState<string>();
@@ -65,7 +69,18 @@ export default function Wishlist() {
         }
       }
     };
-    console.log(qString);
+
+    // Update screensize klo dirubah
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, [router.isReady, q, qString]);
 
   function UpdateDiChild(replace_in_parent: WishlistQueryResult) {
@@ -94,52 +109,65 @@ export default function Wishlist() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <div className="m-0 lg:mx-auto lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
-          <div className="flex flex-col px-2 pt-3">
-            <p className="text-sm font-bold lg:text-lg">Wishlist</p>
-            <form onSubmit={handleEnter}>
-              <SearchBar
-                onChange={handleChange}
-                value={inputValue}
-                autoComplete="off"
-              />
-            </form>
-            <WishlistFilterBar
-              page="wishlist"
-              searchQuery={qString}
-              setQueryResult={UpdateDiChild}
+        <div className="m-0 min-h-screen lg:mx-auto lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
+          <p className="px-3 pt-2 text-sm font-bold lg:text-lg">Wishlist</p>
+          <form className="px-3" onSubmit={handleEnter}>
+            <SearchBar
+              onChange={handleChange}
+              value={inputValue}
+              autoComplete="off"
             />
-          </div>
-
-          {/* <div className="grid grid-cols-2 gap-4 py-2 px-2 lg:grid-cols-5 lg:py-4">
-            {isLoading ? (
-              <>Loading Placeholder</>
-            ) : items?.resultContext.success ? (
-              <>
-                {items.wishlistItems.map((data) => {
-                  return <WishlistCard itemData={data} />;
-                })}
-              </>
-            ) : (
-              <>Error! {items?.resultContext.resultMsg}</>
-            )}
-          </div> */}
-
-          {isLoading ? (
-            <>Loading Placeholder</>
-          ) : (
-            <div className="grid grid-cols-2 gap-4 py-2 px-2 lg:grid-cols-5 lg:py-4">
-              {items?.wishlistItems.length !== 0 && items ? (
-                <>
-                  {items.wishlistItems.map((data) => {
-                    return <WishlistCard itemData={data} />;
-                  })}
-                </>
+          </form>
+          <div className="lg:flex">
+            <div className="flex min-w-[20%] flex-col pt-3 lg:basis-1/5">
+              {windowWidth <= 1024 ? (
+                // Dropdown wrapper
+                <div className="mx-4 mt-4 mb-3 ">
+                  {/* Dropdown "button"  */}
+                  <div
+                    className="cursor-pointer rounded bg-normal-blue"
+                    onClick={() => setIsOpen(!isOpen)}
+                  >
+                    <div className="flex items-center justify-center px-5 py-2 text-white">
+                      Filters
+                    </div>
+                  </div>
+                  {/* Content, filters */}
+                  {isOpen && (
+                    <div className="pt-4">
+                      <WishlistFilterBar
+                        page="wishlist"
+                        searchQuery={qString}
+                        setQueryResult={UpdateDiChild}
+                      />
+                    </div>
+                  )}
+                </div>
               ) : (
-                <>KOSONG PLACEHOLDER</>
+                <WishlistFilterBar
+                  page="wishlist"
+                  searchQuery={qString}
+                  setQueryResult={UpdateDiChild}
+                />
               )}
             </div>
-          )}
+
+            {isLoading ? (
+              <>Loading Placeholder</>
+            ) : (
+              <div className="grid grid-cols-2 gap-4 py-2 px-2 lg:grid-cols-5 lg:py-4">
+                {items?.wishlistItems.length !== 0 && items ? (
+                  <>
+                    {items.wishlistItems.map((data) => {
+                      return <WishlistCard itemData={data} />;
+                    })}
+                  </>
+                ) : (
+                  <>KOSONG PLACEHOLDER</>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </main>
     </>
