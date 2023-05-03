@@ -14,6 +14,8 @@ import { HiKey } from "react-icons/hi"; //import react icons
 import * as Yup from "yup";
 import styles from "../styles/Form.module.css";
 import { DecryptEmail } from "@/helper/EncryptDecrypt";
+import { urlFirstString } from "@/helper";
+import { toast } from "react-toastify";
 
 const initialValues: ActivateFormValues = {
   otpCode: "",
@@ -37,29 +39,42 @@ export default function Activate() {
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | undefined>(
     undefined
   );
-
-  // ambil uuid dari router
-  const e = router.query.e as string;
+  const { e } = router.query;
 
   const ResendCode = async () => {
-    console.log("resend");
-
-    await OtpSend({
-      email: e,
-      otpType: "USER_ACTIVATION",
-    });
+    if (decryptedEmail) {
+      await OtpSend({
+        email: decryptedEmail,
+        otpType: "USER_ACTIVATION",
+      });
+    }
   };
 
   // Timer Clean Up
   useEffect(() => {
-    const DecryptFunction = async () => {
-      const decryptedEmailResult = await DecryptEmail({ uuid: e });
-      setDecryptedEmail(decryptedEmailResult.email);
+    const DecryptFunction = async (decrypte: string) => {
+      const decryptedEmailResult = await DecryptEmail({
+        uuid: decrypte,
+      });
+      if (decryptedEmailResult.resultContext.success) {
+        setDecryptedEmail(decryptedEmailResult.email);
+        // TODO: Improve errors disini (di ticket lain)
+      } else {
+        toast.error("There seem to be a problem... please try again later!", {
+          position: "top-center",
+          autoClose: 10000,
+          hideProgressBar: true,
+          theme: "colored",
+        });
+      }
     };
 
     // decrypt uuid ke email
     if (router.isReady) {
-      DecryptFunction();
+      const string_e = urlFirstString(e);
+      if (string_e) {
+        DecryptFunction(string_e);
+      }
     }
 
     return () => {
