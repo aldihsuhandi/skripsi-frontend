@@ -14,6 +14,15 @@ import { LogoutCall } from "@/helper/LogoutCall";
 import { ProcessImgBE } from "@/helper/ProcessImgBE";
 import { UserMenu } from "../UserMenu/UserMenu";
 import { UserSummary } from "@/types/User";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import {
+  HiUser,
+  HiBuildingStorefront,
+  HiClock,
+  HiCog8Tooth,
+  HiArrowLeftOnRectangle,
+  HiHeart,
+} from "react-icons/hi2";
 
 export const NavBar = () => {
   const router = useRouter();
@@ -126,9 +135,43 @@ export const NavBar = () => {
           {/*===> CONDITIONAL STATEMENT KALO USER DAH LOGIN/BELOM (By default statement nya gw set ke true) <=== */}
           {isLoggedIn && userData ? ( //Klo udh login render ini
             <UserMenu userData={userData} onLogoutClick={onLogoutClick}>
-              <Link href="/wishlist">
-                <span>Wishlist (WIP)</span>
+              <Link
+                href="#"
+                className="flex flex-row items-center hover:bg-bright-blue"
+              >
+                <HiUser size={15} />
+                <span className="px-2">Profile</span>
               </Link>
+              <Link
+                href="#"
+                className="flex flex-row items-center hover:bg-bright-blue"
+              >
+                <HiBuildingStorefront size={15} />
+                <span className="px-2">Be a Merchant</span>
+              </Link>
+              <Link
+                href="/wishlist"
+                className="flex flex-row items-center pb-1 hover:bg-bright-blue"
+              >
+                <HiHeart size={15} />
+                <span className="px-2">Wishlist (WIP)</span>
+              </Link>
+              <hr />
+              <Link
+                href="#"
+                className="flex flex-row items-center pt-1 hover:bg-bright-blue"
+              >
+                <HiCog8Tooth size={15} />
+                <span className="px-2">Settings</span>
+              </Link>
+              <div className="flex flex-row items-center hover:bg-bright-blue">
+                <span>
+                  <HiArrowLeftOnRectangle size={15} />
+                </span>
+                <a onClick={onLogoutClick} className="cursor-pointer px-2">
+                  Logout
+                </a>
+              </div>
             </UserMenu>
           ) : (
             //Klo blm login render ini
