@@ -38,15 +38,18 @@ export const UserMenu = ({
 
   return (
     <div className="relative flex">
-      <div className="cursor-pointer" onClick={() => setMenuOpen(!menuOpen)}>
+      <div
+        className="cursor-pointer"
+        onMouseEnter={() => setMenuOpen(!menuOpen)}
+      >
         <Avatar src={image} alt="profile-picture" rounded />
       </div>
       {/* The pop-up menu */}
       {menuOpen && (
         <div
-          className="absolute right-2 top-10 flex w-52 flex-col rounded border border-gray-600 bg-white p-2"
+          className="absolute right-2 top-10 flex w-52 flex-col rounded-md border border-gray-600 bg-white p-2 py-2"
           ref={ref}
-          onClick={() => setMenuOpen(false)}
+          onMouseLeave={() => setMenuOpen(false)}
         >
           {children}
         </div>

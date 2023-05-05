@@ -137,40 +137,54 @@ export const NavBar = () => {
             <UserMenu userData={userData} onLogoutClick={onLogoutClick}>
               <Link
                 href="#"
-                className="flex flex-row items-center hover:bg-bright-blue"
+                className="flex flex-row items-center rounded-md p-2 hover:bg-bright-blue"
               >
                 <HiUser size={15} />
                 <span className="px-2">Profile</span>
               </Link>
               <Link
                 href="#"
-                className="flex flex-row items-center hover:bg-bright-blue"
+                className="flex flex-row items-center rounded-md p-2 hover:bg-bright-blue"
               >
                 <HiBuildingStorefront size={15} />
                 <span className="px-2">Be a Merchant</span>
               </Link>
               <Link
                 href="/wishlist"
-                className="flex flex-row items-center pb-1 hover:bg-bright-blue"
+                className="flex flex-row items-center rounded-md p-2 hover:bg-bright-blue"
               >
                 <HiHeart size={15} />
                 <span className="px-2">Wishlist (WIP)</span>
               </Link>
-              <hr />
+              <Link
+                href="/ShoppingHistory"
+                className="flex flex-row items-center rounded-md p-2 hover:bg-bright-blue"
+              >
+                <HiClock size={15} />
+                <span className="px-2">Shopping History</span>
+              </Link>
+              <hr className="" />
               <Link
                 href="#"
-                className="flex flex-row items-center pt-1 hover:bg-bright-blue"
+                className="flex flex-row items-center rounded-md p-2 hover:bg-bright-blue"
               >
                 <HiCog8Tooth size={15} />
                 <span className="px-2">Settings</span>
               </Link>
-              <div className="flex flex-row items-center hover:bg-bright-blue">
+              <div
+                className="group flex cursor-pointer flex-row items-center rounded-md p-2 hover:bg-red-500"
+                onClick={onLogoutClick}
+              >
                 <span>
-                  <HiArrowLeftOnRectangle size={15} />
+                  <HiArrowLeftOnRectangle
+                    size={15}
+                    color="red"
+                    className="group-hover:fill-white"
+                  />
                 </span>
-                <a onClick={onLogoutClick} className="cursor-pointer px-2">
+                <p className="px-2 text-red-600 group-hover:text-white">
                   Logout
-                </a>
+                </p>
               </div>
             </UserMenu>
           ) : (
