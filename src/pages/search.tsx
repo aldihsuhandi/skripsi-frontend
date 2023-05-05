@@ -113,18 +113,20 @@ export default function Search() {
               setQueryResult={UpdateDiChild}
             />
           )}
-          <div className="grid grid-cols-2 gap-4 py-2 px-2 lg:grid-cols-5 lg:py-4">
-            {isLoading ? (
-              <>Loading Placeholder</>
-            ) : items?.resultContext.success ? (
-              <>
-                {items.items.map((data) => {
-                  return <ProductCard itemData={data} />;
-                })}
-              </>
-            ) : (
-              <>Error! {items?.resultContext.resultMsg}</>
-            )}
+          <div>
+            <div className="grid grid-cols-2 gap-4 py-2 px-2 lg:grid-cols-5 lg:py-4">
+              {isLoading ? (
+                <>Loading Placeholder</>
+              ) : items?.resultContext.success ? (
+                <>
+                  {items.items.map((data) => {
+                    return <ProductCard itemData={data} />;
+                  })}
+                </>
+              ) : (
+                <>Error! {items?.resultContext.resultMsg}</>
+              )}
+            </div>
           </div>
         </div>
       </main>
