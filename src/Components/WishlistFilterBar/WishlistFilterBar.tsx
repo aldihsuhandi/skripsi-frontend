@@ -268,13 +268,34 @@ export const WishlistFilterBar = ({
                     htmlFor="inLev"
                     className="mb-1 block text-sm font-medium"
                   >
-                    Interest Level
+                    Merchant Interest Level
                   </label>
                   <Field
                     as="select"
-                    name="inLev"
+                    name="inLevMerchant"
                     onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
-                      setFieldValue("inLev", event.target.value);
+                      setFieldValue("inLevMerchant", event.target.value);
+                    }}
+                    className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                  >
+                    <option value="">Choose</option>
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Enthusiast">Enthusiast</option>
+                  </Field>
+                </div>
+                <div>
+                  <label
+                    htmlFor="inLev"
+                    className="mb-1 block text-sm font-medium"
+                  >
+                    Community Interest Level
+                  </label>
+                  <Field
+                    as="select"
+                    name="inLevUser"
+                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                      setFieldValue("inLevUser", event.target.value);
                     }}
                     className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                   >
