@@ -38,22 +38,41 @@ export const UserMenu = ({
 
   return (
     <div className="relative flex">
-      <div
-        className="cursor-pointer"
-        onMouseEnter={() => setMenuOpen(!menuOpen)}
-      >
-        <Avatar src={image} alt="profile-picture" rounded />
-      </div>
-      {/* The pop-up menu */}
-      {menuOpen && (
-        <div
-          className="absolute right-2 top-10 flex w-52 flex-col rounded-md border border-gray-600 bg-white p-2 py-2"
-          ref={ref}
-          onMouseLeave={() => setMenuOpen(false)}
-        >
-          {children}
-        </div>
-      )}
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger asChild>
+          <div
+            className="cursor-pointer"
+            // onMouseEnter={() => setMenuOpen(!menuOpen)}
+          >
+            <Avatar src={image} alt="profile-picture" rounded />
+          </div>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Portal>
+          <DropdownMenu.Content
+            // className="absolute right-2 top-10 flex w-52 flex-col rounded-md border border-gray-600 bg-white p-2 py-2"
+            className="min-w-[220px] rounded-md border-gray-600 bg-white p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform]"
+            // ref={ref}
+            side="bottom"
+            sideOffset={5}
+          >
+            <DropdownMenu.Item className="">{children}</DropdownMenu.Item>
+            {/* The pop-up menu */}
+            {/* {menuOpen && (
+              <div
+                className="absolute right-2 top-10 flex w-52 flex-col rounded-md border border-gray-600 bg-white p-2 py-2"
+                ref={ref}
+                onMouseLeave={() => setMenuOpen(false)}
+              >
+                {children}
+              </div>
+            )} */}
+            <DropdownMenu.Arrow
+              className="border-gray-600 fill-white"
+              height={8}
+            />
+          </DropdownMenu.Content>
+        </DropdownMenu.Portal>
+      </DropdownMenu.Root>
 
       {/* <div className="mx-1 self-center rounded-md border border-normal-blue bg-white hover:border-bright-blue hover:bg-bright-blue">
         <button
