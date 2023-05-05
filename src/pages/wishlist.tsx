@@ -16,7 +16,8 @@ export default function Wishlist() {
   // Uat Dropwdown filter klo kecil
   const [isOpen, setIsOpen] = useState(false);
 
-  const { q, pMin, pMax, pSort, hob, itemCat, inLev } = router.query;
+  const { q, pMin, pMax, pSort, hob, itemCat, inLevMerchant, inLevUser } =
+    router.query;
   const [qString, setQString] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -56,7 +57,8 @@ export default function Wishlist() {
           pMax: pMaxNumber,
           hob: urlFirstString(hob),
           itemCat: urlFirstString(itemCat),
-          inLev: urlFirstString(inLev),
+          inLevMerchant: urlFirstString(inLevMerchant),
+          inLevUser: urlFirstString(inLevUser),
         });
         console.log(itemQueried.resultContext.success);
         if (itemQueried.resultContext.success) {

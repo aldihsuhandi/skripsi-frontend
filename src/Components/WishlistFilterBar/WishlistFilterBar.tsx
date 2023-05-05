@@ -2,10 +2,10 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
 import { WishlistQuery, parseNumberUndefined, urlFirstString } from "@/helper";
+import { SessionValidate } from "@/helper/SessionHelper";
 import { WishlistQueryResult } from "@/types";
 import { ItemFilterFormValues } from "@/types/ItemFilter";
 import { Field, Form, Formik } from "formik";
-import { SessionValidate } from "@/helper/SessionHelper";
 
 export type WishlistFilterBarProps = {
   searchQuery?: string;
@@ -24,15 +24,16 @@ export const WishlistFilterBar = ({
   const router = useRouter();
   // uat trigger form outside form(ik), dipake di useEffect
   // Soalnya klo user refresh ilang, perlu query lagi
-  const { pMin, pMax, pSort, hob, itemCat, inLev } = router.query;
-
+  const { q, pMin, pMax, pSort, hob, itemCat, inLevMerchant, inLevUser } =
+    router.query;
   const [ini, setIni] = useState<ItemFilterFormValues>({
     pMin: "",
     pMax: "",
     pSort: "",
     hob: "",
     itemCat: "",
-    inLev: "",
+    inLevMerchant: "",
+    inLevUser: "",
   });
 
   useEffect(() => {
@@ -42,7 +43,8 @@ export const WishlistFilterBar = ({
     const pSort_string = urlFirstString(pSort);
     const hob_string = urlFirstString(hob);
     const itemCat_string = urlFirstString(itemCat);
-    const inLev_string = urlFirstString(inLev);
+    const inLevMerchant_string = urlFirstString(inLevMerchant);
+    const inLevUser_string = urlFirstString(inLevUser);
 
     setIni({
       pMin: pMin_string || "",
@@ -50,9 +52,10 @@ export const WishlistFilterBar = ({
       pSort: pSort_string || "",
       hob: hob_string || "",
       itemCat: itemCat_string || "",
-      inLev: inLev_string || "",
+      inLevMerchant: inLevMerchant_string || "",
+      inLevUser: inLevUser_string || "",
     });
-  }, [pMin, pMax, pSort, hob, itemCat, inLev]);
+  }, [pMin, pMax, pSort, hob, itemCat, inLevMerchant, inLevUser]);
 
   function handleKeyDownPreventWords(
     event: React.KeyboardEvent<HTMLInputElement>
@@ -111,8 +114,15 @@ export const WishlistFilterBar = ({
         if (values.itemCat) {
           Object.assign(flexible_object_for_url, { itemCat: values.itemCat });
         }
-        if (values.inLev) {
-          Object.assign(flexible_object_for_url, { inLev: values.inLev });
+        if (values.inLevMerchant) {
+          Object.assign(flexible_object_for_url, {
+            inLevMerchant: values.inLevMerchant,
+          });
+        }
+        if (values.inLevUser) {
+          Object.assign(flexible_object_for_url, {
+            inLevUser: values.inLevUser,
+          });
         }
 
         // 1. Transalte values to appropriate types
@@ -125,7 +135,8 @@ export const WishlistFilterBar = ({
           pMax: pMaxNumber,
           hob: values.hob,
           itemCat: values.itemCat,
-          inLev: values.inLev,
+          inLevMerchant: values.inLevMerchant,
+          inLevUser: values.inLevUser,
         });
 
         // 3. setState variable parent pake setQueryResult():
