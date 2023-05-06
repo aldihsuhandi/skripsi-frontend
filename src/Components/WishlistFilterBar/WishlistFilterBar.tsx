@@ -6,6 +6,7 @@ import { SessionValidate } from "@/helper/SessionHelper";
 import { WishlistQueryResult } from "@/types";
 import { ItemFilterFormValues } from "@/types/ItemFilter";
 import { Field, Form, Formik } from "formik";
+import { FilterDictionary } from "@/helper/FilterDictionary/FIlterDictionaryCall";
 
 export type WishlistFilterBarProps = {
   searchQuery?: string;
@@ -26,6 +27,11 @@ export const WishlistFilterBar = ({
   // Soalnya klo user refresh ilang, perlu query lagi
   const { q, pMin, pMax, pSort, hob, itemCat, inLevMerchant, inLevUser } =
     router.query;
+
+  const [hobbyList, setHobbyList] = useState<string[]>([]);
+  const [categoryList, setCategoryList] = useState<string[]>([]);
+  const [interestList, setInterestList] = useState<string[]>([]);
+
   const [ini, setIni] = useState<ItemFilterFormValues>({
     pMin: "",
     pMax: "",
@@ -55,6 +61,24 @@ export const WishlistFilterBar = ({
       inLevMerchant: inLevMerchant_string || "",
       inLevUser: inLevUser_string || "",
     });
+
+    const getDictionaries = async () => {
+      // Masih Temp errornya, di different Task
+      const hobList = await FilterDictionary({ dictionaryKey: "HOBBY" }).catch(
+        () => alert("Error!")
+      );
+      const catList = await FilterDictionary({
+        dictionaryKey: "CATEGORY",
+      }).catch(() => alert("Error!"));
+      const inList = await FilterDictionary({
+        dictionaryKey: "INTEREST_LEVEL",
+      }).catch(() => alert("Error!"));
+
+      hobList && setHobbyList(hobList.dictionaries);
+      catList && setCategoryList(catList.dictionaries);
+      inList && setInterestList(inList.dictionaries);
+    };
+    getDictionaries();
   }, [pMin, pMax, pSort, hob, itemCat, inLevMerchant, inLevUser]);
 
   function handleKeyDownPreventWords(
@@ -210,10 +234,6 @@ export const WishlistFilterBar = ({
                   </Field>
                 </div>
 
-                {/* MASIH HARDCODED
-                    !!! Ntar di useEffect API Call uat ambil list of Hobbies, trus baru populate optionsnya
-                */}
-
                 <div>
                   <label
                     htmlFor="hob"
@@ -230,9 +250,9 @@ export const WishlistFilterBar = ({
                     className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                   >
                     <option value="">Choose</option>
-                    <option value="Keyboard">Keyboard</option>
-                    <option value="GPU">GPU</option>
-                    <option value="music">Music</option>
+                    {hobbyList.map((value) => (
+                      <option value={value}>{value}</option>
+                    ))}
                   </Field>
                 </div>
                 <div>
@@ -242,14 +262,6 @@ export const WishlistFilterBar = ({
                   >
                     Category
                   </label>
-
-                  {/* 
-                    !!! MASIH HARDCODED !!!
-                    TODO: itemCat di disable klo Hobby/hob blom di pilih
-                    abis dipilih di onChange panggil apiCall minta list category dari tu hobby apa aja
-                    trus baru di-enable trus isi optionnya
-                */}
-
                   <Field
                     as="select"
                     name="itemCat"
@@ -259,8 +271,9 @@ export const WishlistFilterBar = ({
                     className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                   >
                     <option value="">Choose</option>
-                    <option value="Guitar">Guitar</option>
-                    <option value="AMD">AMD</option>
+                    {categoryList.map((value) => (
+                      <option value={value}>{value}</option>
+                    ))}
                   </Field>
                 </div>
                 <div>
@@ -279,9 +292,9 @@ export const WishlistFilterBar = ({
                     className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                   >
                     <option value="">Choose</option>
-                    <option value="Beginner">Beginner</option>
-                    <option value="Intermediate">Intermediate</option>
-                    <option value="Enthusiast">Enthusiast</option>
+                    {interestList.map((value) => (
+                      <option value={value}>{value}</option>
+                    ))}
                   </Field>
                 </div>
                 <div>
@@ -300,9 +313,9 @@ export const WishlistFilterBar = ({
                     className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                   >
                     <option value="">Choose</option>
-                    <option value="Beginner">Beginner</option>
-                    <option value="Intermediate">Intermediate</option>
-                    <option value="Enthusiast">Enthusiast</option>
+                    {interestList.map((value) => (
+                      <option value={value}>{value}</option>
+                    ))}
                   </Field>
                 </div>
               </div>
