@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { HiFingerPrint, HiUser } from "react-icons/hi"; //import react icons
 import * as Yup from "yup";
 import styles from "../styles/Form.module.css";
+import { EncryptEmail } from "@/helper/EncryptDecrypt";
 
 const initialValues: LoginRequest = {
   email: "",
@@ -61,10 +62,6 @@ export default function Login() {
                 <h1 className="mb-6 text-xl font-light italic">
                   Make getting into a hobby easier!
                 </h1>
-                {/* <p className="text-sm">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                </p> */}
               </div>
             </div>
             <div className="right flex flex-col justify-evenly">
@@ -106,6 +103,12 @@ export default function Login() {
                         setShowAPIError(
                           "Your Accound is inactive, redirecting you to the activate page"
                         );
+
+                        // Encrypt Email
+                        const encryptedEmail = await EncryptEmail({
+                          email: values.email,
+                        });
+
                         // send otp again
                         await OtpSend({
                           email: values.email,
@@ -115,7 +118,7 @@ export default function Login() {
                         const timer = setTimeout(() => {
                           router.push({
                             pathname: "/activate",
-                            query: { e: values.email },
+                            query: { e: encryptedEmail.uuid },
                           });
                         }, 2000);
                         setTimeoutId(timer);

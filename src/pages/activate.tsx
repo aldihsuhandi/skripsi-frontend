@@ -13,6 +13,9 @@ import { useEffect, useState } from "react";
 import { HiKey } from "react-icons/hi"; //import react icons
 import * as Yup from "yup";
 import styles from "../styles/Form.module.css";
+import { DecryptEmail } from "@/helper/EncryptDecrypt";
+import { urlFirstString } from "@/helper";
+import { toast } from "react-toastify";
 
 const initialValues: ActivateFormValues = {
   otpCode: "",
@@ -30,33 +33,56 @@ export default function Activate() {
     undefined
   );
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [decryptedEmail, setDecryptedEmail] = useState("");
 
   // Storing the timeoutId for clean up
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | undefined>(
     undefined
   );
-
-  // !!! MASIH HARAM !!!
-  // ini dptin email dari URL
-  const e = router.query.e as string;
+  const { e } = router.query;
 
   const ResendCode = async () => {
-    console.log("resend");
-
-    await OtpSend({
-      email: e,
-      otpType: "USER_ACTIVATION",
-    });
+    if (decryptedEmail) {
+      await OtpSend({
+        email: decryptedEmail,
+        otpType: "USER_ACTIVATION",
+      });
+    }
   };
 
   // Timer Clean Up
   useEffect(() => {
+    const DecryptFunction = async (decrypte: string) => {
+      const decryptedEmailResult = await DecryptEmail({
+        uuid: decrypte,
+      });
+      if (decryptedEmailResult.resultContext.success) {
+        setDecryptedEmail(decryptedEmailResult.email);
+        // TODO: Improve errors disini (di ticket lain)
+      } else {
+        toast.error("There seem to be a problem... please try again later!", {
+          position: "top-center",
+          autoClose: 10000,
+          hideProgressBar: true,
+          theme: "colored",
+        });
+      }
+    };
+
+    // decrypt uuid ke email
+    if (router.isReady) {
+      const string_e = urlFirstString(e);
+      if (string_e) {
+        DecryptFunction(string_e);
+      }
+    }
+
     return () => {
       if (timeoutId !== undefined) {
         clearTimeout(timeoutId);
       }
     };
-  }, [timeoutId]);
+  }, [timeoutId, e, router.isReady]);
 
   return (
     <>
@@ -96,7 +122,7 @@ export default function Activate() {
                     validationSchema={ActivateSchema}
                     onSubmit={async (values) => {
                       const data_Activate: ActivateRequest = {
-                        email: e,
+                        email: decryptedEmail,
                         otp: values.otpCode,
                       };
 
@@ -149,11 +175,21 @@ export default function Activate() {
                             >
                               {resultMessage}
                             </p>
+                            {decryptedEmail === "" ? (
+                              <p>Please Wait, fetching the email</p>
+                            ) : (
+                              ""
+                            )}
                           </div>
                         )}
 
                         <div className="input-button">
-                          <button type="submit" className={styles.button}>
+                          <button
+                            type="submit"
+                            className={styles.button}
+                            // Disabled klo blm di update dari decrypt
+                            disabled={decryptedEmail === ""}
+                          >
                             Activate
                           </button>
                         </div>
