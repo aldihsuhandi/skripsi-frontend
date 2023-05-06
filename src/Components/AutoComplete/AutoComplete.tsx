@@ -15,6 +15,10 @@ import { SearchBar, SearchBarProps } from "../SearchBar";
 import { useRouter } from "next/router";
 import { HighlightSuggestion } from "./HighlightSuggestion";
 import { urlFirstString } from "@/helper";
+import {
+  CheckExistSessionLocal,
+  CheckSessionValid,
+} from "@/helper/SessionHelper";
 
 export type AutoCompleteProps = {
   autoCompleteOnChange?: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -74,16 +78,26 @@ export const AutoComplete = ({
         autocomplete: value,
       };
 
+      const headers = {
+        clientId: CLIENT_ID,
+        clientSecret: CLIENT_SECRET,
+        "Content-Type": "application/json",
+        "Accept-Type": "application/json",
+      };
+
+      const sessionString = CheckExistSessionLocal();
+      if (sessionString) {
+        const validSession = await CheckSessionValid(sessionString);
+        if (validSession) {
+          Object.assign(headers, { sessionId: sessionString });
+        }
+      }
+
       const { data } = await axios.post<ItemAutoCompleteResult>(
         "http://localhost:8080/item/autocomplete",
         JSON.stringify(PostBody),
         {
-          headers: {
-            clientId: CLIENT_ID,
-            clientSecret: CLIENT_SECRET,
-            "Content-Type": "application/json",
-            "Accept-Type": "application/json",
-          },
+          headers,
         }
       );
 
