@@ -135,14 +135,15 @@ export const NavBar = () => {
           {/*===> CONDITIONAL STATEMENT KALO USER DAH LOGIN/BELOM (By default statement nya gw set ke true) <=== */}
           {isLoggedIn && userData ? ( //Klo udh login render ini
             <UserMenu userData={userData} onLogoutClick={onLogoutClick}>
-              <Link
+              {/* <Link
                 href="#"
                 className="flex flex-row items-center rounded-md p-2 hover:bg-bright-blue"
               >
                 <HiUser size={15} />
+                <img src="" alt="" />
                 <span className="px-2">Profile</span>
-              </Link>
-              <Link
+              </Link> */}
+              {/* <Link
                 href="#"
                 className="flex flex-row items-center rounded-md p-2 hover:bg-bright-blue"
               >
@@ -185,7 +186,7 @@ export const NavBar = () => {
                 <p className="px-2 text-red-600 group-hover:text-white">
                   Logout
                 </p>
-              </div>
+              </div> */}
             </UserMenu>
           ) : (
             //Klo blm login render ini

@@ -3,6 +3,15 @@ import { UserSummary } from "@/types/User";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { Avatar } from "../Avatar";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import Link from "next/link";
+import {
+  HiUser,
+  HiBuildingStorefront,
+  HiClock,
+  HiCog8Tooth,
+  HiArrowLeftOnRectangle,
+  HiHeart,
+} from "react-icons/hi2";
 
 export interface UserMenuProps {
   userData: UserSummary;
@@ -50,12 +59,74 @@ export const UserMenu = ({
         <DropdownMenu.Portal>
           <DropdownMenu.Content
             // className="absolute right-2 top-10 flex w-52 flex-col rounded-md border border-gray-600 bg-white p-2 py-2"
-            className="min-w-[220px] rounded-md border-gray-600 bg-white p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform]"
+            className="mr-5 min-w-[420px] rounded-md border-gray-600 bg-white p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform]"
             // ref={ref}
             side="bottom"
             sideOffset={5}
           >
-            <DropdownMenu.Item className="">{children}</DropdownMenu.Item>
+            <DropdownMenu.Group className="p-1">
+              <DropdownMenu.Item className="rounded-md border p-2 shadow-md hover:shadow-lg">
+                <Link href="#" className="flex flex-row items-center">
+                  <img
+                    src={image}
+                    alt="profile-pic-big"
+                    className="h-24 w-24 rounded-full"
+                  />
+                  <div className="flex flex-col">
+                    <span className="px-4 py-2">Name: {userData.username}</span>
+                    <span className="px-4 py-2">Email: {userData.email}</span>
+                  </div>
+                </Link>
+              </DropdownMenu.Item>
+            </DropdownMenu.Group>
+            {/* <DropdownMenu.Item className="">{children}</DropdownMenu.Item> */}
+            <DropdownMenu.Group className="flex flex-col p-1">
+              <DropdownMenu.Item className="rounded-md p-2 hover:border hover:shadow-md">
+                <Link href="#" className="flex flex-row items-center">
+                  <HiBuildingStorefront size={15} />
+                  <span className="px-2">Be a Merchant</span>
+                </Link>
+              </DropdownMenu.Item>
+              <DropdownMenu.Item className="rounded-md p-2 hover:border hover:shadow-md">
+                <Link href="/wishlist" className="flex flex-row items-center">
+                  <HiHeart size={15} />
+                  <span className="px-2">Wishlist (WIP)</span>
+                </Link>
+              </DropdownMenu.Item>
+              <DropdownMenu.Item className="rounded-md p-2 hover:border hover:shadow-md">
+                <Link
+                  href="/ShoppingHistory"
+                  className="flex flex-row items-center"
+                >
+                  <HiClock size={15} />
+                  <span className="px-2">Shopping History</span>
+                </Link>
+              </DropdownMenu.Item>
+              <DropdownMenu.Item className="rounded-md p-2 hover:border hover:shadow-md">
+                <Link href="#" className="flex flex-row items-center">
+                  <HiCog8Tooth size={15} />
+                  <span className="px-2">Settings</span>
+                </Link>
+              </DropdownMenu.Item>
+              <DropdownMenu.Item className="group rounded-md p-2 hover:bg-red-500">
+                <div
+                  className="flex cursor-pointer flex-row items-center"
+                  onClick={onLogoutClick}
+                  ref={ref}
+                >
+                  <span>
+                    <HiArrowLeftOnRectangle
+                      size={15}
+                      color="red"
+                      className="group-hover:fill-white"
+                    />
+                  </span>
+                  <p className="px-2 text-red-600 group-hover:text-white">
+                    Logout
+                  </p>
+                </div>
+              </DropdownMenu.Item>
+            </DropdownMenu.Group>
             {/* The pop-up menu */}
             {/* {menuOpen && (
               <div
