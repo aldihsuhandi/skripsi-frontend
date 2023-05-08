@@ -1,14 +1,14 @@
 import { useRouter } from "next/router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 
-import { Field, Form, Formik, FormikProps } from "formik";
 import {
-  urlFirstString,
-  parseNumberUndefined,
   ItemFilterQuery,
+  parseNumberUndefined,
+  urlFirstString,
 } from "@/helper";
-import { ItemFilterFormValues } from "@/types/ItemFilter";
 import { ItemQueryResult } from "@/types";
+import { ItemFilterFormValues } from "@/types/ItemFilter";
+import { Field, Form, Formik } from "formik";
 
 export type ItemFilterBarProps = {
   searchQuery?: string;
@@ -27,7 +27,8 @@ export const ItemFilterBar = ({
   const router = useRouter();
   // uat trigger form outside form(ik), dipake di useEffect
   // Soalnya klo user refresh ilang, perlu query lagi
-  const { pMin, pMax, pSort, hob, itemCat, inLev } = router.query;
+  const { q, pMin, pMax, pSort, hob, itemCat, inLevMerchant, inLevUser } =
+    router.query;
 
   const [ini, setIni] = useState<ItemFilterFormValues>({
     pMin: "",
@@ -35,7 +36,8 @@ export const ItemFilterBar = ({
     pSort: "",
     hob: "",
     itemCat: "",
-    inLev: "",
+    inLevMerchant: "",
+    inLevUser: "",
   });
 
   useEffect(() => {
@@ -45,7 +47,8 @@ export const ItemFilterBar = ({
     const pSort_string = urlFirstString(pSort);
     const hob_string = urlFirstString(hob);
     const itemCat_string = urlFirstString(itemCat);
-    const inLev_string = urlFirstString(inLev);
+    const inLevMerchant_string = urlFirstString(inLevMerchant);
+    const inLevUser_string = urlFirstString(inLevUser);
 
     setIni({
       pMin: pMin_string || "",
@@ -53,9 +56,10 @@ export const ItemFilterBar = ({
       pSort: pSort_string || "",
       hob: hob_string || "",
       itemCat: itemCat_string || "",
-      inLev: inLev_string || "",
+      inLevMerchant: inLevMerchant_string || "",
+      inLevUser: inLevUser_string || "",
     });
-  }, [pMin, pMax, pSort, hob, itemCat, inLev]);
+  }, [pMin, pMax, pSort, hob, itemCat, inLevMerchant, inLevUser]);
 
   function handleKeyDownPreventWords(
     event: React.KeyboardEvent<HTMLInputElement>
@@ -110,8 +114,15 @@ export const ItemFilterBar = ({
         if (values.itemCat) {
           Object.assign(flexible_object_for_url, { itemCat: values.itemCat });
         }
-        if (values.inLev) {
-          Object.assign(flexible_object_for_url, { inLev: values.inLev });
+        if (values.inLevMerchant) {
+          Object.assign(flexible_object_for_url, {
+            inLevMerchant: values.inLevMerchant,
+          });
+        }
+        if (values.inLevUser) {
+          Object.assign(flexible_object_for_url, {
+            inLevUser: values.inLevUser,
+          });
         }
 
         console.log(flexible_object_for_url, "yang diapke di router.push ntar");
@@ -127,7 +138,8 @@ export const ItemFilterBar = ({
           pMax: pMaxNumber,
           hob: values.hob,
           itemCat: values.itemCat,
-          inLev: values.inLev,
+          inLevMerchant: values.inLevMerchant,
+          inLevUser: values.inLevUser,
         });
 
         // 3. setState variable parent pake setQueryResult():
@@ -140,10 +152,10 @@ export const ItemFilterBar = ({
       }}
     >
       {({ setFieldValue }) => (
-        <Form>
-          <div className="grid grid-cols-1 lg:grid-cols-4 lg:gap-2">
-            <div className="col-span-4">
-              <div className="grid grid-cols-3 gap-2 px-3 pb-2">
+        <Form className="min-w-[20%] lg:basis-1/5">
+          <div className="grid grid-cols-1 lg:flex lg:flex-col">
+            <div>
+              <div className="grid grid-cols-2 gap-2 px-3 pb-2 lg:flex lg:flex-col">
                 <div>
                   <label
                     htmlFor="pMin"
@@ -254,13 +266,34 @@ export const ItemFilterBar = ({
                     htmlFor="inLev"
                     className="mb-1 block text-sm font-medium"
                   >
-                    Interest Level
+                    Merchant Interest Level
                   </label>
                   <Field
                     as="select"
-                    name="inLev"
+                    name="inLevMerchant"
                     onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
-                      setFieldValue("inLev", event.target.value);
+                      setFieldValue("inLevMerchant", event.target.value);
+                    }}
+                    className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                  >
+                    <option value="">Choose</option>
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Enthusiast">Enthusiast</option>
+                  </Field>
+                </div>
+                <div>
+                  <label
+                    htmlFor="inLev"
+                    className="mb-1 block text-sm font-medium"
+                  >
+                    Community Interest Level
+                  </label>
+                  <Field
+                    as="select"
+                    name="inLevUser"
+                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                      setFieldValue("inLevUser", event.target.value);
                     }}
                     className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                   >
