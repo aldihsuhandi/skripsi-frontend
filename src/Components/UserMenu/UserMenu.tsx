@@ -66,21 +66,28 @@ export const UserMenu = ({
           >
             <DropdownMenu.Group className="p-1">
               <DropdownMenu.Item className="rounded-md border p-2 shadow-md hover:shadow-lg">
-                <Link href="#" className="flex flex-row items-center">
-                  <img
+                <Link
+                  href="/UserProfile"
+                  className="flex flex-row items-center"
+                >
+                  <Avatar
                     src={image}
-                    alt="profile-pic-big"
+                    alt="profile-picture"
                     className="h-24 w-24 rounded-full"
                   />
                   <div className="flex flex-col">
-                    <span className="px-4 py-2">Name: {userData.username}</span>
-                    <span className="px-4 py-2">Email: {userData.email}</span>
+                    <span className="px-4 py-2 text-sm">
+                      Name: {userData.username}
+                    </span>
+                    <span className="px-4 py-2 text-sm">
+                      Email: {userData.email}
+                    </span>
                   </div>
                 </Link>
               </DropdownMenu.Item>
             </DropdownMenu.Group>
             {/* <DropdownMenu.Item className="">{children}</DropdownMenu.Item> */}
-            <DropdownMenu.Group className="flex flex-col p-1">
+            <DropdownMenu.Group className="flex w-1/2 flex-col p-1">
               <DropdownMenu.Item className="rounded-md p-2 hover:border hover:shadow-md">
                 <Link href="#" className="flex flex-row items-center">
                   <HiBuildingStorefront size={15} />
