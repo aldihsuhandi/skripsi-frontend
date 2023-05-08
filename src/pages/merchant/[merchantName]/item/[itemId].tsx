@@ -1,22 +1,21 @@
 import { COLOR_HEX_STRING, Color } from "@/Components/Color";
-import { ChatIcon } from "@/Components/Icons";
-import { ForumIcon } from "@/Components/Icons";
-import { ItemImage } from "@/Components/ItemImage";
+import { ChatIcon, ForumIcon } from "@/Components/Icons";
 import { ItemImagesMultiple } from "@/Components/ItemImagesMultiple";
 import { MerchantInfo } from "@/Components/MerchantInfo";
-import { ItemQuery, capitalizeFirstLetter, urlFirstString } from "@/helper";
-import { ItemQueryResult } from "@/types";
+import { capitalizeFirstLetter, urlFirstString } from "@/helper";
+import { ItemDetail } from "@/helper/ItemDetail";
+import { ItemDetailResult } from "@/types";
 import classNames from "classnames";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { ReactNode, useEffect, useState } from "react";
 import {
-  HiStar,
-  HiShare,
   HiHeart,
-  HiUserGroup,
-  HiPlusCircle,
   HiMinusCircle,
+  HiPlusCircle,
+  HiShare,
+  HiStar,
+  HiUserGroup,
 } from "react-icons/hi";
 import { HiBuildingStorefront } from "react-icons/hi2";
 
@@ -27,7 +26,7 @@ export default function MerchantItem() {
 
   const { itemId } = router.query;
 
-  const [itemData, setItemData] = useState<ItemQueryResult | undefined>();
+  const [itemData, setItemData] = useState<ItemDetailResult | undefined>();
   const [pageTitle, setPageTitle] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -37,17 +36,16 @@ export default function MerchantItem() {
     const fetchItemData = async () => {
       if (itemId) {
         setIsLoading(true);
-        const itemDataFetch = await ItemQuery({
-          itemId: urlFirstString(itemId),
+
+        const itemDataFetch = await ItemDetail({
+          itemId: itemId as string,
         });
         setItemData(itemDataFetch);
-        // klo dari itemId harusnya cuman satu, tpi masih array/list karena useCase nya bisa
-        // uat search/query yang banyak hasilnya
-        if (itemDataFetch.items[0]) {
+        if (itemDataFetch.item) {
           setPageTitle(
-            itemDataFetch.items[0].itemName +
+            itemDataFetch.item.itemName +
               " from" +
-              itemDataFetch.items[0].merchantInfo.username
+              itemDataFetch.item.merchantInfo.username
           );
         }
         setIsLoading(false);
@@ -90,20 +88,20 @@ export default function MerchantItem() {
       <main>
         {/* <div>{JSON.stringify(itemData)}</div> */}
         {/* If nggak loading dan itemData nggak falsy (undefined gitu2) */}
-        {!isLoading && itemData && itemData.items[0] ? (
+        {!isLoading && itemData && itemData.item ? (
           <div className="m-0 flex min-h-screen flex-col py-0 lg:mx-auto lg:max-w-screen-lg lg:py-11 xl:max-w-screen-xl 2xl:max-w-screen-2xl">
             {/* 1. Row isi most of the content, kek images, merchant, interest dkk */}
             <div className="mx-auto flex flex-col lg:flex-row">
               {/* 1.1. Images */}
               <div className="flex flex-col px-3">
                 {/* 1.1.1 Image(s) */}
-                <ItemImagesMultiple imageIds={itemData.items[0].itemImages} />
+                <ItemImagesMultiple imageIds={itemData.item.itemImages} />
               </div>
               {/* 1.2. Title, Interest Level, Item Desc, Rating, Cat, Hob, Merchant Info */}
               <div className="flex flex-col px-0 lg:px-14">
                 {/* 1.2.1 Title */}
                 <h3 className="mb-2 text-2xl font-bold">
-                  {itemData.items[0].itemName}
+                  {itemData.item.itemName}
                 </h3>
                 {/* 1.2.2 Rating (PLACEHOLDER FOR NOW) */}
                 <div>
@@ -120,20 +118,20 @@ export default function MerchantItem() {
                 </div>
 
                 <h1 className="py-3 text-3xl font-bold">
-                  Rp. {itemData.items[0].itemPrice.toLocaleString()}
+                  Rp. {itemData.item.itemPrice.toLocaleString()}
                 </h1>
 
                 {/* 1.2.3 Category */}
                 <h4 className="text-purple-500">
                   Category:{" "}
                   <span className="font-bold">
-                    {itemData.items[0].itemCategory}
+                    {itemData.item.itemCategory}
                   </span>
                 </h4>
                 {/* 1.2.4 Hobby */}
                 <h4 className="text-bright-cyan">
                   Hobby:{" "}
-                  <span className="font-bold">{itemData.items[0].hobby}</span>
+                  <span className="font-bold">{itemData.item.hobby}</span>
                 </h4>
                 {/* 1.2.5 Interest Level (Bru Merchant doang) */}
                 <div className="flex flex-row justify-between">
@@ -147,9 +145,7 @@ export default function MerchantItem() {
                         }}
                       />
                     }
-                    level={capitalizeFirstLetter(
-                      itemData.items[0].merchantLevel
-                    )}
+                    level={capitalizeFirstLetter(itemData.item.merchantLevel)}
                     description={"Merchant Rating"}
                   />
                   <InterestLevelComponent
@@ -169,12 +165,12 @@ export default function MerchantItem() {
                 {/* 1.2.6 Item Desc (if any) */}
                 <span className="font-bold">Description:</span>
                 <h5>
-                  {itemData.items[0].itemDescription.length !== 0
-                    ? itemData.items[0].itemDescription
+                  {itemData.item.itemDescription.length !== 0
+                    ? itemData.item.itemDescription
                     : "No Description Given"}
                 </h5>
                 <MerchantInfo
-                  data={itemData.items[0].merchantInfo}
+                  data={itemData.item.merchantInfo}
                   className="pt-4"
                 />
               </div>
@@ -183,7 +179,7 @@ export default function MerchantItem() {
                 {/* Quantity -- Stock, Button */}
                 <div className="m-auto flex flex-col self-center py-2">
                   <span className="self-center">Quantity</span>
-                  <div className="flex flex-row items-center self-center">
+                  <div className="item-center flex flex-row self-center">
                     <HiMinusCircle
                       className={classNames("text-normal-blue", {
                         "cursor-pointer": quantityToCart > 1,
@@ -202,28 +198,26 @@ export default function MerchantItem() {
                     <HiPlusCircle
                       className={classNames("text-normal-blue", {
                         "cursor-pointer":
-                          quantityToCart < itemData.items[0].itemQuantity,
+                          quantityToCart < itemData.item.itemQuantity,
                         "cursor-not-allowed":
-                          quantityToCart === itemData.items[0].itemQuantity,
+                          quantityToCart === itemData.item.itemQuantity,
                       })}
                       style={{ height: "1.5em", width: "1.5em" }}
                       onClick={() => {
-                        if (quantityToCart < itemData.items[0].itemQuantity) {
+                        if (quantityToCart < itemData.item.itemQuantity) {
                           setQuantityToCart(quantityToCart + 1);
                         }
                       }}
                     />
                   </div>
                   <span className="self-center">
-                    Stock: {itemData.items[0].itemQuantity}
+                    Stock: {itemData.item.itemQuantity}
                   </span>
                 </div>
                 {/* Total Price */}
                 <span className="self-center text-lg font-bold">
                   Total: Rp.{" "}
-                  {(
-                    quantityToCart * itemData.items[0].itemPrice
-                  ).toLocaleString()}
+                  {(quantityToCart * itemData.item.itemPrice).toLocaleString()}
                 </span>
                 {/* Add to Cart Button */}
                 <div className="px-4 pt-2 pb-1">
@@ -267,7 +261,7 @@ export default function MerchantItem() {
               </div>
             </div>
           </div>
-        ) : itemData?.items[0] ? (
+        ) : itemData?.item ? (
           <>Loading</>
         ) : (
           <>Item Not Found</>
