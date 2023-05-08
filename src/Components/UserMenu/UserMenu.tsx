@@ -6,12 +6,15 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import Link from "next/link";
 import {
   HiUser,
+  HiPhone,
   HiBuildingStorefront,
   HiClock,
   HiCog8Tooth,
   HiArrowLeftOnRectangle,
   HiHeart,
 } from "react-icons/hi2";
+
+import { HiMail } from "react-icons/hi";
 
 export interface UserMenuProps {
   userData: UserSummary;
@@ -59,7 +62,7 @@ export const UserMenu = ({
         <DropdownMenu.Portal>
           <DropdownMenu.Content
             // className="absolute right-2 top-10 flex w-52 flex-col rounded-md border border-gray-600 bg-white p-2 py-2"
-            className="mr-5 min-w-[420px] rounded-md border-gray-600 bg-white p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform]"
+            className="mr-5 min-w-[380px] rounded-md border-gray-600 bg-white p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform]"
             // ref={ref}
             side="bottom"
             sideOffset={5}
@@ -76,11 +79,17 @@ export const UserMenu = ({
                     className="h-24 w-24 rounded-full"
                   />
                   <div className="flex flex-col">
-                    <span className="px-4 py-2 text-sm">
-                      Name: {userData.username}
+                    <span className="flex flex-row items-center px-4 py-1">
+                      <HiUser size={12} />
+                      <p className="pl-2 text-sm">{userData.username}</p>
                     </span>
-                    <span className="px-4 py-2 text-sm">
-                      Email: {userData.email}
+                    <span className="flex flex-row items-center px-4 py-1">
+                      <HiMail size={12} />
+                      <p className="pl-2 text-sm">{userData.email}</p>
+                    </span>
+                    <span className="flex flex-row items-center px-4 py-1">
+                      <HiPhone size={12} />
+                      <p className="pl-2 text-sm">{userData.phoneNumber}</p>
                     </span>
                   </div>
                 </Link>
