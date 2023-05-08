@@ -5,7 +5,8 @@ export interface ItemFilterValues {
   pSort?: string;
   hob?: string;
   itemCat?: string;
-  inLev?: string;
+  inLevMerchant?: string;
+  inLevUser?: string;
 }
 
 export interface ItemFilterFormValues {
@@ -14,5 +15,6 @@ export interface ItemFilterFormValues {
   pSort?: string;
   hob?: string;
   itemCat?: string;
-  inLev?: string;
+  inLevMerchant?: string;
+  inLevUser?: string;
 }
