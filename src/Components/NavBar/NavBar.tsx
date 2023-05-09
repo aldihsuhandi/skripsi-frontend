@@ -134,60 +134,11 @@ export const NavBar = () => {
           {/* User Avatar */}
           {/*===> CONDITIONAL STATEMENT KALO USER DAH LOGIN/BELOM (By default statement nya gw set ke true) <=== */}
           {isLoggedIn && userData ? ( //Klo udh login render ini
-            <UserMenu userData={userData} onLogoutClick={onLogoutClick}>
-              {/* <Link
-                href="#"
-                className="flex flex-row items-center rounded-md p-2 hover:bg-bright-blue"
-              >
-                <HiUser size={15} />
-                <img src="" alt="" />
-                <span className="px-2">Profile</span>
-              </Link> */}
-              {/* <Link
-                href="#"
-                className="flex flex-row items-center rounded-md p-2 hover:bg-bright-blue"
-              >
-                <HiBuildingStorefront size={15} />
-                <span className="px-2">Be a Merchant</span>
-              </Link>
-              <Link
-                href="/wishlist"
-                className="flex flex-row items-center rounded-md p-2 hover:bg-bright-blue"
-              >
-                <HiHeart size={15} />
-                <span className="px-2">Wishlist (WIP)</span>
-              </Link>
-              <Link
-                href="/ShoppingHistory"
-                className="flex flex-row items-center rounded-md p-2 hover:bg-bright-blue"
-              >
-                <HiClock size={15} />
-                <span className="px-2">Shopping History</span>
-              </Link>
-              <hr className="" />
-              <Link
-                href="#"
-                className="flex flex-row items-center rounded-md p-2 hover:bg-bright-blue"
-              >
-                <HiCog8Tooth size={15} />
-                <span className="px-2">Settings</span>
-              </Link>
-              <div
-                className="group flex cursor-pointer flex-row items-center rounded-md p-2 hover:bg-red-500"
-                onClick={onLogoutClick}
-              >
-                <span>
-                  <HiArrowLeftOnRectangle
-                    size={15}
-                    color="red"
-                    className="group-hover:fill-white"
-                  />
-                </span>
-                <p className="px-2 text-red-600 group-hover:text-white">
-                  Logout
-                </p>
-              </div> */}
-            </UserMenu>
+            <UserMenu
+              userData={userData}
+              onLogoutClick={onLogoutClick}
+              children={undefined}
+            ></UserMenu>
           ) : (
             //Klo blm login render ini
             <>
