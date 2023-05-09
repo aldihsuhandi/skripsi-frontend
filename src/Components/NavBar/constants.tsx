@@ -19,15 +19,15 @@ export const HeaderNavigation: HeaderNavigationProps[] = [
       />
     ),
   },
-  {
-    href: "/ShoppingHistory",
-    icon: (
-      <HistoryIcon
-        htmlColor={COLOR_HEX_STRING[Color.NormalBlue]}
-        classNameIcon="h-7 w-7"
-      />
-    ),
-  },
+  // {
+  //   href: "/ShoppingHistory",
+  //   icon: (
+  //     <HistoryIcon
+  //       htmlColor={COLOR_HEX_STRING[Color.NormalBlue]}
+  //       classNameIcon="h-7 w-7"
+  //     />
+  //   ),
+  // },
   {
     href: "/Forum",
     icon: (

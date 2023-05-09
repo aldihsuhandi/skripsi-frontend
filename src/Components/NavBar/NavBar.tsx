@@ -14,6 +14,15 @@ import { LogoutCall } from "@/helper/LogoutCall";
 import { ProcessImgBE } from "@/helper/ProcessImgBE";
 import { UserMenu } from "../UserMenu/UserMenu";
 import { UserSummary } from "@/types/User";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import {
+  HiUser,
+  HiBuildingStorefront,
+  HiClock,
+  HiCog8Tooth,
+  HiArrowLeftOnRectangle,
+  HiHeart,
+} from "react-icons/hi2";
 
 export const NavBar = () => {
   const router = useRouter();
@@ -125,11 +134,11 @@ export const NavBar = () => {
           {/* User Avatar */}
           {/*===> CONDITIONAL STATEMENT KALO USER DAH LOGIN/BELOM (By default statement nya gw set ke true) <=== */}
           {isLoggedIn && userData ? ( //Klo udh login render ini
-            <UserMenu userData={userData} onLogoutClick={onLogoutClick}>
-              <Link href="/wishlist">
-                <span>Wishlist (WIP)</span>
-              </Link>
-            </UserMenu>
+            <UserMenu
+              userData={userData}
+              onLogoutClick={onLogoutClick}
+              children={undefined}
+            ></UserMenu>
           ) : (
             //Klo blm login render ini
             <>
