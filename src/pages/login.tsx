@@ -11,6 +11,7 @@ import { HiFingerPrint, HiUser } from "react-icons/hi"; //import react icons
 import * as Yup from "yup";
 import styles from "../styles/Form.module.css";
 import { EncryptEmail } from "@/helper/EncryptDecrypt";
+import { toast } from "react-toastify";
 
 const initialValues: LoginRequest = {
   email: "",
@@ -87,44 +88,64 @@ export default function Login() {
 
                       const resultFromCall = await LoginCall(user_Login_Data);
 
-                      if (resultFromCall.resultContext.success) {
-                        // set local storage
-                        localStorage.setItem(
-                          Session_Local_Key,
-                          resultFromCall.sessionId
-                        );
-                        // redirect ke home
-                        router.push("/");
-                      } else if (
-                        resultFromCall.resultContext.resultCode ===
-                        "USER_NOT_ACTIVE"
-                      ) {
-                        // show message blom, active
-                        setShowAPIError(
-                          "Your Accound is inactive, redirecting you to the activate page"
-                        );
+                      if (resultFromCall) {
+                        if (resultFromCall.resultContext.success) {
+                          // set local storage
+                          localStorage.setItem(
+                            Session_Local_Key,
+                            resultFromCall.sessionId
+                          );
+                          // redirect ke home
+                          router.push("/");
+                        } else if (
+                          resultFromCall.resultContext.resultCode ===
+                          "USER_NOT_ACTIVE"
+                        ) {
+                          // show message blom, active
+                          setShowAPIError(
+                            "Your Accound is inactive, redirecting you to the activate page"
+                          );
 
-                        // Encrypt Email
-                        const encryptedEmail = await EncryptEmail({
-                          email: values.email,
-                        });
-
-                        // send otp again
-                        await OtpSend({
-                          email: values.email,
-                          otpType: "USER_ACTIVATION",
-                        });
-                        // delayed redirect ke activate pass email
-                        const timer = setTimeout(() => {
-                          router.push({
-                            pathname: "/activate",
-                            query: { e: encryptedEmail.uuid },
+                          // Encrypt Email
+                          const encryptedEmail = await EncryptEmail({
+                            email: values.email,
                           });
-                        }, 2000);
-                        setTimeoutId(timer);
-                      } else if (!resultFromCall.resultContext.success) {
-                        // set Error misc, show di bawah
-                        setShowAPIError(resultFromCall.resultContext.resultMsg);
+
+                          // delayed redirect ke activate pass email
+                          if (encryptedEmail) {
+                            // Send Otp dan redirect jika dan hanya jika success Encrypt-nya
+                            if (encryptedEmail.resultContext.success) {
+                              // send otp again
+                              await OtpSend({
+                                email: values.email,
+                                otpType: "USER_ACTIVATION",
+                              });
+
+                              const timer = setTimeout(() => {
+                                router.push({
+                                  pathname: "/activate",
+                                  query: { e: encryptedEmail.uuid },
+                                });
+                              }, 2000);
+                              setTimeoutId(timer);
+                            } else {
+                              toast.error(
+                                "We were unable to process activating your account, please try again later!",
+                                {
+                                  position: "top-center",
+                                  autoClose: 10000,
+                                  hideProgressBar: false,
+                                  theme: "colored",
+                                }
+                              );
+                            }
+                          }
+                        } else if (!resultFromCall.resultContext.success) {
+                          // set Error misc, show di bawah
+                          setShowAPIError(
+                            resultFromCall.resultContext.resultMsg
+                          );
+                        }
                       }
                     }}
                   >

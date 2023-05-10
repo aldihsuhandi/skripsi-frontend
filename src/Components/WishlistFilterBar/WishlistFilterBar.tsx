@@ -7,6 +7,7 @@ import { WishlistQueryResult } from "@/types";
 import { ItemFilterFormValues } from "@/types/ItemFilter";
 import { Field, Form, Formik } from "formik";
 import { FilterDictionary } from "@/helper/FilterDictionary/FIlterDictionaryCall";
+import { toast } from "react-toastify";
 
 export type WishlistFilterBarProps = {
   searchQuery?: string;
@@ -64,19 +65,32 @@ export const WishlistFilterBar = ({
 
     const getDictionaries = async () => {
       // Masih Temp errornya, di different Task
-      const hobList = await FilterDictionary({ dictionaryKey: "HOBBY" }).catch(
-        () => alert("Error!")
-      );
+      const hobList = await FilterDictionary({ dictionaryKey: "HOBBY" });
       const catList = await FilterDictionary({
         dictionaryKey: "CATEGORY",
-      }).catch(() => alert("Error!"));
+      });
       const inList = await FilterDictionary({
         dictionaryKey: "INTEREST_LEVEL",
-      }).catch(() => alert("Error!"));
+      });
 
-      hobList && setHobbyList(hobList.dictionaries);
-      catList && setCategoryList(catList.dictionaries);
-      inList && setInterestList(inList.dictionaries);
+      // hobList?.resultContext.success && setHobbyList(hobList.dictionaries);
+      // catList?.resultContext.success && setCategoryList(catList.dictionaries);
+      // inList?.resultContext.success && setInterestList(inList.dictionaries);
+      hobList?.resultContext.success
+        ? setHobbyList(hobList.dictionaries)
+        : setHobbyList([
+            "There was an error fetching this data, try refreshing or try again later.",
+          ]);
+      catList?.resultContext.success
+        ? setCategoryList(catList.dictionaries)
+        : setCategoryList([
+            "There was an error fetching this data, try refreshing or try again later.",
+          ]);
+      inList?.resultContext.success
+        ? setInterestList(inList.dictionaries)
+        : setInterestList([
+            "There was an error fetching this data, try refreshing or try again later.",
+          ]);
     };
     getDictionaries();
   }, [pMin, pMax, pSort, hob, itemCat, inLevMerchant, inLevUser]);
@@ -164,16 +178,25 @@ export const WishlistFilterBar = ({
         });
 
         // 3. setState variable parent pake setQueryResult():
-        if (itemQueried.resultContext.success) {
-          setQueryResult(itemQueried);
-          router.push({
-            pathname: `/${page}`,
-            query: flexible_object_for_url,
-          });
-        } else if (itemQueried.resultContext.resultCode === "SESSION_EXPIRED") {
-          router.push("/login");
-        } else {
-          alert("System is Busy!");
+        if (itemQueried) {
+          if (itemQueried.resultContext.success) {
+            setQueryResult(itemQueried);
+            router.push({
+              pathname: `/${page}`,
+              query: flexible_object_for_url,
+            });
+          } else if (
+            itemQueried.resultContext.resultCode === "SESSION_EXPIRED"
+          ) {
+            router.push("/login");
+          } else {
+            toast.error("An Unexpected error occured", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              theme: "colored",
+            });
+          }
         }
       }}
     >

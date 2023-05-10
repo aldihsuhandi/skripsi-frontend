@@ -9,6 +9,7 @@ import { ItemQueryResult } from "@/types";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function Search() {
   const router = useRouter();
@@ -46,8 +47,28 @@ export default function Search() {
           inLevMerchant: urlFirstString(inLevMerchant),
           inLevUser: urlFirstString(inLevUser),
         });
-        setIsLoading(false);
-        setItems(itemQueried);
+        if (itemQueried) {
+          if (itemQueried.resultContext.success) {
+            setIsLoading(false);
+            setItems(itemQueried);
+          } else {
+            // nggak success
+            if (itemQueried.resultContext.resultCode === "SESSION_EXPIRED") {
+              // Session dah expired
+              router.push("/login");
+            } else {
+              toast.error(
+                "We were unable to process your search request, please try again later!",
+                {
+                  position: "top-center",
+                  autoClose: 10000,
+                  hideProgressBar: false,
+                  theme: "colored",
+                }
+              );
+            }
+          }
+        }
       }
     };
 

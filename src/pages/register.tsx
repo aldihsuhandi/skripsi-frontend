@@ -20,6 +20,7 @@ import { Field, Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import * as Yup from "yup";
 import { EncryptEmail } from "@/helper/EncryptDecrypt";
+import { toast } from "react-toastify";
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
@@ -93,28 +94,44 @@ export default function Register() {
                 confirmPassword: values.confirmPassword,
               };
 
-              const resultFromCall: RegisterResult = await RegisterPOST(
-                formDataSubmitted
-              );
+              const resultFromCall: RegisterResult | undefined =
+                await RegisterPOST(formDataSubmitted);
 
-              if (resultFromCall.resultContext.success) {
-                setShowError("");
+              if (resultFromCall) {
+                if (resultFromCall.resultContext.success) {
+                  setShowError("");
 
-                // NOTE: Kalo gagal biarin, tetep redirect, di page /activate ada button resend juga
+                  // NOTE: Kalo gagal biarin, tetep redirect, di page /activate ada button resend juga
 
-                // Encrypt Email
-                const encryptedEmail = await EncryptEmail({
-                  email: values.email,
-                });
+                  // Encrypt Email
+                  const encryptedEmail = await EncryptEmail({
+                    email: values.email,
+                  });
 
-                // redirect
-                router.push({
-                  pathname: "/activate",
-                  query: { e: encryptedEmail.uuid },
-                });
-              } else {
-                // berarti ada error
-                setShowError(resultFromCall.resultContext.resultMsg);
+                  // redirect
+                  if (encryptedEmail) {
+                    // redirect jika dan hanya jika Encrypt success
+                    if (encryptedEmail.resultContext.success) {
+                      router.push({
+                        pathname: "/activate",
+                        query: { e: encryptedEmail.uuid },
+                      });
+                    } else {
+                      toast.error(
+                        "We were unable to redirect you to activate the account, please try again later in the login page!",
+                        {
+                          position: "top-center",
+                          autoClose: 10000,
+                          hideProgressBar: false,
+                          theme: "colored",
+                        }
+                      );
+                    }
+                  }
+                } else {
+                  // berarti ada error
+                  setShowError(resultFromCall.resultContext.resultMsg);
+                }
               }
             }}
           >

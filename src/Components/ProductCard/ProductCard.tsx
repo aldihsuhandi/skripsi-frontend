@@ -69,23 +69,33 @@ export const ProductCard = ({ itemData, ...props }: ProductCardProps) => {
               type="button"
               onClick={async (e) => {
                 e.preventDefault();
-                const result = await WishlistAdd({
+                const wishlistResult = await WishlistAdd({
                   itemId: itemData.itemId,
                 });
-                if (result.resultContext.success) {
-                  toast.success("Successfully added!", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    theme: "colored",
-                  });
-                } else if (
-                  result.resultContext.resultCode === "SESSION_EXPIRED"
-                ) {
-                  router.push("/login");
-                } else if (result.resultContext.resultCode === "SYSTEM_ERROR") {
-                  // Ntar bikin dialog alert (or something) uat handle system error
-                  window.alert("An Unexpected error occured");
+                if (wishlistResult) {
+                  if (wishlistResult.resultContext.success) {
+                    toast.success("Successfully added!", {
+                      position: "top-right",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      theme: "colored",
+                    });
+                  } else if (
+                    wishlistResult.resultContext.resultCode ===
+                    "SESSION_EXPIRED"
+                  ) {
+                    router.push("/login");
+                  } else if (
+                    wishlistResult.resultContext.resultCode === "SYSTEM_ERROR"
+                  ) {
+                    // Ntar bikin dialog alert (or something) uat handle system error
+                    toast.error("An Unexpected error occured", {
+                      position: "top-center",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      theme: "colored",
+                    });
+                  }
                 }
               }}
             >

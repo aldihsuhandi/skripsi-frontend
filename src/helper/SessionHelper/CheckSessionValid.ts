@@ -8,8 +8,10 @@ import { SessionInfoCall } from "../SessionInfoCall";
 export const CheckSessionValid = async (sessionId: string) => {
   const sessionInfo = await SessionInfoCall({ sessionId: sessionId });
 
-  if (sessionInfo.resultContext.success) {
-    return sessionInfo.sessionSummary.email;
+  if (sessionInfo) {
+    if (sessionInfo.resultContext.success) {
+      return sessionInfo.sessionSummary.email;
+    }
   }
   return undefined;
 };

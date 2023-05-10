@@ -43,10 +43,21 @@ export default function Activate() {
 
   const ResendCode = async () => {
     if (decryptedEmail) {
-      await OtpSend({
+      const result = await OtpSend({
         email: decryptedEmail,
         otpType: "USER_ACTIVATION",
       });
+      if (
+        !result?.resultContext.success &&
+        result?.resultContext.resultCode === "USER_NOT_FOUND"
+      ) {
+        toast.error("No user found with that specific email", {
+          position: "top-center",
+          autoClose: 10000,
+          hideProgressBar: false,
+          theme: "colored",
+        });
+      }
     }
   };
 
@@ -56,16 +67,20 @@ export default function Activate() {
       const decryptedEmailResult = await DecryptEmail({
         uuid: decrypte,
       });
-      if (decryptedEmailResult.resultContext.success) {
-        setDecryptedEmail(decryptedEmailResult.email);
-        // TODO: Improve errors disini (di ticket lain)
-      } else {
-        toast.error("There seem to be a problem... please try again later!", {
-          position: "top-center",
-          autoClose: 10000,
-          hideProgressBar: true,
-          theme: "colored",
-        });
+      if (decryptedEmailResult) {
+        if (decryptedEmailResult.resultContext.success) {
+          setDecryptedEmail(decryptedEmailResult.email);
+        } else {
+          toast.error(
+            "There seem to be a problem... please leave this page try again later!",
+            {
+              position: "top-center",
+              autoClose: 10000,
+              hideProgressBar: true,
+              theme: "colored",
+            }
+          );
+        }
       }
     };
 
@@ -126,23 +141,24 @@ export default function Activate() {
                         otp: values.otpCode,
                       };
 
-                      const resultFromCall: ActivateResult = await ActivateCall(
-                        data_Activate
-                      );
+                      const resultFromCall: ActivateResult | undefined =
+                        await ActivateCall(data_Activate);
 
-                      if (resultFromCall.resultContext.success) {
-                        setIsSuccess(true);
-                        setResultMessage(
-                          "Your Accound has been succesfully activated. Redirecting to login page shortly"
-                        );
-                        const timer = setTimeout(() => {
-                          router.push("/login");
-                        }, 2000);
-                        setTimeoutId(timer);
-                      } else {
-                        setResultMessage(
-                          resultFromCall.resultContext.resultMsg
-                        );
+                      if (resultFromCall) {
+                        if (resultFromCall.resultContext.success) {
+                          setIsSuccess(true);
+                          setResultMessage(
+                            "Your Accound has been succesfully activated. Redirecting to login page shortly"
+                          );
+                          const timer = setTimeout(() => {
+                            router.push("/login");
+                          }, 2000);
+                          setTimeoutId(timer);
+                        } else {
+                          setResultMessage(
+                            resultFromCall.resultContext.resultMsg
+                          );
+                        }
                       }
                     }}
                   >
