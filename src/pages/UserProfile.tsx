@@ -82,40 +82,6 @@ export default function UserProfile() {
             </div>
           </div>
         )}
-        {/* <div className="mx-auto p-4">
-          <div className="min-w-lg mx-auto min-h-[550px] max-w-4xl rounded-lg bg-white shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]">
-            <div className="flex flex-row divide-x-2 p-4">
-              <div className="pr-4">
-                <img
-                  src="https://i.imgur.com/0AwX4wM.png"
-                  alt=""
-                  className="h-64 w-64 rounded-full"
-                />
-
-                <div className="flex flex-col justify-center space-y-3 pt-28">
-                  <button className="rounded-md border p-2 shadow-sm">
-                    Edit Profile
-                  </button>
-                  <button className="rounded-md border p-2 shadow-sm">
-                    Change Password
-                  </button>
-                  <button className="rounded-md border p-2 shadow-sm">
-                    Delete Account
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex flex-col p-4">
-                <p>USERNAME</p>
-                <p>EMAIL</p>
-                <p>PHONE NUMBER</p>
-                <p>DOB</p>
-                <p>GENDER</p>
-                <p>BIO</p>
-              </div>
-            </div>
-          </div>
-        </div> */}
       </main>
     </>
   );

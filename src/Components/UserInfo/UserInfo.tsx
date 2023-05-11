@@ -39,21 +39,18 @@ export const UserInfo = ({ userData, ...props }: UserInfoProps) => {
 
   return (
     <div className="mx-auto sm:p-6 md:p-12">
-      <div className="min-w-lg mx-auto min-h-[575px] max-w-4xl rounded-lg bg-white shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]">
-        <div className="flex flex-row divide-x-2 p-4">
-          <div className="pr-4">
+      <div className="mx-auto min-h-[550px] rounded-lg bg-white shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] md:max-w-4xl ">
+        <div className="flex flex-col divide-x-0 p-4 sm:flex-row sm:divide-x-2">
+          <div className="self-center pr-4">
             <Avatar
               src={image}
               alt="profile-picture"
-              className="h-64 w-64 rounded-full"
+              className="h-40 w-40 rounded-full md:h-64 md:w-64"
             />
 
-            <div className="flex flex-col justify-center space-y-3 pt-32">
+            <div className="flex flex-col justify-center space-y-3 pt-2 sm:pt-40">
               <button className="rounded-md border bg-normal-blue p-2 text-white shadow-sm hover:bg-bright-blue hover:shadow-md">
                 Edit Profile
-              </button>
-              <button className="rounded-md border border-normal-blue p-2 text-normal-blue shadow-sm hover:bg-normal-blue hover:text-white hover:shadow-md">
-                Change Password
               </button>
               <button className="rounded-md border bg-red-600 p-2 text-white shadow-sm hover:bg-red-500 hover:shadow-md">
                 Delete Account
