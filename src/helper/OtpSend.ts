@@ -24,7 +24,7 @@ export const OtpSend = async ({ email, otpType }: OtpSendProps) => {
 
     return data;
   } catch (error) {
-    toast.error("Unable to Connect to database, please try again later", {
+    toast.error("The System is busy, please try again later", {
       position: "top-center",
       autoClose: 10000,
       hideProgressBar: false,
