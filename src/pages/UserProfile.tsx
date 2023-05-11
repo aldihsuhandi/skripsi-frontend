@@ -1,9 +1,52 @@
 import Head from "next/head";
-import { ImageDownload, ProcessImgBE } from "@/helper";
+import {
+  ImageDownload,
+  ProcessImgBE,
+  SessionInfoCall,
+  UserQuery,
+} from "@/helper";
 import { UserSummary } from "@/types/User";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { HTMLAttributes, ReactNode, useEffect, useRef, useState } from "react";
+import { Avatar } from "@/Components/Avatar";
+import { UserInfo } from "@/Components/UserInfo";
+import { useRouter } from "next/router";
+import { Session_Local_Key } from "@/types";
+import Link from "next/link";
 
 export default function UserProfile() {
+  const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState<UserSummary | undefined>(undefined);
+
+  useEffect(() => {
+    const sessionString = localStorage.getItem(Session_Local_Key);
+    async function sessionAPI() {
+      if (sessionString) {
+        // Kalo session ada di local, check validity atau dah expired
+        const sessionInfo = await SessionInfoCall({ sessionId: sessionString });
+        if (sessionInfo.resultContext.success) {
+          const emailUser = sessionInfo.sessionSummary.email;
+
+          const userData = await UserQuery({
+            key: emailUser,
+            identifier: "email",
+          }).then((userData) => {
+            setUserData(userData.userInfo);
+          });
+
+          setIsLoggedIn(true);
+        } else if (!sessionInfo.resultContext.success) {
+          localStorage.removeItem(Session_Local_Key);
+
+          router.reload();
+        }
+      } else {
+        setIsLoggedIn(false);
+      }
+    }
+    sessionAPI();
+  }, []);
+
   return (
     <>
       <Head>
@@ -13,7 +56,33 @@ export default function UserProfile() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <div className="mx-auto p-4">
+        {isLoggedIn && userData ? (
+          <UserInfo userData={userData}></UserInfo>
+        ) : (
+          <div className="mx-auto p-4">
+            <div className="min-w-lg mx-auto flex min-h-[575px] max-w-4xl items-center justify-center rounded-lg bg-white shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]">
+              <div className="flex flex-col items-center p-2">
+                <p className="text-2xl font-bold">
+                  UH OH! YOUR SESSION HAS EXPIRED!
+                </p>
+                <p className="text-2xl font-semibold">_(:3 」∠)_</p>
+                <p className="text-2xl font-semibold">
+                  You need to login first to see your profile's page!
+                </p>
+                <div className="pt-8">
+                  <div className="mx-1 rounded-md border border-normal-blue bg-normal-blue">
+                    <Link href="/login">
+                      <button className="h-10 w-20 px-1 font-semibold text-bright-white hover:border-bright-blue hover:bg-bright-blue">
+                        Login
+                      </button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* <div className="mx-auto p-4">
           <div className="min-w-lg mx-auto min-h-[550px] max-w-4xl rounded-lg bg-white shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]">
             <div className="flex flex-row divide-x-2 p-4">
               <div className="pr-4">
@@ -46,7 +115,7 @@ export default function UserProfile() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </main>
     </>
   );
