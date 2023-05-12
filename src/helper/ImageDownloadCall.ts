@@ -1,6 +1,7 @@
 import { CLIENT_ID, CLIENT_SECRET } from "@/types";
 import { ImageDownloadRequest } from "@/types/Image";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export const ImageDownload = async (imageData: ImageDownloadRequest) => {
   try {
@@ -18,6 +19,11 @@ export const ImageDownload = async (imageData: ImageDownloadRequest) => {
     );
     return response;
   } catch (error) {
-    return null;
+    toast.error("The System is busy, please try again later", {
+      position: "top-center",
+      autoClose: 10000,
+      hideProgressBar: false,
+      theme: "colored",
+    });
   }
 };

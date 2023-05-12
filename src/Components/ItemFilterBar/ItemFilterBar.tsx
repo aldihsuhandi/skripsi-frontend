@@ -10,6 +10,7 @@ import { ItemQueryResult } from "@/types";
 import { ItemFilterFormValues } from "@/types/ItemFilter";
 import { Field, Form, Formik } from "formik";
 import { FilterDictionary } from "@/helper/FilterDictionary/FIlterDictionaryCall";
+import { toast } from "react-toastify";
 
 export type ItemFilterBarProps = {
   searchQuery?: string;
@@ -67,19 +68,32 @@ export const ItemFilterBar = ({
 
     const getDictionaries = async () => {
       // Masih Temp errornya, di different Task
-      const hobList = await FilterDictionary({ dictionaryKey: "HOBBY" }).catch(
-        () => alert("Error!")
-      );
+      const hobList = await FilterDictionary({ dictionaryKey: "HOBBY" });
       const catList = await FilterDictionary({
         dictionaryKey: "CATEGORY",
-      }).catch(() => alert("Error!"));
+      });
       const inList = await FilterDictionary({
         dictionaryKey: "INTEREST_LEVEL",
-      }).catch(() => alert("Error!"));
+      });
 
-      hobList && setHobbyList(hobList.dictionaries);
-      catList && setCategoryList(catList.dictionaries);
-      inList && setInterestList(inList.dictionaries);
+      // hobList?.resultContext.success && setHobbyList(hobList.dictionaries);
+      // catList?.resultContext.success && setCategoryList(catList.dictionaries);
+      // inList?.resultContext.success && setInterestList(inList.dictionaries);
+      hobList?.resultContext.success
+        ? setHobbyList(hobList.dictionaries)
+        : setHobbyList([
+            "There was an error fetching this data, try refreshing or try again later.",
+          ]);
+      catList?.resultContext.success
+        ? setCategoryList(catList.dictionaries)
+        : setCategoryList([
+            "There was an error fetching this data, try refreshing or try again later.",
+          ]);
+      inList?.resultContext.success
+        ? setInterestList(inList.dictionaries)
+        : setInterestList([
+            "There was an error fetching this data, try refreshing or try again later.",
+          ]);
     };
     getDictionaries();
   }, [pMin, pMax, pSort, hob, itemCat, inLevMerchant, inLevUser]);
@@ -166,12 +180,32 @@ export const ItemFilterBar = ({
         });
 
         // 3. setState variable parent pake setQueryResult():
-        setQueryResult(itemQueried);
+        if (itemQueried) {
+          if (itemQueried.resultContext.success) {
+            setQueryResult(itemQueried);
 
-        router.push({
-          pathname: `/${page}`,
-          query: flexible_object_for_url,
-        });
+            router.push({
+              pathname: `/${page}`,
+              query: flexible_object_for_url,
+            });
+          } else {
+            // nggak success
+            if (itemQueried.resultContext.resultCode === "SESSION_EXPIRED") {
+              // Session dah expired
+              router.push("/login");
+            } else {
+              toast.error(
+                "We were unable to process your search request, please try again later!",
+                {
+                  position: "top-center",
+                  autoClose: 10000,
+                  hideProgressBar: false,
+                  theme: "colored",
+                }
+              );
+            }
+          }
+        }
       }}
     >
       {({ setFieldValue }) => (

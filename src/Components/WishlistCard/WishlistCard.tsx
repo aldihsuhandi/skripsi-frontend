@@ -6,6 +6,7 @@ import { HTMLAttributes, useEffect, useState } from "react";
 import { HiShoppingCart, HiTrash } from "react-icons/hi";
 import { DialogConfrim } from "../DialogConfirm";
 import { WishlistRemove } from "@/helper";
+import { toast } from "react-toastify";
 
 export interface WishlistCardProps extends HTMLAttributes<HTMLDivElement> {
   itemData: ItemSummary;
@@ -87,18 +88,27 @@ export const WishlistCard = ({ itemData, ...props }: WishlistCardProps) => {
               }
               title="Apakah anda yakin ingin menghapus dari Wishlist?"
               onConfirm={async () => {
-                const result = await WishlistRemove({
+                const wishlistResult = await WishlistRemove({
                   itemId: itemData.itemId,
                 });
-                if (result.resultContext.success) {
-                  router.reload();
-                } else if (
-                  result.resultContext.resultCode === "SESSION_EXPIRED"
-                ) {
-                  router.push("/login");
-                } else if (result.resultContext.resultCode === "SYSTEM_ERROR") {
-                  // Ntar bikin dialog alert (or something) uat handle system error
-                  window.alert("An Unexpected error occured");
+                if (wishlistResult) {
+                  if (wishlistResult.resultContext.success) {
+                    router.reload();
+                  } else if (
+                    wishlistResult.resultContext.resultCode ===
+                    "SESSION_EXPIRED"
+                  ) {
+                    router.push("/login");
+                  } else if (
+                    wishlistResult.resultContext.resultCode === "SYSTEM_ERROR"
+                  ) {
+                    toast.error("An Unexpected error occured", {
+                      position: "top-center",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      theme: "colored",
+                    });
+                  }
                 }
               }}
             />

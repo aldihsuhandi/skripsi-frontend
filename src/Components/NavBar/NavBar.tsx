@@ -1,28 +1,17 @@
+import { LogoutCall } from "@/helper/LogoutCall";
 import { SessionInfoCall } from "@/helper/SessionInfoCall";
+import { UserQuery } from "@/helper/UserQueryCall";
 import { Session_Local_Key } from "@/types";
+import { UserSummary } from "@/types/User";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { AutoComplete } from "../AutoComplete";
-import { Avatar } from "../Avatar";
+import { UserMenu } from "../UserMenu/UserMenu";
 import { HeaderNavigation } from "./constants";
 import { NonLoginHeaderNav } from "./nonlogin_constants";
-import { UserQuery } from "@/helper/UserQueryCall";
-import { ImageDownload } from "@/helper/ImageDownloadCall";
-import { LogoutCall } from "@/helper/LogoutCall";
-import { ProcessImgBE } from "@/helper/ProcessImgBE";
-import { UserMenu } from "../UserMenu/UserMenu";
-import { UserSummary } from "@/types/User";
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import {
-  HiUser,
-  HiBuildingStorefront,
-  HiClock,
-  HiCog8Tooth,
-  HiArrowLeftOnRectangle,
-  HiHeart,
-} from "react-icons/hi2";
+import { toast } from "react-toastify";
 
 export const NavBar = () => {
   const router = useRouter();
@@ -37,25 +26,47 @@ export const NavBar = () => {
       if (sessionString) {
         // Kalo session ada di local, check validity atau dah expired
         const sessionInfo = await SessionInfoCall({ sessionId: sessionString });
-        if (sessionInfo.resultContext.success) {
-          // ambil email
-          const emailUser = sessionInfo.sessionSummary.email;
+        if (sessionInfo) {
+          if (sessionInfo.resultContext.success) {
+            // ambil email
+            const emailUser = sessionInfo.sessionSummary.email;
 
-          // panggil user/query, uat profilePicutre Id
-          const userData = await UserQuery({
-            key: emailUser,
-            identifier: "email",
-          }).then((userData) => {
-            setUserData(userData.userInfo);
-          });
+            // panggil user/query, uat profilePicutre Id
+            const userData = await UserQuery({
+              key: emailUser,
+              identifier: "email",
+            });
 
-          // set Logged in
-          setIsLoggedIn(true);
-        } else if (!sessionInfo.resultContext.success) {
-          // Klo gk success, for misal SESSION_EXPIRED, apis dri local yang stale
-          localStorage.removeItem(Session_Local_Key);
+            if (userData) {
+              if (userData.resultContext.success) {
+                setUserData(userData.userInfo);
+              } else {
+                toast.error(
+                  "There is an error getting your account info, please try again later!",
+                  {
+                    position: "top-center",
+                    autoClose: 10000,
+                    hideProgressBar: false,
+                    theme: "colored",
+                  }
+                );
+              }
+            }
 
-          router.reload();
+            // .then((userData) => {
+            //   if (userData && userData.resultContext.success) {
+            //     setUserData(userData.userInfo);
+            //   }
+            // });
+
+            // set Logged in
+            setIsLoggedIn(true);
+          } else if (!sessionInfo.resultContext.success) {
+            // Klo gk success, for misal SESSION_EXPIRED, apis dri local yang stale
+            localStorage.removeItem(Session_Local_Key);
+
+            router.reload();
+          }
         }
       } else {
         // kalo nggak ada, set false di hook `isLoggedIn`

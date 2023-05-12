@@ -18,6 +18,7 @@ import {
   HiUserGroup,
 } from "react-icons/hi";
 import { HiBuildingStorefront } from "react-icons/hi2";
+import { toast } from "react-toastify";
 
 export default function MerchantItem() {
   // Ini spesific 1 item dari sebuah merchang
@@ -40,15 +41,29 @@ export default function MerchantItem() {
         const itemDataFetch = await ItemDetail({
           itemId: itemId as string,
         });
-        setItemData(itemDataFetch);
-        if (itemDataFetch.item) {
-          setPageTitle(
-            itemDataFetch.item.itemName +
-              " from" +
-              itemDataFetch.item.merchantInfo.username
-          );
+        if (itemDataFetch) {
+          if (itemDataFetch.resultContext.success) {
+            setItemData(itemDataFetch);
+            if (itemDataFetch.item) {
+              setPageTitle(
+                itemDataFetch.item.itemName +
+                  " from" +
+                  itemDataFetch.item.merchantInfo.username
+              );
+            }
+            setIsLoading(false);
+          } else {
+            toast.error(
+              "An Error Occured when fetching this item's data, please try again.",
+              {
+                position: "top-center",
+                autoClose: 10000,
+                hideProgressBar: false,
+                theme: "colored",
+              }
+            );
+          }
         }
-        setIsLoading(false);
       }
     };
 

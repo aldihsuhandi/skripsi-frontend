@@ -8,6 +8,7 @@ import { sanitize } from "dompurify";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function Wishlist() {
   const router = useRouter();
@@ -60,14 +61,23 @@ export default function Wishlist() {
           inLevMerchant: urlFirstString(inLevMerchant),
           inLevUser: urlFirstString(inLevUser),
         });
-        console.log(itemQueried.resultContext.success);
-        if (itemQueried.resultContext.success) {
-          setIsLoading(false);
-          setItems(itemQueried);
-        } else if (itemQueried.resultContext.resultCode === "SESSION_EXPIRED") {
-          router.push("/login");
-        } else {
-          alert("System is Busy!");
+
+        if (itemQueried) {
+          if (itemQueried.resultContext.success) {
+            setIsLoading(false);
+            setItems(itemQueried);
+          } else if (
+            itemQueried.resultContext.resultCode === "SESSION_EXPIRED"
+          ) {
+            router.push("/login");
+          } else {
+            toast.error("An Unexpected error occured", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              theme: "colored",
+            });
+          }
         }
       }
     };
