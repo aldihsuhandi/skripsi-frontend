@@ -9,7 +9,13 @@ import "react-toastify/dist/ReactToastify.css";
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const { pathname } = router;
-  const noNav = ["/login", "/register", "/activate"];
+  const noNav = [
+    "/login",
+    "/register",
+    "/activate",
+    "/forgot_password",
+    "/reset_password",
+  ];
 
   return (
     <>

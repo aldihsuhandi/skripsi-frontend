@@ -203,9 +203,12 @@ export default function Login() {
                     </div>
                   )}
 
-                  <p className="text-center text-red-600">
-                    Forgot Password (next Sprint)
-                  </p>
+                  <Link
+                    className="text-center text-red-600"
+                    href="/forgot_password"
+                  >
+                    Forgot Password (WIP)
+                  </Link>
                   <p className="text-center text-gray-400">
                     Don't have an account yet?
                     <Link href={"/register"} className="text-blue-700">
