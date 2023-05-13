@@ -2,6 +2,32 @@ import Head from "next/head";
 import { useState } from "react";
 import { HiUser, HiFingerPrint, HiAtSymbol } from "react-icons/hi2";
 import styles from "../styles/Form.module.css";
+import { ForgotPassFormValues } from "@/types/User";
+import * as Yup from "yup";
+
+//di reset_password page ntar jgn lupa request/await/panggil si (apapun itulah) yg ada di dlm ResetPassQuerycall nya!!
+const initialValues: ForgotPassFormValues = {
+  email: "",
+  password: "",
+  confirmPassword: "",
+};
+
+const ResetPassSchema = Yup.object().shape({
+  email: Yup.string()
+    .required("Email is Required")
+    .email("Please enter a valid email"),
+
+  password: Yup.string()
+    .min(8, "Password minimum have lenght of 8")
+    .matches(/[A-Z]/, "Password must have atleast 1 Uppercase letter")
+    .matches(/[a-z]/, "Password must have atleast 1 Lowercase letter")
+    .matches(/[0-9]/, "Password must contain at least one number")
+    .required("Password is required!"),
+
+  confirmPassword: Yup.string()
+    .required("Please re-type your password")
+    .oneOf([Yup.ref("password")], "Re-typed passwords did not match."),
+});
 
 export default function reset_password() {
   const [show, setShow] = useState(false);
@@ -45,7 +71,7 @@ export default function reset_password() {
                         className={styles.input_text}
                       />
                       <span className="icon flex items-center px-4">
-                        <HiUser size={25} />
+                        <HiAtSymbol size={25} />
                       </span>
                     </div>
 

@@ -1,11 +1,9 @@
 import { ResultContext } from "../ResultContext";
 
-//Form Values
-export interface ResetPassSendFormValues {
+//Request
+export interface ResetPassSendRequest {
   email: string;
 }
-
-//Request
 
 /* 
 >>> Di Headers:

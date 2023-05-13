@@ -1,20 +1,18 @@
 import axios from "axios";
-import { ResetPassSendRequest, ResetPassSendResult } from "@/types/User";
+import { ForgotPassRequest, ForgotPassResult } from "@/types/User";
 import { CLIENT_ID, CLIENT_SECRET } from "@/types";
 import { toast } from "react-toastify";
 
-export const ResetPassSend = async ({ email }: ResetPassSendRequest) => {
+export const ForgotPassCall = async (formDataForgotPass: ForgotPassRequest) => {
   try {
-    const { data } = await axios.post<ResetPassSendResult>(
-      "http://localhost:8080/user/forgot_password/send",
-      {
-        email,
-      },
+    const { data } = await axios.post<ForgotPassResult>(
+      "http://localhost:8080/user/reset_password",
+      formDataForgotPass,
       {
         headers: {
           clientId: CLIENT_ID,
           clientSecret: CLIENT_SECRET,
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
           "Accept-Type": "application/json",
         },
       }

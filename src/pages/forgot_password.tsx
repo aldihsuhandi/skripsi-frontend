@@ -1,16 +1,34 @@
+import { ResetPassSend } from "@/helper/ResetPassSendCall";
 import { EncryptEmail } from "@/helper/EncryptDecrypt";
 import { Session_Local_Key } from "@/types";
 import { Formik, Form, Field } from "formik";
 import Head from "next/head";
 import Link from "next/link";
-import router from "next/router";
+import router, { useRouter } from "next/router";
 import { HiFingerPrint, HiUser } from "react-icons/hi2";
 import { toast } from "react-toastify";
 import styles from "../styles/Form.module.css";
 import { useState } from "react";
+import { ResetPassSendRequest } from "@/types/User";
+import * as Yup from "yup";
+
+const initialValues: ResetPassSendRequest = {
+  email: "",
+};
+
+const ForgotPassSchema = Yup.object().shape({
+  email: Yup.string()
+    .required("Email is Required")
+    .email("Please enter a valid email"),
+});
 
 export default function forgot_password() {
-  const [show, setShow] = useState(false);
+  const router = useRouter();
+  const [showError, setShowError] = useState<string | undefined>(undefined);
+  const [resultMessage, setResultMessage] = useState<string | undefined>(
+    undefined
+  );
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
   return (
     <>
@@ -43,25 +61,72 @@ export default function forgot_password() {
                     </p>
                   </div>
 
-                  <form className="flex flex-col gap-5">
-                    <div className={styles.input_group}>
-                      <input
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                        className={styles.input_text}
-                      />
-                      <span className="icon flex items-center px-4">
-                        <HiUser size={25} />
-                      </span>
-                    </div>
+                  <Formik
+                    initialValues={initialValues}
+                    validationSchema={ForgotPassSchema}
+                    onSubmit={async (values) => {
+                      const user_forgot_pass_data: ResetPassSendRequest = {
+                        email: values.email,
+                      };
 
-                    <div className="input-button">
-                      <button type="submit" className={styles.button}>
-                        Send Email Confirmation
-                      </button>
-                    </div>
-                  </form>
+                      const resultFromCall = await ResetPassSend(
+                        user_forgot_pass_data
+                      );
+
+                      if (resultFromCall) {
+                        if (resultFromCall.resultContext.success) {
+                          toast.success(
+                            "We've sent an email regarding your request to reset your password!",
+                            {
+                              position: "top-center",
+                              autoClose: 10000,
+                              hideProgressBar: false,
+                              theme: "colored",
+                            }
+                          );
+                        } else if (
+                          resultFromCall.resultContext.resultCode ===
+                          "USER_NOT_EXIST"
+                        ) {
+                          toast.error(
+                            "Uh oh! It seems that the email you are looking for is not exist!",
+                            {
+                              position: "top-center",
+                              autoClose: 10000,
+                              hideProgressBar: false,
+                              theme: "colored",
+                            }
+                          );
+                        }
+                      }
+                    }}
+                  >
+                    {({ errors, touched }) => (
+                      <Form className="flex flex-col gap-5">
+                        <div className={styles.input_group}>
+                          <Field
+                            type="email"
+                            name="email"
+                            placeholder="Email"
+                            className={styles.input_text}
+                          />
+                          <span className="icon flex items-center px-4">
+                            <HiUser size={25} />
+                          </span>
+                        </div>
+                        {errors.email && touched.email && (
+                          <div>
+                            <p className="text-red-600">{errors.email}</p>
+                          </div>
+                        )}
+                        <div className="input-button">
+                          <button type="submit" className={styles.button}>
+                            Send Reset Confirmation
+                          </button>
+                        </div>
+                      </Form>
+                    )}
+                  </Formik>
                 </section>
               </div>
             </div>
