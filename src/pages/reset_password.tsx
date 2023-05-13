@@ -1,9 +1,18 @@
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HiUser, HiFingerPrint, HiAtSymbol } from "react-icons/hi2";
 import styles from "../styles/Form.module.css";
-import { ForgotPassFormValues } from "@/types/User";
+import {
+  ForgotPassFormValues,
+  ForgotPassRequest,
+  ForgotPassResult,
+} from "@/types/User";
 import * as Yup from "yup";
+import { ResetPassQuery } from "@/helper";
+import { useRouter } from "next/router";
+import { Formik, Form, Field } from "formik";
+import { ForgotPassCall } from "@/helper/ForgotPassCall";
+import { toast } from "react-toastify";
 
 //di reset_password page ntar jgn lupa request/await/panggil si (apapun itulah) yg ada di dlm ResetPassQuerycall nya!!
 const initialValues: ForgotPassFormValues = {
@@ -30,7 +39,13 @@ const ResetPassSchema = Yup.object().shape({
 });
 
 export default function reset_password() {
+  const router = useRouter();
   const [show, setShow] = useState(false);
+  const [showError, setShowError] = useState<string | undefined>(undefined);
+
+  // useEffect(() => {
+
+  // });
 
   return (
     <>
@@ -61,6 +76,35 @@ export default function reset_password() {
                       Fill the form below to reset your password!
                     </p>
                   </div>
+
+                  <Formik
+                    initialValues={initialValues}
+                    validationSchema={ResetPassSchema}
+                    onSubmit={async (values) => {
+                      const formDataResetPass: ForgotPassRequest = {
+                        email: values.email,
+                        password: values.password,
+                        confirmPassword: values.confirmPassword,
+                      };
+
+                      const resultFromCall: ForgotPassResult | undefined =
+                        await ForgotPassCall(formDataResetPass);
+                      if (resultFromCall) {
+                        if (resultFromCall.resultContext.success) {
+                          toast.success(
+                            "Success! Your password has been reset!",
+                            {
+                              position: "top-center",
+                              autoClose: 10000,
+                              hideProgressBar: false,
+                              theme: "colored",
+                            }
+                          );
+                        } else if (!resultFromCall.resultContext.success) {
+                        }
+                      }
+                    }}
+                  ></Formik>
 
                   <form className="flex flex-col gap-5">
                     <div className={styles.input_group}>
