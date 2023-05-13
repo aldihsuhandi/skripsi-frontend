@@ -1,11 +1,24 @@
 import axios from "axios";
 
-import { CLIENT_ID, CLIENT_SECRET, WishlistQueryResult } from "@/types";
+import {
+  CLIENT_ID,
+  CLIENT_SECRET,
+  WishlistPagingContext,
+  WishlistQueryResult,
+} from "@/types";
 import { ItemFilterValues } from "@/types/ItemFilter";
 import { toast } from "react-toastify";
 import { CheckExistSessionLocal } from "../SessionHelper";
 
-export const WishlistQuery = async (filters: ItemFilterValues) => {
+export const WishlistQuery = async ({
+  filters,
+  pageNumber,
+  numberOfItem,
+}: {
+  filters: ItemFilterValues;
+  pageNumber?: number;
+  numberOfItem?: number;
+}) => {
   try {
     const sessionString = CheckExistSessionLocal();
     if (sessionString) {
@@ -19,6 +32,8 @@ export const WishlistQuery = async (filters: ItemFilterValues) => {
       const { data } = await axios.post<WishlistQueryResult>(
         "http://localhost:8080/item/wishlist/query",
         {
+          pageNumber: pageNumber,
+          numberOfItem: numberOfItem,
           itemFilterContext: {
             itemName: filters.itemName,
             minItemPrice: filters.pMin,

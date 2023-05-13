@@ -8,7 +8,9 @@ import { sanitize } from "dompurify";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import ReactPaginate from "react-paginate";
 import { toast } from "react-toastify";
+import styles from "../styles/Paginate.module.css";
 
 export default function Wishlist() {
   const router = useRouter();
@@ -25,6 +27,7 @@ export default function Wishlist() {
   const [inputValue, setInputValue] = useState("");
 
   const [items, setItems] = useState<WishlistQueryResult | undefined>();
+  const [currentPage, setCurrentPage] = useState(0);
 
   useEffect(() => {
     // Check session, klo nggak valid
@@ -53,13 +56,17 @@ export default function Wishlist() {
       await fetchQueriesName();
       if (urlFirstString(q) === qString) {
         const itemQueried = await WishlistQuery({
-          itemName: qString || "",
-          pMin: pMinNumber,
-          pMax: pMaxNumber,
-          hob: urlFirstString(hob),
-          itemCat: urlFirstString(itemCat),
-          inLevMerchant: urlFirstString(inLevMerchant),
-          inLevUser: urlFirstString(inLevUser),
+          pageNumber: currentPage + 1,
+          numberOfItem: 20, // bisa di ganti2 ntar tpi later
+          filters: {
+            itemName: qString || "",
+            pMin: pMinNumber,
+            pMax: pMaxNumber,
+            hob: urlFirstString(hob),
+            itemCat: urlFirstString(itemCat),
+            inLevMerchant: urlFirstString(inLevMerchant),
+            inLevUser: urlFirstString(inLevUser),
+          },
         });
 
         if (itemQueried) {
@@ -93,7 +100,7 @@ export default function Wishlist() {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [router.isReady, q, qString]);
+  }, [router.isReady, q, qString, currentPage]);
 
   function UpdateDiChild(replace_in_parent: WishlistQueryResult) {
     setItems(replace_in_parent);
@@ -112,6 +119,15 @@ export default function Wishlist() {
       query: { q: inputValue },
     });
   };
+
+  const handlePageClick = (selectedPage: { selected: number }) => {
+    console.log(selectedPage.selected, "page otw navigation");
+    console.log(currentPage, "currentPage before");
+    setCurrentPage(selectedPage.selected);
+    console.log(selectedPage.selected, "after setCurrentPage");
+    console.log(currentPage, "currentPage after");
+  };
+
   return (
     <>
       <Head>
@@ -167,15 +183,37 @@ export default function Wishlist() {
             {isLoading ? (
               <>Loading Placeholder</>
             ) : (
-              <div className="grid grid-cols-2 gap-4 py-2 px-2 lg:grid-cols-5 lg:py-4">
-                {items?.wishlistItems.length !== 0 && items ? (
-                  <>
-                    {items.wishlistItems.map((data) => {
-                      return <WishlistCard itemData={data} />;
-                    })}
-                  </>
-                ) : (
-                  <>KOSONG PLACEHOLDER</>
+              <div className="flex flex-col">
+                <div className="grid grid-cols-2 gap-4 py-2 px-2 lg:grid-cols-5 lg:py-4">
+                  {items?.wishlistItems.length !== 0 && items ? (
+                    <>
+                      {items.wishlistItems.map((data) => {
+                        return <WishlistCard itemData={data} />;
+                      })}
+                    </>
+                  ) : (
+                    <>KOSONG PLACEHOLDER</>
+                  )}
+                </div>
+                {items && (
+                  <ReactPaginate
+                    pageCount={items.pagingContext.totalPage}
+                    onPageChange={handlePageClick}
+                    initialPage={currentPage}
+                    nextLabel=">"
+                    previousLabel="<"
+                    breakLabel="..."
+                    // Stylings
+                    containerClassName={styles.pagination}
+                    pageLinkClassName={styles.pagelink}
+                    activeClassName={styles.active}
+                    activeLinkClassName={styles.active}
+                    breakClassName={styles.pagelink}
+                    previousLinkClassName={styles.pagelink}
+                    nextLinkClassName={styles.pagelink}
+                    disabledLinkClassName={styles.disabled}
+                    renderOnZeroPageCount={null}
+                  />
                 )}
               </div>
             )}
@@ -185,6 +223,3 @@ export default function Wishlist() {
     </>
   );
 }
-
-// Ntar
-const RenderContent = () => {};
