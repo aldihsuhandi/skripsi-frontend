@@ -209,17 +209,6 @@ const renderResult = ({
   if (items) {
     if (items.resultContext.success) {
       if (totalItems.length !== 0) {
-        // return items.items.map((data) => {
-        //   return <ProductCard itemData={data} />;
-        // });
-        // return totalItems.map((data) => {
-        //   return <ProductCard itemData={data} />;
-        // });
-        // <RenderItems
-        //   items={items}
-        //   totalItems={totalItems}
-        //   fetchMore={fetchMore}
-        // />;
         return (
           <>
             {RenderItems({
@@ -249,19 +238,6 @@ const RenderItems = ({
   totalItems: ItemSummary[];
   fetchMore: () => void;
 }) => {
-  // return totalItems.map((data) => {
-  //   return <ProductCard itemData={data} />;
-  // });
-
-  // console.log(items);
-  // console.log(totalItems);
-
-  // return <>a</>;
-
-  console.log(items.pagingContext.hasNext, "ada next ?");
-  console.log(items);
-  console.log(totalItems);
-
   return (
     <InfiniteScroll
       dataLength={totalItems.length}
@@ -269,13 +245,7 @@ const RenderItems = ({
       hasMore={items.pagingContext.hasNext}
       loader={<h4 className="text-center">Loading...</h4>}
     >
-      {/* {items.items.map((data) => {
-    return <ProductCard itemData={data} />;
-  })} */}
       <div className="grid grid-cols-2 gap-4 py-2 px-2 lg:grid-cols-5 lg:py-4">
-        {/* {totalItems.map((data) => {
-          return <ProductCard itemData={data} />;
-        })} */}
         {totalItems.map((data) => (
           <ProductCard itemData={data} />
         ))}
