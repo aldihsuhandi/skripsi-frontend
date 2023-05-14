@@ -6,6 +6,7 @@ import {
   ForgotPassFormValues,
   ForgotPassRequest,
   ForgotPassResult,
+  ResetPassQueryResult,
 } from "@/types/User";
 import * as Yup from "yup";
 import { ResetPassQuery } from "@/helper";
@@ -42,10 +43,13 @@ export default function reset_password() {
   const router = useRouter();
   const [show, setShow] = useState(false);
   const [showError, setShowError] = useState<string | undefined>(undefined);
+  // const [isLoading, setIsLoading] = useState<boolean>(true);
+  // const [emailData, setEmailData] = useState<
+  //   ResetPassQueryResult | undefined
+  // >();
+  // const [emailData, setEmailData] = useState('');
 
-  // useEffect(() => {
-
-  // });
+  // useEffect(() => {});
 
   return (
     <>
