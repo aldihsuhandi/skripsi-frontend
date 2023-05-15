@@ -99,12 +99,14 @@ export default function Search() {
   }, [router.isReady, q, qString]);
 
   function UpdateItemsDiChild(replace_items_in_parent: ItemQueryResult) {
+    setCurPage(2); // Reset back to default when new filter is applied
     setItems(replace_items_in_parent);
   }
 
   function UpdateTotalItemsDiChild(
     replace_total_items_in_parent: ItemSummary[]
   ) {
+    setCurPage(2); // Reset back to default when new filter is applied
     setTotalItems(replace_total_items_in_parent);
   }
 
@@ -179,6 +181,9 @@ export default function Search() {
             />
           )}
           <div>
+            <button onClick={() => console.log(curPage, "curPage")}>
+              curPage
+            </button>
             {isLoading ? (
               <>Loading Placeholder</>
             ) : (
