@@ -181,9 +181,6 @@ export default function Search() {
             />
           )}
           <div>
-            <button onClick={() => console.log(curPage, "curPage")}>
-              curPage
-            </button>
             {isLoading ? (
               <>Loading Placeholder</>
             ) : (
