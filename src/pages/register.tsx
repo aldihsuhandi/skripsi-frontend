@@ -7,6 +7,7 @@ import {
   HiFolderAdd,
   HiPhone,
   HiUser,
+  HiEmojiHappy,
 } from "react-icons/hi"; //import react icons
 import styles from "../styles/Form.module.css";
 
@@ -32,6 +33,8 @@ const initialValues: RegisterFormValues = {
   phoneNumber: "",
   password: "",
   confirmPassword: "",
+  gender: "",
+  dateOfBirth: new Date(),
 };
 
 const RegisterSchema = Yup.object().shape({
@@ -46,9 +49,15 @@ const RegisterSchema = Yup.object().shape({
       return !value || (value && SUPPORTED_FORMATS.includes(value.type));
     }),
 
-  email: Yup.string().email("Please enter a valid email").required("Required"),
+  email: Yup.string()
+    .email("Please enter a valid email")
+    .required("Email is Required"),
 
   username: Yup.string().required("Username cannot be empty!"),
+
+  gender: Yup.string().required("You have to choose your gender!"),
+
+  dateOfBirth: Yup.date().required("You must input your birthday!").nullable(),
 
   phoneNumber: Yup.string()
     .required("Phone Number cannot be empty!")
@@ -92,6 +101,8 @@ export default function Register() {
                 profilePicture: values.profilePicture ?? undefined,
                 password: values.password,
                 confirmPassword: values.confirmPassword,
+                gender: values.gender,
+                dateOfBirth: values.dateOfBirth,
               };
 
               const resultFromCall: RegisterResult | undefined =
@@ -136,7 +147,7 @@ export default function Register() {
             }}
           >
             {({ setFieldValue, errors, touched }) => (
-              <Form className="m-0 block h-full  w-full overflow-scroll bg-bright-white shadow-2xl lg:m-auto lg:grid lg:h-3/4 lg:w-3/5 lg:grid-cols-2 lg:overflow-hidden lg:rounded-lg">
+              <Form className="m-0 block h-full w-full overflow-scroll bg-bright-white shadow-2xl lg:m-auto lg:grid lg:h-3/4 lg:w-3/5 lg:grid-cols-2 lg:overflow-hidden lg:rounded-lg">
                 <div className="flex auto-cols-auto flex-col items-center justify-evenly bg-gradient-to-br from-blue-800 to-purple-800 lg:rounded-l-lg">
                   {/*---> Upload Image Form <---*/}
                   <div className="relative flex max-w-lg flex-col text-center">
@@ -201,12 +212,12 @@ export default function Register() {
                     />
                   </div>
                 </div>
-                <div className="right flex flex-col justify-evenly overflow-scroll">
-                  <div className="overflow-scroll py-10 text-center">
+                <div className="right flex flex-col justify-evenly overflow-auto">
+                  <div className="overflow-auto py-10 text-center">
                     <section className="mx-auto flex w-3/4 flex-col gap-10">
                       {/*---> Title Register Form <---*/}
                       <div className="title">
-                        <h1 className="py-4 text-2xl font-bold text-gray-800">
+                        <h1 className="py-2 text-2xl font-bold text-gray-800">
                           You are almost there!
                         </h1>
                         <p className="mx-auto w-3/4 text-gray-500">
@@ -221,9 +232,10 @@ export default function Register() {
                             name="email"
                             placeholder="Email"
                             className={styles.input_text}
+                            // className="placeholder:text-red-500"
                           />
-                          <span className="icon flex items-center px-4">
-                            <HiAtSymbol size={25} />
+                          <span className="icon flex items-center pr-2">
+                            <HiAtSymbol size={20} />
                           </span>
                         </div>
 
@@ -235,8 +247,8 @@ export default function Register() {
                             placeholder="Username"
                             className={styles.input_text}
                           />
-                          <span className="icon flex items-center px-4">
-                            <HiUser size={25} />
+                          <span className="icon flex items-center pr-2">
+                            <HiUser size={20} />
                           </span>
                         </div>
 
@@ -249,9 +261,40 @@ export default function Register() {
                             placeholder="Phone Number"
                             className={styles.input_text}
                           />
-                          <span className="icon flex items-center px-4">
-                            <HiPhone size={25} />
+                          <span className="icon flex items-center pr-2">
+                            <HiPhone size={20} />
                           </span>
+                        </div>
+
+                        {/*---> Gender Input <---*/}
+                        <div className={styles.input_group}>
+                          <Field
+                            as="select"
+                            name="gender"
+                            placeholder="Gender"
+                            className={styles.custom_option}
+                            // className="w-full appearance-none rounded-xl bg-bright-white py-2 px-2 hover:cursor-pointer"
+                          >
+                            <option value="" disabled hidden>
+                              Gender
+                            </option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                          </Field>
+                          <span className="icon flex items-center pr-2">
+                            <HiEmojiHappy size={20} className="fill-black" />
+                          </span>
+                        </div>
+
+                        {/*---> DOB Input <---*/}
+                        <div className={styles.input_group}>
+                          <Field
+                            type="date"
+                            name="birthday"
+                            placeholder="Date of Birth"
+                            className="w-full rounded-xl bg-bright-white py-2 px-2 placeholder:text-gray-500"
+                          ></Field>
                         </div>
 
                         {/*---> Password Input <---*/}
@@ -263,10 +306,10 @@ export default function Register() {
                             className={styles.input_text}
                           />
                           <span
-                            className="icon flex items-center px-4"
+                            className="icon flex items-center pr-2"
                             onClick={() => setShow(!show)}
                           >
-                            <HiFingerPrint size={25} />
+                            <HiFingerPrint size={20} />
                           </span>
                         </div>
 
@@ -279,10 +322,10 @@ export default function Register() {
                             className={styles.input_text}
                           />
                           <span
-                            className="icon flex items-center px-4"
+                            className="icon flex items-center pr-2"
                             onClick={() => setShow(!show)}
                           >
-                            <HiFingerPrint size={25} />
+                            <HiFingerPrint size={20} />
                           </span>
                         </div>
 

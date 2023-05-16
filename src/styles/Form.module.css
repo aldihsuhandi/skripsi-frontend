@@ -26,7 +26,7 @@
 
 .input_text + * {
   /*---> Styling icon dlm formnya <---*/
-  color: gray;
+  color: black;
 }
 
 .input_text:focus + * {
@@ -38,4 +38,10 @@
   /*---> Styling show password & don't show password <---*/
   color: #008ec4;
   cursor: pointer;
+}
+
+.custom_option {
+  /*---> Styling option gender (utk placeholdernya) <---*/
+  color: gray;
+  @apply w-full appearance-none rounded-xl bg-bright-white py-2 px-2 hover:cursor-pointer;
 }
