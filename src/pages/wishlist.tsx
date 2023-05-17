@@ -65,8 +65,6 @@ export default function Wishlist() {
     const fetchQueriesPage = async () => {
       const tempPage = parseNumberUndefined(urlFirstString(page)) ?? 0;
       setCurrentPage(tempPage === 0 ? 0 : tempPage - 1);
-      console.log(page, "page");
-      console.log(tempPage, "tempPage");
     };
 
     const initialRenderResult = async () => {
@@ -146,7 +144,6 @@ export default function Wishlist() {
   };
 
   const handlePageClick = (selectedPage: { selected: number }) => {
-    console.log("TRIGGERED");
     setCurrentPage(selectedPage.selected);
     router.push({
       pathname: `/wishlist`,
