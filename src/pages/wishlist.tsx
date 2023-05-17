@@ -153,7 +153,6 @@ export default function Wishlist() {
       query: {
         ...router.query,
         page: selectedPage.selected + 1,
-        qWish: inputValue,
       },
     });
   };
@@ -172,7 +171,7 @@ export default function Wishlist() {
           <form className="px-3" onSubmit={handleEnter}>
             <SearchBar
               onChange={handleChange}
-              value={inputValue}
+              value={qWishString ?? inputValue}
               autoComplete="off"
             />
           </form>
