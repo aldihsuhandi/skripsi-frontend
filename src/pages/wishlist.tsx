@@ -1,7 +1,12 @@
 import { SearchBar } from "@/Components/SearchBar";
 import { WishlistCard } from "@/Components/WishlistCard";
 import { WishlistFilterBar } from "@/Components/WishlistFilterBar";
-import { WishlistQuery, parseNumberUndefined, urlFirstString } from "@/helper";
+import {
+  WishlistQuery,
+  parseNumberUndefined,
+  return0ifNan,
+  urlFirstString,
+} from "@/helper";
 import { SessionValidate } from "@/helper/SessionHelper";
 import { WishlistQueryResult } from "@/types/Wishlist";
 import { sanitize } from "dompurify";
@@ -19,15 +24,24 @@ export default function Wishlist() {
   // Uat Dropwdown filter klo kecil
   const [isOpen, setIsOpen] = useState(false);
 
-  const { q, pMin, pMax, pSort, hob, itemCat, inLevMerchant, inLevUser } =
-    router.query;
-  const [qString, setQString] = useState<string>();
+  const {
+    qWish,
+    pMin,
+    pMax,
+    pSort,
+    hob,
+    itemCat,
+    inLevMerchant,
+    inLevUser,
+    page,
+  } = router.query;
+  const [qWishString, setqWishString] = useState<string>();
+  const [currentPage, setCurrentPage] = useState(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const [inputValue, setInputValue] = useState("");
 
   const [items, setItems] = useState<WishlistQueryResult | undefined>();
-  const [currentPage, setCurrentPage] = useState(0);
 
   useEffect(() => {
     // Check session, klo nggak valid
@@ -45,7 +59,14 @@ export default function Wishlist() {
     }
 
     const fetchQueriesName = async () => {
-      setQString(urlFirstString(q));
+      setqWishString(urlFirstString(qWish));
+    };
+
+    const fetchQueriesPage = async () => {
+      const tempPage = parseNumberUndefined(urlFirstString(page)) ?? 0;
+      setCurrentPage(tempPage === 0 ? 0 : tempPage - 1);
+      console.log(page, "page");
+      console.log(tempPage, "tempPage");
     };
 
     const initialRenderResult = async () => {
@@ -54,12 +75,16 @@ export default function Wishlist() {
 
       setIsLoading(true);
       await fetchQueriesName();
-      if (urlFirstString(q) === qString) {
+      await fetchQueriesPage();
+      if (
+        urlFirstString(qWish) === qWishString
+        // && urlFirstString(page) == page
+      ) {
         const itemQueried = await WishlistQuery({
           pageNumber: currentPage + 1,
-          numberOfItem: 20, // bisa di ganti2 ntar tpi later
+          numberOfItem: 10, // bisa di ganti2 ntar tpi later
           filters: {
-            itemName: qString || "",
+            itemName: qWishString || "",
             pMin: pMinNumber,
             pMax: pMaxNumber,
             hob: urlFirstString(hob),
@@ -100,7 +125,7 @@ export default function Wishlist() {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [router.isReady, q, qString, currentPage]);
+  }, [router.isReady, qWish, qWishString, page]);
 
   function UpdateDiChild(replace_in_parent: WishlistQueryResult) {
     setItems(replace_in_parent);
@@ -116,16 +141,21 @@ export default function Wishlist() {
     event.preventDefault();
     router.push({
       pathname: `/wishlist`,
-      query: { q: inputValue },
+      query: { qWish: inputValue },
     });
   };
 
   const handlePageClick = (selectedPage: { selected: number }) => {
-    console.log(selectedPage.selected, "page otw navigation");
-    console.log(currentPage, "currentPage before");
+    console.log("TRIGGERED");
     setCurrentPage(selectedPage.selected);
-    console.log(selectedPage.selected, "after setCurrentPage");
-    console.log(currentPage, "currentPage after");
+    router.push({
+      pathname: `/wishlist`,
+      query: {
+        ...router.query,
+        page: selectedPage.selected + 1,
+        qWish: inputValue,
+      },
+    });
   };
 
   return (
@@ -165,7 +195,7 @@ export default function Wishlist() {
                     <div className="pt-4">
                       <WishlistFilterBar
                         page="wishlist"
-                        searchQuery={qString}
+                        searchQuery={qWishString}
                         setQueryResult={UpdateDiChild}
                       />
                     </div>
@@ -174,7 +204,7 @@ export default function Wishlist() {
               ) : (
                 <WishlistFilterBar
                   page="wishlist"
-                  searchQuery={qString}
+                  searchQuery={qWishString}
                   setQueryResult={UpdateDiChild}
                 />
               )}
@@ -199,10 +229,12 @@ export default function Wishlist() {
                   <ReactPaginate
                     pageCount={items.pagingContext.totalPage}
                     onPageChange={handlePageClick}
-                    initialPage={currentPage}
+                    // initialPage={currentPage}
+                    forcePage={currentPage}
                     nextLabel=">"
                     previousLabel="<"
                     breakLabel="..."
+                    // disableInitialCallback
                     // Stylings
                     containerClassName={styles.pagination}
                     pageLinkClassName={styles.pagelink}
