@@ -17,7 +17,7 @@ import {
   RegisterRequest,
   RegisterResult,
 } from "@/types/User";
-import { Field, Form, Formik } from "formik";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import * as Yup from "yup";
 import { EncryptEmail } from "@/helper/EncryptDecrypt";
@@ -57,7 +57,7 @@ const RegisterSchema = Yup.object().shape({
 
   gender: Yup.string().required("You have to choose your gender!"),
 
-  dateOfBirth: Yup.date().required("You must input your birthday!").nullable(),
+  dateOfBirth: Yup.date().required("You must input your birthday!"),
 
   phoneNumber: Yup.string()
     .required("Phone Number cannot be empty!")
@@ -81,6 +81,7 @@ export default function Register() {
   const [show, setShow] = useState(false); //Untuk icon-icon yg di bagian register form
   const [showError, setShowError] = useState<string | undefined>(undefined);
   const [picture, setPicture] = useState("");
+  const [theDate, setTheDate] = useState();
   const imgRef = useRef<HTMLInputElement>(null);
 
   return (
@@ -291,9 +292,10 @@ export default function Register() {
                         <div className={styles.input_group}>
                           <Field
                             type="date"
+                            id="birthday"
                             name="birthday"
-                            placeholder="Date of Birth"
-                            className="w-full rounded-xl bg-bright-white py-2 px-2 placeholder:text-gray-500"
+                            // placeholder="Date of Birth"
+                            className="w-full rounded-xl bg-bright-white py-2 px-2 hover:cursor-pointer"
                           ></Field>
                         </div>
 
@@ -360,6 +362,20 @@ export default function Register() {
                               <p className="text-red-600">{errors.password}</p>
                             </div>
                           )}
+
+                          {errors.gender && touched.gender && (
+                            <div>
+                              <p className="text-red-600">{errors.gender}</p>
+                            </div>
+                          )}
+
+                          <ErrorMessage
+                            name="birthday"
+                            component="div"
+                            className="text-red-600"
+                          />
+
+                          {/* {errors.dateOfBirth && touched.dateOfBirth ? <div><p className="text-red-600">{errors.dateOfBirth}</p></div> : null} */}
 
                           {errors.confirmPassword &&
                             touched.confirmPassword && (
