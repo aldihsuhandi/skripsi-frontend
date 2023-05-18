@@ -11,7 +11,7 @@ export interface RegisterFormValues {
   username: string;
   phoneNumber: string;
   gender: string;
-  dateOfBirth: Date;
+  dateOfBirth: string;
   password: string;
   confirmPassword: string;
 }
@@ -31,7 +31,7 @@ export interface RegisterRequest {
   profilePicture?: File;
   // profilePicture?: string;
   gender: string;
-  dateOfBirth: Date;
+  dateOfBirth: string;
   password: string;
   confirmPassword: string;
 }

@@ -22,6 +22,8 @@ import { useRouter } from "next/router";
 import * as Yup from "yup";
 import { EncryptEmail } from "@/helper/EncryptDecrypt";
 import { toast } from "react-toastify";
+import { StringToDateAndBack } from "@/helper";
+import { format } from "date-fns";
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
@@ -34,7 +36,7 @@ const initialValues: RegisterFormValues = {
   password: "",
   confirmPassword: "",
   gender: "",
-  dateOfBirth: new Date(),
+  dateOfBirth: "",
 };
 
 const RegisterSchema = Yup.object().shape({
@@ -95,6 +97,7 @@ export default function Register() {
             initialValues={initialValues}
             validationSchema={RegisterSchema}
             onSubmit={async (values) => {
+              // console.log(typeof values.dateOfBirth);
               const formDataSubmitted: RegisterRequest = {
                 email: values.email,
                 username: values.username,
@@ -103,8 +106,10 @@ export default function Register() {
                 password: values.password,
                 confirmPassword: values.confirmPassword,
                 gender: values.gender,
-                dateOfBirth: values.dateOfBirth,
+                dateOfBirth: StringToDateAndBack(values.dateOfBirth),
               };
+
+              // console.log(formDataSubmitted);
 
               const resultFromCall: RegisterResult | undefined =
                 await RegisterPOST(formDataSubmitted);
@@ -292,8 +297,8 @@ export default function Register() {
                         <div className={styles.input_group}>
                           <Field
                             type="date"
-                            id="birthday"
-                            name="birthday"
+                            id="dateOfBirth"
+                            name="dateOfBirth"
                             // placeholder="Date of Birth"
                             className="w-full rounded-xl bg-bright-white py-2 px-2 hover:cursor-pointer"
                           ></Field>
