@@ -10,6 +10,8 @@ export interface RegisterFormValues {
   email: string;
   username: string;
   phoneNumber: string;
+  gender: string;
+  dateOfBirth: string;
   password: string;
   confirmPassword: string;
 }
@@ -28,6 +30,8 @@ export interface RegisterRequest {
   phoneNumber: string;
   profilePicture?: File;
   // profilePicture?: string;
+  gender: string;
+  dateOfBirth: string;
   password: string;
   confirmPassword: string;
 }
