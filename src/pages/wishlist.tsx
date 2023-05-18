@@ -1,12 +1,7 @@
 import { SearchBar } from "@/Components/SearchBar";
 import { WishlistCard } from "@/Components/WishlistCard";
 import { WishlistFilterBar } from "@/Components/WishlistFilterBar";
-import {
-  WishlistQuery,
-  parseNumberUndefined,
-  return0ifNan,
-  urlFirstString,
-} from "@/helper";
+import { WishlistQuery, parseNumberUndefined, urlFirstString } from "@/helper";
 import { SessionValidate } from "@/helper/SessionHelper";
 import { WishlistQueryResult } from "@/types/Wishlist";
 import { sanitize } from "dompurify";
@@ -60,6 +55,7 @@ export default function Wishlist() {
 
     const fetchQueriesName = async () => {
       setqWishString(urlFirstString(qWish));
+      setInputValue(urlFirstString(qWish) ?? "");
     };
 
     const fetchQueriesPage = async () => {
@@ -168,7 +164,7 @@ export default function Wishlist() {
           <form className="px-3" onSubmit={handleEnter}>
             <SearchBar
               onChange={handleChange}
-              value={qWishString ?? inputValue}
+              value={inputValue}
               autoComplete="off"
             />
           </form>
