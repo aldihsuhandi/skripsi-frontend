@@ -41,8 +41,8 @@ export interface WishlistPagingContext {
   /**
    * Kalo gk muat number, bigint
    */
-  totalItem?: number;
-  totalPage?: number;
+  totalItem: number;
+  totalPage: number;
 }
 
 export interface WishlistSummary {

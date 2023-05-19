@@ -6,7 +6,15 @@ import { CLIENT_ID, CLIENT_SECRET } from "@/types";
 import { CheckExistSessionLocal } from "./SessionHelper";
 import { toast } from "react-toastify";
 
-export const ItemFilterQuery = async (filters: ItemFilterValues) => {
+export const ItemFilterQuery = async ({
+  filters,
+  pageNumber,
+  numberOfItem,
+}: {
+  filters: ItemFilterValues;
+  pageNumber?: number;
+  numberOfItem?: number;
+}) => {
   try {
     const headers = {
       clientId: CLIENT_ID,
@@ -24,6 +32,8 @@ export const ItemFilterQuery = async (filters: ItemFilterValues) => {
     const { data } = await axios.post<ItemQueryResult>(
       "http://localhost:8080/item/query",
       {
+        pageNumber: pageNumber,
+        numberOfItem: numberOfItem,
         itemFilterContext: {
           itemName: filters.itemName,
           minItemPrice: filters.pMin,

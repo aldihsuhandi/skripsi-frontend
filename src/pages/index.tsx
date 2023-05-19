@@ -48,10 +48,13 @@ export default function Home() {
       await fetchingQueries();
       if (urlFirstString(q) === qString) {
         const itemQueried = await ItemFilterQuery({
-          itemName: qString || "",
-          hob: urlFirstString(hob),
-          itemCat: urlFirstString(itemCat),
-          inLev: urlFirstString(inLev),
+          filters: {
+            itemName: qString || "",
+            hob: urlFirstString(hob),
+            itemCat: urlFirstString(itemCat),
+            inLevMerchant: "",
+            inLevUser: "",
+          },
         });
         setIsLoading(false);
         setItems(itemQueried);

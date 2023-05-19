@@ -6,7 +6,7 @@ import {
   parseNumberUndefined,
   urlFirstString,
 } from "@/helper";
-import { ItemQueryResult } from "@/types";
+import { ItemQueryResult, ItemSummary } from "@/types";
 import { ItemFilterFormValues } from "@/types/ItemFilter";
 import { Field, Form, Formik } from "formik";
 import { FilterDictionary } from "@/helper/FilterDictionary/FIlterDictionaryCall";
@@ -18,13 +18,17 @@ export type ItemFilterBarProps = {
   /**
    * Run the setState given from Parent
    */
-  setQueryResult: (replace_in_parent: ItemQueryResult) => void;
+  setItemQueryResult: (replace_in_parent: ItemQueryResult) => void;
+  setTotalItemQueryResult: (
+    replace_total_items_in_parent: ItemSummary[]
+  ) => void;
 };
 
 export const ItemFilterBar = ({
   searchQuery,
   page,
-  setQueryResult,
+  setItemQueryResult,
+  setTotalItemQueryResult,
 }: ItemFilterBarProps) => {
   const router = useRouter();
   // uat trigger form outside form(ik), dipake di useEffect
@@ -170,19 +174,22 @@ export const ItemFilterBar = ({
         const pMaxNumber = parseNumberUndefined(values.pMax);
         // 2. Api call item/query
         const itemQueried = await ItemFilterQuery({
-          itemName: searchQuery || "",
-          pMin: pMinNumber,
-          pMax: pMaxNumber,
-          hob: values.hob,
-          itemCat: values.itemCat,
-          inLevMerchant: values.inLevMerchant,
-          inLevUser: values.inLevUser,
+          filters: {
+            itemName: searchQuery || "",
+            pMin: pMinNumber,
+            pMax: pMaxNumber,
+            hob: values.hob,
+            itemCat: values.itemCat,
+            inLevMerchant: values.inLevMerchant,
+            inLevUser: values.inLevUser,
+          },
         });
 
-        // 3. setState variable parent pake setQueryResult():
+        // 3. setState variable parent pake setItemQueryResult():
         if (itemQueried) {
           if (itemQueried.resultContext.success) {
-            setQueryResult(itemQueried);
+            setItemQueryResult(itemQueried);
+            setTotalItemQueryResult(itemQueried.items);
 
             router.push({
               pathname: `/${page}`,
