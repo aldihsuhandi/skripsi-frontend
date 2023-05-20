@@ -40,30 +40,13 @@ export const NavBar = () => {
             if (userData) {
               if (userData.resultContext.success) {
                 setUserData(userData.userInfo);
-              } else {
-                toast.error(
-                  "There is an error getting your account info, please try again later!",
-                  {
-                    position: "top-center",
-                    autoClose: 10000,
-                    hideProgressBar: false,
-                    theme: "colored",
-                  }
-                );
               }
             }
-
-            // .then((userData) => {
-            //   if (userData && userData.resultContext.success) {
-            //     setUserData(userData.userInfo);
-            //   }
-            // });
 
             // set Logged in
             setIsLoggedIn(true);
           } else if (!sessionInfo.resultContext.success) {
             // Klo gk success, for misal SESSION_EXPIRED, apis dri local yang stale
-            localStorage.removeItem(Session_Local_Key);
 
             router.reload();
           }
@@ -79,9 +62,11 @@ export const NavBar = () => {
   const onLogoutClick = async () => {
     const sessionString = localStorage.getItem(Session_Local_Key);
     if (sessionString) {
-      await LogoutCall({ sessionId: sessionString });
+      const logoutData = await LogoutCall({ sessionId: sessionString });
+      if (logoutData && logoutData.resultContext.success) {
+        router.push("/login");
+      }
     }
-    router.push("/login");
   };
 
   return (

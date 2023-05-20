@@ -1,40 +1,41 @@
-import axios from "axios";
-
-import { WishlistAddResult } from "@/types";
-import { CLIENT_ID, CLIENT_SECRET } from "@/types";
-import { CheckExistSessionLocal, CheckSessionValid } from "../SessionHelper";
+import { CLIENT_ID, CLIENT_SECRET, WishlistAddResult } from "@/types";
 import { toast } from "react-toastify";
+import { PostCall } from "../PostCall";
+import { CheckExistSessionLocal } from "../SessionHelper";
 
 export const WishlistRemove = async ({ itemId }: { itemId: string }) => {
-  try {
-    const sessionString = CheckExistSessionLocal();
-    if (sessionString) {
-      const headers = {
-        clientId: CLIENT_ID,
-        clientSecret: CLIENT_SECRET,
-        "Content-Type": "application/json",
-        "Accept-Type": "application/json",
-        sessionId: sessionString,
-      };
+  const sessionString = CheckExistSessionLocal();
+  if (sessionString) {
+    const headers = {
+      clientId: CLIENT_ID,
+      clientSecret: CLIENT_SECRET,
+      "Content-Type": "application/json",
+      "Accept-Type": "application/json",
+      sessionId: sessionString,
+    };
 
-      const { data } = await axios.post<WishlistAddResult>(
-        "http://localhost:8080/item/wishlist/remove",
+    const config = {
+      headers: headers,
+    };
+
+    const result = await PostCall<WishlistAddResult>({
+      url: "http://localhost:8080/item/wishlist/remove",
+      config: config,
+      body: { itemId },
+    });
+
+    if (result?.resultContext.success) {
+      return result;
+    } else {
+      toast.error(
+        "An Error Occured when deleting wishlist item, please try again.",
         {
-          itemId,
-        },
-        {
-          headers: headers,
+          position: "top-center",
+          autoClose: 10000,
+          hideProgressBar: false,
+          theme: "colored",
         }
       );
-
-      return data;
     }
-  } catch (error) {
-    toast.error("The System is busy, please try again later", {
-      position: "top-center",
-      autoClose: 10000,
-      hideProgressBar: false,
-      theme: "colored",
-    });
   }
 };

@@ -187,17 +187,6 @@ export const WishlistFilterBar = ({
               pathname: `/${page}`,
               query: flexible_object_for_url,
             });
-          } else if (
-            itemQueried.resultContext.resultCode === "SESSION_EXPIRED"
-          ) {
-            router.push("/login");
-          } else {
-            toast.error("An Unexpected error occured", {
-              position: "top-center",
-              autoClose: 5000,
-              hideProgressBar: false,
-              theme: "colored",
-            });
           }
         }
       }}

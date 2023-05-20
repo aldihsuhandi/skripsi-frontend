@@ -1,13 +1,7 @@
-import axios from "axios";
-
-import {
-  CLIENT_ID,
-  CLIENT_SECRET,
-  WishlistPagingContext,
-  WishlistQueryResult,
-} from "@/types";
+import { CLIENT_ID, CLIENT_SECRET, WishlistQueryResult } from "@/types";
 import { ItemFilterValues } from "@/types/ItemFilter";
 import { toast } from "react-toastify";
+import { PostCall } from "../PostCall";
 import { CheckExistSessionLocal } from "../SessionHelper";
 
 export const WishlistQuery = async ({
@@ -19,52 +13,58 @@ export const WishlistQuery = async ({
   pageNumber?: number;
   numberOfItem?: number;
 }) => {
-  try {
-    const sessionString = CheckExistSessionLocal();
-    if (sessionString) {
-      const headers = {
-        clientId: CLIENT_ID,
-        clientSecret: CLIENT_SECRET,
-        "Content-Type": "application/json",
-        "Accept-Type": "application/json",
-        sessionId: sessionString,
-      };
-      const { data } = await axios.post<WishlistQueryResult>(
-        "http://localhost:8080/item/wishlist/query",
-        {
-          pageNumber: pageNumber,
-          numberOfItem: numberOfItem,
-          itemFilterContext: {
-            itemName: filters.itemName,
-            minItemPrice: filters.pMin,
-            maxItemPrice: filters.pMax,
-            hobby: filters.hob,
-            itemCategory: filters.itemCat,
-            merchantInterestLevel: filters.inLevMerchant,
-            userInterestLevel: filters.inLevUser,
-          },
+  const sessionString = CheckExistSessionLocal();
+  if (sessionString) {
+    const headers = {
+      clientId: CLIENT_ID,
+      clientSecret: CLIENT_SECRET,
+      "Content-Type": "application/json",
+      "Accept-Type": "application/json",
+      sessionId: sessionString,
+    };
+
+    const config = {
+      headers: headers,
+    };
+
+    const result = await PostCall<WishlistQueryResult>({
+      url: "http://localhost:8080/item/wishlist/query",
+      config: config,
+      body: {
+        pageNumber: pageNumber,
+        numberOfItem: numberOfItem,
+        itemFilterContext: {
+          itemName: filters.itemName,
+          minItemPrice: filters.pMin,
+          maxItemPrice: filters.pMax,
+          hobby: filters.hob,
+          itemCategory: filters.itemCat,
+          merchantInterestLevel: filters.inLevMerchant,
+          userInterestLevel: filters.inLevUser,
         },
+      },
+    });
+
+    if (result?.resultContext.success) {
+      return result;
+    } else {
+      toast.error(
+        "An Error Occured when fetching wishlist data, please try again later.",
         {
-          headers: headers,
+          position: "top-center",
+          autoClose: 10000,
+          hideProgressBar: false,
+          theme: "colored",
         }
       );
-
-      return data;
-    } else {
-      toast.error("You need to be logged in to query wishlist!", {
-        position: "top-center",
-        autoClose: 10000,
-        hideProgressBar: false,
-        theme: "colored",
-      });
-      return undefined;
     }
-  } catch (error) {
-    toast.error("The System is busy, please try again later", {
+  } else {
+    toast.error("You need to be logged in to query wishlist!", {
       position: "top-center",
       autoClose: 10000,
       hideProgressBar: false,
       theme: "colored",
     });
+    return undefined;
   }
 };

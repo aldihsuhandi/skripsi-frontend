@@ -3,33 +3,38 @@ import {
   DecryptEmailRequestBody,
   DecryptEmailResult,
 } from "@/types/EnDecryptEmail";
-import axios from "axios";
 import { toast } from "react-toastify";
+import { PostCall } from "../PostCall";
 
 export const DecryptEmail = async (uuid: DecryptEmailRequestBody) => {
-  try {
-    const headers = {
-      clientId: CLIENT_ID,
-      clientSecret: CLIENT_SECRET,
-      "Content-Type": "application/json",
-      "Accept-Type": "application/json",
-    };
+  const headers = {
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    "Content-Type": "application/json",
+    "Accept-Type": "application/json",
+  };
 
-    const { data } = await axios.post<DecryptEmailResult>(
-      "http://localhost:8080/user/email/decrypt",
-      uuid,
+  const config = {
+    headers: headers,
+  };
+
+  const result = await PostCall<DecryptEmailResult>({
+    url: "http://localhost:8080/user/email/decrypt",
+    config: config,
+    body: uuid,
+  });
+
+  if (!result?.resultContext.success) {
+    toast.error(
+      "There seem to be a problem... please leave this page try again later!",
       {
-        headers,
+        position: "top-center",
+        autoClose: 10000,
+        hideProgressBar: true,
+        theme: "colored",
       }
     );
-
-    return data;
-  } catch (e) {
-    toast.error("The System is busy, please try again later", {
-      position: "top-center",
-      autoClose: 10000,
-      hideProgressBar: false,
-      theme: "colored",
-    });
   }
+
+  return result;
 };

@@ -195,22 +195,6 @@ export const ItemFilterBar = ({
               pathname: `/${page}`,
               query: flexible_object_for_url,
             });
-          } else {
-            // nggak success
-            if (itemQueried.resultContext.resultCode === "SESSION_EXPIRED") {
-              // Session dah expired
-              router.push("/login");
-            } else {
-              toast.error(
-                "We were unable to process your search request, please try again later!",
-                {
-                  position: "top-center",
-                  autoClose: 10000,
-                  hideProgressBar: false,
-                  theme: "colored",
-                }
-              );
-            }
           }
         }
       }}

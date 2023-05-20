@@ -92,17 +92,6 @@ export default function Wishlist() {
           if (itemQueried.resultContext.success) {
             setIsLoading(false);
             setItems(itemQueried);
-          } else if (
-            itemQueried.resultContext.resultCode === "SESSION_EXPIRED"
-          ) {
-            router.push("/login");
-          } else {
-            toast.error("An Unexpected error occured", {
-              position: "top-center",
-              autoClose: 5000,
-              hideProgressBar: false,
-              theme: "colored",
-            });
           }
         }
       }
