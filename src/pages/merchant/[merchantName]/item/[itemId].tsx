@@ -2,7 +2,7 @@ import { COLOR_HEX_STRING, Color } from "@/Components/Color";
 import { ChatIcon, ForumIcon } from "@/Components/Icons";
 import { ItemImagesMultiple } from "@/Components/ItemImagesMultiple";
 import { MerchantInfo } from "@/Components/MerchantInfo";
-import { capitalizeFirstLetter, urlFirstString } from "@/helper";
+import { CartAdd, capitalizeFirstLetter, urlFirstString } from "@/helper";
 import { ItemDetail } from "@/helper/ItemDetail";
 import { ItemDetailResult } from "@/types";
 import classNames from "classnames";
@@ -27,6 +27,7 @@ export default function MerchantItem() {
 
   const { itemId } = router.query;
 
+  const [itemIdValid, setItemIdValid] = useState<string>();
   const [itemData, setItemData] = useState<ItemDetailResult | undefined>();
   const [pageTitle, setPageTitle] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -41,6 +42,9 @@ export default function MerchantItem() {
         const itemDataFetch = await ItemDetail({
           itemId: itemId as string,
         });
+
+        setItemIdValid(urlFirstString(itemId));
+
         if (itemDataFetch) {
           if (itemDataFetch.resultContext.success) {
             setItemData(itemDataFetch);
@@ -103,7 +107,7 @@ export default function MerchantItem() {
                 <ItemImagesMultiple imageIds={itemData.item.itemImages} />
               </div>
               {/* 1.2. Title, Interest Level, Item Desc, Rating, Cat, Hob, Merchant Info */}
-              <div className="flex flex-col px-0 lg:px-14">
+              <div className="flex flex-col px-0 lg:mx-14 lg:min-w-[460px]">
                 {/* 1.2.1 Title */}
                 <h3 className="mb-2 text-2xl font-bold">
                   {itemData.item.itemName}
@@ -226,7 +230,26 @@ export default function MerchantItem() {
                 </span>
                 {/* Add to Cart Button */}
                 <div className="px-4 pt-2 pb-1">
-                  <button className="w-full rounded bg-normal-blue py-2 px-4 font-bold text-white hover:bg-blue-700">
+                  <button
+                    className="w-full rounded bg-normal-blue py-2 px-4 font-bold text-white hover:bg-blue-700"
+                    onClick={async (e) => {
+                      e.preventDefault();
+                      if (itemIdValid) {
+                        const addResult = await CartAdd({
+                          itemId: itemIdValid,
+                          quantity: quantityToCart,
+                        });
+                        if (addResult && addResult.resultContext.success) {
+                          toast.success("Successfully added to cart!", {
+                            position: "top-center",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            theme: "colored",
+                          });
+                        }
+                      }
+                    }}
+                  >
                     Add to Cart
                   </button>
                 </div>

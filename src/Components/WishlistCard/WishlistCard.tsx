@@ -5,14 +5,19 @@ import { useRouter } from "next/router";
 import { HTMLAttributes, useEffect, useState } from "react";
 import { HiShoppingCart, HiTrash } from "react-icons/hi";
 import { DialogConfrim } from "../DialogConfirm";
-import { WishlistRemove } from "@/helper";
+import { CartAdd, WishlistRemove } from "@/helper";
 import { toast } from "react-toastify";
 
 export interface WishlistCardProps extends HTMLAttributes<HTMLDivElement> {
   itemData: ItemSummary;
+  onDelete: () => void;
 }
 
-export const WishlistCard = ({ itemData, ...props }: WishlistCardProps) => {
+export const WishlistCard = ({
+  itemData,
+  onDelete,
+  ...props
+}: WishlistCardProps) => {
   const router = useRouter();
   const [image, setImage] = useState<string | undefined>();
   const [merchantEncoded, setMerchantEncoded] = useState<string | undefined>();
@@ -68,6 +73,21 @@ export const WishlistCard = ({ itemData, ...props }: WishlistCardProps) => {
             <button
               className="rounded-full bg-normal-blue p-2 hover:bg-bright-blue"
               type="button"
+              onClick={async (e) => {
+                e.preventDefault();
+                const addResult = await CartAdd({
+                  itemId: itemData.itemId,
+                  quantity: 1,
+                });
+                if (addResult && addResult.resultContext.success) {
+                  toast.success("Successfully added to cart!", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    theme: "colored",
+                  });
+                }
+              }}
             >
               <HiShoppingCart size={20} className="fill-white" />
             </button>
@@ -93,7 +113,7 @@ export const WishlistCard = ({ itemData, ...props }: WishlistCardProps) => {
                 });
                 if (wishlistResult) {
                   if (wishlistResult.resultContext.success) {
-                    router.reload();
+                    onDelete();
                   }
                 }
               }}

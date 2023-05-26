@@ -2,7 +2,7 @@ import React from "react";
 import { UrlObject } from "url";
 
 import { Color, COLOR_HEX_STRING } from "../Color";
-import { CartIcon, HistoryIcon, ForumIcon, ChatIcon } from "../Icons";
+import { CartIcon, ForumIcon, ChatIcon } from "../Icons";
 
 export interface HeaderNavigationProps {
   href: string | UrlObject;
@@ -11,7 +11,7 @@ export interface HeaderNavigationProps {
 
 export const HeaderNavigation: HeaderNavigationProps[] = [
   {
-    href: "/ShoppingCart",
+    href: "/cart",
     icon: (
       <CartIcon
         htmlColor={COLOR_HEX_STRING[Color.NormalBlue]}
