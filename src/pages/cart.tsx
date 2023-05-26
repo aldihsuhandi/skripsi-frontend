@@ -152,12 +152,32 @@ export default function Cart() {
                     className="w-full rounded bg-normal-blue px-24 py-2  font-bold text-white hover:bg-blue-700"
                     disabled={isLoading}
                   >
-                    Add to Cart
+                    Buy
                   </button>
                 </div>
               </div>
             ) : undefined}
           </div>
+          {windowWidth < 1024 ? (
+            <div className="sticky bottom-0 border-t-4 border-t-normal-white bg-bright-white">
+              <div className="py-2 px-8 text-center">
+                <p className="text-lg font-bold">Total Price:</p>
+                {isLoading ? (
+                  <>Loading...</>
+                ) : (
+                  <>Rp. {cartPrice?.toLocaleString()}</>
+                )}
+              </div>
+              <div className="min-w-[64px] px-4 pb-2">
+                <button
+                  className="w-full rounded bg-normal-blue px-24 py-2  font-bold text-white hover:bg-blue-700"
+                  disabled={isLoading}
+                >
+                  Buy
+                </button>
+              </div>
+            </div>
+          ) : undefined}
         </div>
       </main>
     </>
