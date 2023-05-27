@@ -6,3 +6,6 @@ export * from "./SessionInfo";
 export * from "./UserQuery";
 export * from "./UserRole";
 export * from "./Logout";
+export * from "./ForgotPass";
+export * from "./ResetPassQuery";
+export * from "./ResetPassSend";
