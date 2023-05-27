@@ -28,6 +28,7 @@ export interface ItemSummary {
   merchantInfo: UserSummary;
   merchantLevel: string;
   itemImages: string[];
+  inWishlist: boolean;
   gmtCreate: Date;
   gmtModified: Date;
 }

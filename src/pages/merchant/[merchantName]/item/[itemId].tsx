@@ -1,8 +1,15 @@
 import { COLOR_HEX_STRING, Color } from "@/Components/Color";
+import { DialogConfrim } from "@/Components/DialogConfirm";
 import { ChatIcon, ForumIcon } from "@/Components/Icons";
 import { ItemImagesMultiple } from "@/Components/ItemImagesMultiple";
 import { MerchantInfo } from "@/Components/MerchantInfo";
-import { CartAdd, capitalizeFirstLetter, urlFirstString } from "@/helper";
+import {
+  CartAdd,
+  WishlistAdd,
+  WishlistRemove,
+  capitalizeFirstLetter,
+  urlFirstString,
+} from "@/helper";
 import { ItemDetail } from "@/helper/ItemDetail";
 import { ItemDetailResult } from "@/types";
 import classNames from "classnames";
@@ -31,6 +38,7 @@ export default function MerchantItem() {
   const [itemData, setItemData] = useState<ItemDetailResult | undefined>();
   const [pageTitle, setPageTitle] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isWishlisted, setIsWishlisted] = useState<boolean>(false);
 
   const [quantityToCart, setQuantityToCart] = useState(1);
 
@@ -48,6 +56,7 @@ export default function MerchantItem() {
         if (itemDataFetch) {
           if (itemDataFetch.resultContext.success) {
             setItemData(itemDataFetch);
+            setIsWishlisted(itemDataFetch.item.inWishlist);
             if (itemDataFetch.item) {
               setPageTitle(
                 itemDataFetch.item.itemName +
@@ -261,12 +270,93 @@ export default function MerchantItem() {
                 </div>
                 {/* Buttons, Wishlist, Chat, Forum, Share */}
                 <div className="flex flex-row justify-evenly pb-2">
-                  <div className="rounded bg-normal-blue px-1">
-                    <HiHeart
-                      className="text-white"
-                      style={{ height: "1.7em", width: "1.7em" }}
+                  {isWishlisted ? (
+                    <DialogConfrim
+                      trigger={
+                        <button
+                          className="rounded bg-normal-blue px-1 hover:bg-bright-blue"
+                          type="button"
+                          onClick={(e) => e.preventDefault()}
+                        >
+                          <HiHeart
+                            style={{ height: "1.7em", width: "1.7em" }}
+                            className="fill-red-500"
+                          />
+                        </button>
+                      }
+                      title="Are you sure you want to remove from wishlist?"
+                      onConfirm={async () => {
+                        const wishlistResult = await WishlistRemove({
+                          itemId: itemData.item.itemId,
+                        });
+                        if (wishlistResult) {
+                          if (wishlistResult.resultContext.success) {
+                            setIsWishlisted(false);
+                            toast.success("Successfully deleted!", {
+                              position: "top-center",
+                              autoClose: 5000,
+                              hideProgressBar: false,
+                              theme: "colored",
+                            });
+                          }
+                        }
+                      }}
                     />
-                  </div>
+                  ) : (
+                    <button
+                      className="rounded bg-normal-blue px-1 hover:bg-bright-blue"
+                      type="button"
+                      onClick={async (e) => {
+                        e.preventDefault();
+                        const wishlistResult = await WishlistAdd({
+                          itemId: itemData.item.itemId,
+                        });
+                        if (wishlistResult) {
+                          if (wishlistResult.resultContext.success) {
+                            setIsWishlisted(true);
+                            toast.success("Successfully added!", {
+                              position: "top-center",
+                              autoClose: 5000,
+                              hideProgressBar: false,
+                              theme: "colored",
+                            });
+                          }
+                        }
+                      }}
+                    >
+                      <HiHeart
+                        style={{ height: "1.7em", width: "1.7em" }}
+                        className="fill-white"
+                      />
+                    </button>
+                  )}
+                  {/* <button
+                    className="rounded bg-normal-blue px-1 hover:bg-bright-blue"
+                    type="button"
+                    onClick={async (e) => {
+                      e.preventDefault();
+                      const wishlistResult = await WishlistAdd({
+                        itemId: itemData.item.itemId,
+                      });
+                      if (wishlistResult) {
+                        if (wishlistResult.resultContext.success) {
+                          setIsWishlisted(true);
+                          toast.success("Successfully added!", {
+                            position: "top-center",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            theme: "colored",
+                          });
+                        }
+                      }
+                    }}
+                  >
+                    <HiHeart
+                      style={{ height: "1.7em", width: "1.7em" }}
+                      className={isWishlisted ? "fill-red-500" : "fill-white"}
+                    />
+                  </button> */}
+
                   <div className="rounded bg-normal-blue px-1">
                     <ForumIcon
                       classNameIcon="h-7 w-7"
