@@ -11,3 +11,5 @@ export * from "./UserQueryCall";
 export * from "./ItemQueryFilterCall";
 export * from "./ItemQueryCall";
 export * from "./WishlistCalls";
+export * from "./ResetPassSendCall";
+export * from "./ResetPassQueryCall";
