@@ -15,6 +15,7 @@ import styles from "../styles/Form.module.css";
 const initialValues: LoginRequest = {
   email: "",
   password: "",
+  remembered: false,
 };
 
 const LoginSchema = Yup.object().shape({
@@ -83,6 +84,7 @@ export default function Login() {
                       const user_Login_Data: LoginRequest = {
                         email: values.email,
                         password: values.password,
+                        remembered: values.remembered
                       };
 
                       const resultFromCall = await LoginCall(user_Login_Data);
@@ -176,6 +178,15 @@ export default function Login() {
                             <p className="text-red-600">{errors.password}</p>
                           </div>
                         )}
+
+                        <label className={styles.input_checkbox}>
+                          <Field
+                            name="remembered"
+                            type="checkbox"
+                            className="align-middle text-center"
+                          />
+                          <p className="text-gray-600 px-1 align-middle text-center">remember me</p>
+                        </label>
 
                         <div className="input-button">
                           <button type="submit" className={styles.button}>
