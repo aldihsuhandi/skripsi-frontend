@@ -80,21 +80,6 @@ export const ProductCard = ({ itemData, ...props }: ProductCardProps) => {
                       hideProgressBar: false,
                       theme: "colored",
                     });
-                  } else if (
-                    wishlistResult.resultContext.resultCode ===
-                    "SESSION_EXPIRED"
-                  ) {
-                    router.push("/login");
-                  } else if (
-                    wishlistResult.resultContext.resultCode === "SYSTEM_ERROR"
-                  ) {
-                    // Ntar bikin dialog alert (or something) uat handle system error
-                    toast.error("An Unexpected error occured", {
-                      position: "top-center",
-                      autoClose: 5000,
-                      hideProgressBar: false,
-                      theme: "colored",
-                    });
                   }
                 }
               }}

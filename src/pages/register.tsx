@@ -133,16 +133,6 @@ export default function Register() {
                         pathname: "/activate",
                         query: { e: encryptedEmail.uuid },
                       });
-                    } else {
-                      toast.error(
-                        "We were unable to redirect you to activate the account, please try again later in the login page!",
-                        {
-                          position: "top-center",
-                          autoClose: 10000,
-                          hideProgressBar: false,
-                          theme: "colored",
-                        }
-                      );
                     }
                   }
                 } else {

@@ -1,32 +1,32 @@
-import axios from "axios";
-
+import { CLIENT_ID, CLIENT_SECRET, Session_Local_Key } from "@/types";
 import { SessionInfoRequest, SessionInfoResult } from "@/types/User";
-import { CLIENT_ID, CLIENT_SECRET } from "@/types";
-import { toast } from "react-toastify";
+import { PostCall } from "./PostCall";
 
 export const SessionInfoCall = async (sessionIdData: SessionInfoRequest) => {
-  try {
-    const { data } = await axios.post<SessionInfoResult>(
-      "http://localhost:8080/session/info",
-      sessionIdData,
-      {
-        headers: {
-          clientId: CLIENT_ID,
-          clientSecret: CLIENT_SECRET,
-          sessionId: sessionIdData.sessionId,
-          "Content-Type": "application/json",
-          "Accept-Type": "application/json",
-        },
-      }
-    );
+  const headers = {
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    sessionId: sessionIdData.sessionId,
+    "Content-Type": "application/json",
+    "Accept-Type": "application/json",
+  };
 
-    return data;
-  } catch (e) {
-    toast.error("The System is busy, please try again later", {
-      position: "top-center",
-      autoClose: 10000,
-      hideProgressBar: false,
-      theme: "colored",
-    });
+  const config = {
+    headers: headers,
+  };
+
+  const result = await PostCall<SessionInfoResult>({
+    url: "http://localhost:8080/session/info",
+    config: config,
+    body: sessionIdData,
+  });
+
+  if (
+    !result?.resultContext.success &&
+    result?.resultContext.resultCode === "SESSION_EXPIRED"
+  ) {
+    localStorage.removeItem(Session_Local_Key);
   }
+
+  return result;
 };

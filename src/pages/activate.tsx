@@ -43,21 +43,10 @@ export default function Activate() {
 
   const ResendCode = async () => {
     if (decryptedEmail) {
-      const result = await OtpSend({
+      await OtpSend({
         email: decryptedEmail,
         otpType: "USER_ACTIVATION",
       });
-      if (
-        !result?.resultContext.success &&
-        result?.resultContext.resultCode === "USER_NOT_FOUND"
-      ) {
-        toast.error("No user found with that specific email", {
-          position: "top-center",
-          autoClose: 10000,
-          hideProgressBar: false,
-          theme: "colored",
-        });
-      }
     }
   };
 
@@ -70,16 +59,6 @@ export default function Activate() {
       if (decryptedEmailResult) {
         if (decryptedEmailResult.resultContext.success) {
           setDecryptedEmail(decryptedEmailResult.email);
-        } else {
-          toast.error(
-            "There seem to be a problem... please leave this page try again later!",
-            {
-              position: "top-center",
-              autoClose: 10000,
-              hideProgressBar: true,
-              theme: "colored",
-            }
-          );
         }
       }
     };

@@ -3,3 +3,7 @@ export interface ResultContext {
   resultMsg: string;
   resultCode: string;
 }
+
+export interface APIResultTemplate {
+  resultContext: ResultContext;
+}

@@ -1,31 +1,24 @@
-import axios from "axios";
-
 import { CLIENT_ID, CLIENT_SECRET } from "@/types";
 import { ActivateRequest, ActivateResult } from "@/types/User";
-import { toast } from "react-toastify";
+import { PostCall } from "./PostCall";
 
 export const ActivateCall = async (data_Activate: ActivateRequest) => {
-  try {
-    const { data } = await axios.post<ActivateResult>(
-      "http://localhost:8080/user/activate",
-      data_Activate,
-      {
-        headers: {
-          clientId: CLIENT_ID,
-          clientSecret: CLIENT_SECRET,
-          "Content-Type": "application/json",
-          "Accept-Type": "application/json",
-        },
-      }
-    );
+  const headers = {
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    "Content-Type": "application/json",
+    "Accept-Type": "application/json",
+  };
 
-    return data;
-  } catch (e) {
-    toast.error("The System is busy, please try again later", {
-      position: "top-center",
-      autoClose: 10000,
-      hideProgressBar: false,
-      theme: "colored",
-    });
-  }
+  const config = {
+    headers: headers,
+  };
+
+  const result = await PostCall<ActivateResult>({
+    url: "http://localhost:8080/user/activate",
+    config: config,
+    body: data_Activate,
+  });
+
+  return result;
 };

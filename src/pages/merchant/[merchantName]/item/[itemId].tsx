@@ -52,16 +52,6 @@ export default function MerchantItem() {
               );
             }
             setIsLoading(false);
-          } else {
-            toast.error(
-              "An Error Occured when fetching this item's data, please try again.",
-              {
-                position: "top-center",
-                autoClose: 10000,
-                hideProgressBar: false,
-                theme: "colored",
-              }
-            );
           }
         }
       }
