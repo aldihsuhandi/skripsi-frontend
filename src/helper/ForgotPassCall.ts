@@ -12,7 +12,7 @@ export const ForgotPassCall = async (formDataForgotPass: ForgotPassRequest) => {
         headers: {
           clientId: CLIENT_ID,
           clientSecret: CLIENT_SECRET,
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
           "Accept-Type": "application/json",
         },
       }
