@@ -12,6 +12,11 @@
   @apply border-none focus:outline-none;
 }
 
+.input_checkbox {
+  @apply w-full py-0 px-2 flex justify-start items-center;
+  @apply border-none focus:outline-none;
+}
+
 .button {
   /*---> Utk styling login button nya <---*/
   @apply w-full rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500;
