@@ -106,7 +106,7 @@ export const WishlistCard = ({
                   <HiTrash size={20} className="fill-white" />
                 </button>
               }
-              title="Apakah anda yakin ingin menghapus dari Wishlist?"
+              title="Are you sure you want to remove from wishlist?"
               onConfirm={async () => {
                 const wishlistResult = await WishlistRemove({
                   itemId: itemData.itemId,
