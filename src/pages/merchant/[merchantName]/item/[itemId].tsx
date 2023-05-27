@@ -330,33 +330,6 @@ export default function MerchantItem() {
                       />
                     </button>
                   )}
-                  {/* <button
-                    className="rounded bg-normal-blue px-1 hover:bg-bright-blue"
-                    type="button"
-                    onClick={async (e) => {
-                      e.preventDefault();
-                      const wishlistResult = await WishlistAdd({
-                        itemId: itemData.item.itemId,
-                      });
-                      if (wishlistResult) {
-                        if (wishlistResult.resultContext.success) {
-                          setIsWishlisted(true);
-                          toast.success("Successfully added!", {
-                            position: "top-center",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            theme: "colored",
-                          });
-                        }
-                      }
-                    }}
-                  >
-                    <HiHeart
-                      style={{ height: "1.7em", width: "1.7em" }}
-                      className={isWishlisted ? "fill-red-500" : "fill-white"}
-                    />
-                  </button> */}
-
                   <div className="rounded bg-normal-blue px-1">
                     <ForumIcon
                       classNameIcon="h-7 w-7"
