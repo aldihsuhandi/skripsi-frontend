@@ -5,11 +5,12 @@ import {
   parseNumberUndefined,
   urlFirstString,
 } from "@/helper";
-import { ItemQueryResult } from "@/types";
+import { ItemQueryResult, ItemSummary } from "@/types";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export default function Search() {
   const router = useRouter();
@@ -24,7 +25,12 @@ export default function Search() {
   const [qString, setQString] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  // Uat most recent items, uat ngecheck success ato nggak
   const [items, setItems] = useState<ItemQueryResult | undefined>();
+  // Uat total items, uat infinite scroll
+  const [totalItems, setTotalItems] = useState<ItemSummary[]>([]);
+  // Uat keep track udh page brp, mulai dari 2, karena page 1 di handle useEffect
+  const [curPage, setCurPage] = useState(2);
 
   useEffect(() => {
     const fetchQueriesName = async () => {
@@ -39,34 +45,21 @@ export default function Search() {
       await fetchQueriesName();
       if (urlFirstString(q) === qString) {
         const itemQueried = await ItemFilterQuery({
-          itemName: qString || "",
-          pMin: pMinNumber,
-          pMax: pMaxNumber,
-          hob: urlFirstString(hob),
-          itemCat: urlFirstString(itemCat),
-          inLevMerchant: urlFirstString(inLevMerchant),
-          inLevUser: urlFirstString(inLevUser),
+          filters: {
+            itemName: qString || "",
+            pMin: pMinNumber,
+            pMax: pMaxNumber,
+            hob: urlFirstString(hob),
+            itemCat: urlFirstString(itemCat),
+            inLevMerchant: urlFirstString(inLevMerchant),
+            inLevUser: urlFirstString(inLevUser),
+          },
         });
         if (itemQueried) {
           if (itemQueried.resultContext.success) {
             setIsLoading(false);
             setItems(itemQueried);
-          } else {
-            // nggak success
-            if (itemQueried.resultContext.resultCode === "SESSION_EXPIRED") {
-              // Session dah expired
-              router.push("/login");
-            } else {
-              toast.error(
-                "We were unable to process your search request, please try again later!",
-                {
-                  position: "top-center",
-                  autoClose: 10000,
-                  hideProgressBar: false,
-                  theme: "colored",
-                }
-              );
-            }
+            setTotalItems(totalItems.concat(itemQueried.items));
           }
         }
       }
@@ -89,10 +82,45 @@ export default function Search() {
     };
   }, [router.isReady, q, qString]);
 
-  function UpdateDiChild(replace_in_parent: ItemQueryResult) {
-    console.log("trigered", "yeah");
-    setItems(replace_in_parent);
+  function UpdateItemsDiChild(replace_items_in_parent: ItemQueryResult) {
+    setCurPage(2); // Reset back to default when new filter is applied
+    setItems(replace_items_in_parent);
   }
+
+  function UpdateTotalItemsDiChild(
+    replace_total_items_in_parent: ItemSummary[]
+  ) {
+    setCurPage(2); // Reset back to default when new filter is applied
+    setTotalItems(replace_total_items_in_parent);
+  }
+
+  const infiniteFetchMore = async () => {
+    const pMinNumber = parseNumberUndefined(urlFirstString(pMin));
+    const pMaxNumber = parseNumberUndefined(urlFirstString(pMax));
+
+    const infiniteItemFetchMore = await ItemFilterQuery({
+      pageNumber: curPage,
+      numberOfItem: 10,
+      filters: {
+        itemName: qString || "",
+        pMin: pMinNumber,
+        pMax: pMaxNumber,
+        hob: urlFirstString(hob),
+        itemCat: urlFirstString(itemCat),
+        inLevMerchant: urlFirstString(inLevMerchant),
+        inLevUser: urlFirstString(inLevUser),
+      },
+    });
+
+    setCurPage(curPage + 1);
+
+    if (infiniteItemFetchMore) {
+      if (infiniteItemFetchMore.resultContext.success) {
+        setItems(infiniteItemFetchMore);
+        setTotalItems(totalItems.concat(infiniteItemFetchMore.items));
+      }
+    }
+  };
 
   return (
     <>
@@ -122,7 +150,8 @@ export default function Search() {
                   <ItemFilterBar
                     page="search"
                     searchQuery={qString}
-                    setQueryResult={UpdateDiChild}
+                    setItemQueryResult={UpdateItemsDiChild}
+                    setTotalItemQueryResult={UpdateTotalItemsDiChild}
                   />
                 </div>
               )}
@@ -131,26 +160,82 @@ export default function Search() {
             <ItemFilterBar
               page="search"
               searchQuery={qString}
-              setQueryResult={UpdateDiChild}
+              setItemQueryResult={UpdateItemsDiChild}
+              setTotalItemQueryResult={UpdateTotalItemsDiChild}
             />
           )}
           <div>
-            <div className="grid grid-cols-2 gap-4 py-2 px-2 lg:grid-cols-5 lg:py-4">
-              {isLoading ? (
-                <>Loading Placeholder</>
-              ) : items?.resultContext.success ? (
-                <>
-                  {items.items.map((data) => {
-                    return <ProductCard itemData={data} />;
-                  })}
-                </>
-              ) : (
-                <>Error! {items?.resultContext.resultMsg}</>
-              )}
-            </div>
+            {isLoading ? (
+              <>Loading Placeholder</>
+            ) : (
+              <>
+                {renderResult({
+                  items: items,
+                  totalItems: totalItems,
+                  fetchMore: infiniteFetchMore,
+                })}
+              </>
+            )}
           </div>
         </div>
       </main>
     </>
   );
 }
+
+const renderResult = ({
+  items,
+  totalItems,
+  fetchMore,
+}: {
+  items: ItemQueryResult | undefined;
+  totalItems: ItemSummary[];
+  fetchMore: () => void;
+}) => {
+  if (items) {
+    if (items.resultContext.success) {
+      if (totalItems.length !== 0) {
+        return (
+          <>
+            {RenderItems({
+              items: items,
+              totalItems: totalItems,
+              fetchMore: fetchMore,
+            })}
+          </>
+        );
+      } else {
+        return <>Result is Empty!</>;
+      }
+    } else {
+      <>An Error Occured!</>;
+    }
+  } else {
+    <>Encoutered a Problem</>;
+  }
+};
+
+const RenderItems = ({
+  items,
+  totalItems,
+  fetchMore,
+}: {
+  items: ItemQueryResult;
+  totalItems: ItemSummary[];
+  fetchMore: () => void;
+}) => {
+  return (
+    <InfiniteScroll
+      dataLength={totalItems.length}
+      next={fetchMore}
+      hasMore={items.pagingContext.hasNext}
+      loader={<h4 className="text-center">Loading...</h4>}
+    >
+      <div className="grid grid-cols-2 gap-4 py-2 px-2 lg:grid-cols-5 lg:py-4">
+        {totalItems.map((data) => (
+          <ProductCard itemData={data} />
+        ))}
+      </div>
+    </InfiniteScroll>
+  );
+};

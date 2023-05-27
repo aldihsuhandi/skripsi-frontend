@@ -1,4 +1,4 @@
-import { ResultContext } from "../ResultContext";
+import { APIResultTemplate, ResultContext } from "../ResultContext";
 import { UserSummary } from "../User";
 
 // Request
@@ -63,8 +63,7 @@ export interface ItemSummary {
   gmtModified: Date;
 }
 
-export interface ItemQueryResult {
-  resultContext: ResultContext;
+export interface ItemQueryResult extends APIResultTemplate {
   pagingContext: PagingContext;
   items: ItemSummary[];
 }

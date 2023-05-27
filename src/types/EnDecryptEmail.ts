@@ -1,4 +1,4 @@
-import { ResultContext } from "./ResultContext";
+import { APIResultTemplate, ResultContext } from "./ResultContext";
 
 // Request Headers sama
 /**
@@ -12,8 +12,7 @@ export interface EncryptEmailRequestBody {
   email: string;
 }
 
-export interface EncryptEmailResult {
-  resultContext: ResultContext;
+export interface EncryptEmailResult extends APIResultTemplate {
   uuid: string;
 }
 
@@ -22,7 +21,6 @@ export interface DecryptEmailRequestBody {
   uuid: string;
 }
 
-export interface DecryptEmailResult {
-  resultContext: ResultContext;
+export interface DecryptEmailResult extends APIResultTemplate {
   email: string;
 }

@@ -94,20 +94,6 @@ export const WishlistCard = ({ itemData, ...props }: WishlistCardProps) => {
                 if (wishlistResult) {
                   if (wishlistResult.resultContext.success) {
                     router.reload();
-                  } else if (
-                    wishlistResult.resultContext.resultCode ===
-                    "SESSION_EXPIRED"
-                  ) {
-                    router.push("/login");
-                  } else if (
-                    wishlistResult.resultContext.resultCode === "SYSTEM_ERROR"
-                  ) {
-                    toast.error("An Unexpected error occured", {
-                      position: "top-center",
-                      autoClose: 5000,
-                      hideProgressBar: false,
-                      theme: "colored",
-                    });
                   }
                 }
               }}

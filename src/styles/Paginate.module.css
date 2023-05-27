@@ -1,0 +1,25 @@
+.pagination {
+  display: flex;
+  list-style: none;
+  cursor: pointer;
+  max-width: 300px;
+}
+
+.pagelink {
+  padding: 0.375rem 0.75rem;
+  border: 1px solid #dee2e6;
+  position: relative;
+  display: block;
+}
+
+.active {
+  z-index: 5;
+  color: white;
+  background-color: #008ec4;
+  border-color: #008ec4;
+}
+
+.disabled {
+  cursor: not-allowed;
+  color: grey;
+}

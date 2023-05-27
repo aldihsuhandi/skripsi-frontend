@@ -168,13 +168,15 @@ export const WishlistFilterBar = ({
         const pMaxNumber = parseNumberUndefined(values.pMax);
         // 2. Api call item/query
         const itemQueried = await WishlistQuery({
-          itemName: searchQuery || "",
-          pMin: pMinNumber,
-          pMax: pMaxNumber,
-          hob: values.hob,
-          itemCat: values.itemCat,
-          inLevMerchant: values.inLevMerchant,
-          inLevUser: values.inLevUser,
+          filters: {
+            itemName: searchQuery || "",
+            pMin: pMinNumber,
+            pMax: pMaxNumber,
+            hob: values.hob,
+            itemCat: values.itemCat,
+            inLevMerchant: values.inLevMerchant,
+            inLevUser: values.inLevUser,
+          },
         });
 
         // 3. setState variable parent pake setQueryResult():
@@ -184,17 +186,6 @@ export const WishlistFilterBar = ({
             router.push({
               pathname: `/${page}`,
               query: flexible_object_for_url,
-            });
-          } else if (
-            itemQueried.resultContext.resultCode === "SESSION_EXPIRED"
-          ) {
-            router.push("/login");
-          } else {
-            toast.error("An Unexpected error occured", {
-              position: "top-center",
-              autoClose: 5000,
-              hideProgressBar: false,
-              theme: "colored",
             });
           }
         }

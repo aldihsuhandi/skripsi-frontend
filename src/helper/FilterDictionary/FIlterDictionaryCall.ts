@@ -1,38 +1,30 @@
-import { CLIENT_ID, CLIENT_SECRET } from "@/types";
+import { CLIENT_ID, CLIENT_SECRET, Session_Local_Key } from "@/types";
 import {
   FilterDictionaryRequestBody,
   FilterDictionaryResult,
 } from "@/types/FIlterDictionary";
 
-import axios from "axios";
-import { toast } from "react-toastify";
+import { PostCall } from "../PostCall";
 
 export const FilterDictionary = async (
   dictionaryKey: FilterDictionaryRequestBody
 ) => {
-  try {
-    const headers = {
-      clientId: CLIENT_ID,
-      clientSecret: CLIENT_SECRET,
-      "Content-Type": "application/json",
-      "Accept-Type": "application/json",
-    };
+  const headers = {
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    "Content-Type": "application/json",
+    "Accept-Type": "application/json",
+  };
 
-    const { data } = await axios.post<FilterDictionaryResult>(
-      "http://localhost:8080/dictionary/query",
-      dictionaryKey,
-      {
-        headers,
-      }
-    );
+  const config = {
+    headers: headers,
+  };
 
-    return data;
-  } catch (e) {
-    toast.error("The System is busy, please try again later", {
-      position: "top-center",
-      autoClose: 10000,
-      hideProgressBar: false,
-      theme: "colored",
-    });
-  }
+  const result = await PostCall<FilterDictionaryResult>({
+    url: "http://localhost:8080/dictionary/query",
+    config: config,
+    body: dictionaryKey,
+  });
+
+  return result;
 };

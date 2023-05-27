@@ -1,3 +1,4 @@
+import { EncryptEmail } from "@/helper/EncryptDecrypt";
 import { LoginCall } from "@/helper/LoginCall";
 import { OtpSend } from "@/helper/OtpSend";
 import { Session_Local_Key } from "@/types";
@@ -10,8 +11,6 @@ import { useEffect, useState } from "react";
 import { HiFingerPrint, HiUser } from "react-icons/hi"; //import react icons
 import * as Yup from "yup";
 import styles from "../styles/Form.module.css";
-import { EncryptEmail } from "@/helper/EncryptDecrypt";
-import { toast } from "react-toastify";
 
 const initialValues: LoginRequest = {
   email: "",
@@ -128,16 +127,6 @@ export default function Login() {
                                 });
                               }, 2000);
                               setTimeoutId(timer);
-                            } else {
-                              toast.error(
-                                "We were unable to process activating your account, please try again later!",
-                                {
-                                  position: "top-center",
-                                  autoClose: 10000,
-                                  hideProgressBar: false,
-                                  theme: "colored",
-                                }
-                              );
                             }
                           }
                         } else if (!resultFromCall.resultContext.success) {

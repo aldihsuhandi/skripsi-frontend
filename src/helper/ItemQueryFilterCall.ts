@@ -1,51 +1,67 @@
-import axios from "axios";
-
-import { ItemQueryResult } from "@/types";
+import {
+  CLIENT_ID,
+  CLIENT_SECRET,
+  ItemQueryResult,
+  Session_Local_Key,
+} from "@/types";
 import { ItemFilterValues } from "@/types/ItemFilter";
-import { CLIENT_ID, CLIENT_SECRET } from "@/types";
-import { CheckExistSessionLocal } from "./SessionHelper";
 import { toast } from "react-toastify";
+import { PostCall } from "./PostCall";
 
-export const ItemFilterQuery = async (filters: ItemFilterValues) => {
-  try {
-    const headers = {
-      clientId: CLIENT_ID,
-      clientSecret: CLIENT_SECRET,
-      "Content-Type": "application/json",
-      "Accept-Type": "application/json",
-    };
+export const ItemFilterQuery = async ({
+  filters,
+  pageNumber,
+  numberOfItem,
+}: {
+  filters: ItemFilterValues;
+  pageNumber?: number;
+  numberOfItem?: number;
+}) => {
+  const headers = {
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    "Content-Type": "application/json",
+    "Accept-Type": "application/json",
+  };
 
-    // Check klo ada gk session local
-    const sessionString = CheckExistSessionLocal();
-    if (sessionString) {
-      Object.assign(headers, { sessionId: sessionString });
-    }
+  const sessionString = localStorage.getItem(Session_Local_Key);
+  if (sessionString) {
+    Object.assign(headers, { sessionId: sessionString });
+  }
 
-    const { data } = await axios.post<ItemQueryResult>(
-      "http://localhost:8080/item/query",
-      {
-        itemFilterContext: {
-          itemName: filters.itemName,
-          minItemPrice: filters.pMin,
-          maxItemPrice: filters.pMax,
-          hobby: filters.hob,
-          itemCategory: filters.itemCat,
-          merchantInterestLevel: filters.inLevMerchant,
-          userInterestLevel: filters.inLevUser,
-        },
+  const config = {
+    headers: headers,
+  };
+
+  const result = await PostCall<ItemQueryResult>({
+    url: "http://localhost:8080/item/query",
+    config: config,
+    body: {
+      pageNumber: pageNumber,
+      numberOfItem: numberOfItem,
+      itemFilterContext: {
+        itemName: filters.itemName,
+        minItemPrice: filters.pMin,
+        maxItemPrice: filters.pMax,
+        hobby: filters.hob,
+        itemCategory: filters.itemCat,
+        merchantInterestLevel: filters.inLevMerchant,
+        userInterestLevel: filters.inLevUser,
       },
+    },
+  });
+
+  if (result?.resultContext.success) {
+    return result;
+  } else {
+    toast.error(
+      "We were unable to process your search request, please try again later!",
       {
-        headers: headers,
+        position: "top-center",
+        autoClose: 10000,
+        hideProgressBar: false,
+        theme: "colored",
       }
     );
-
-    return data;
-  } catch (error) {
-    toast.error("The System is busy, please try again later", {
-      position: "top-center",
-      autoClose: 10000,
-      hideProgressBar: false,
-      theme: "colored",
-    });
   }
 };

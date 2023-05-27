@@ -8,7 +8,9 @@ import { sanitize } from "dompurify";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import ReactPaginate from "react-paginate";
 import { toast } from "react-toastify";
+import styles from "../styles/Paginate.module.css";
 
 export default function Wishlist() {
   const router = useRouter();
@@ -17,9 +19,19 @@ export default function Wishlist() {
   // Uat Dropwdown filter klo kecil
   const [isOpen, setIsOpen] = useState(false);
 
-  const { q, pMin, pMax, pSort, hob, itemCat, inLevMerchant, inLevUser } =
-    router.query;
-  const [qString, setQString] = useState<string>();
+  const {
+    qWish,
+    pMin,
+    pMax,
+    pSort,
+    hob,
+    itemCat,
+    inLevMerchant,
+    inLevUser,
+    page,
+  } = router.query;
+  const [qWishString, setqWishString] = useState<string>();
+  const [currentPage, setCurrentPage] = useState(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const [inputValue, setInputValue] = useState("");
@@ -42,7 +54,13 @@ export default function Wishlist() {
     }
 
     const fetchQueriesName = async () => {
-      setQString(urlFirstString(q));
+      setqWishString(urlFirstString(qWish));
+      setInputValue(urlFirstString(qWish) ?? "");
+    };
+
+    const fetchQueriesPage = async () => {
+      const tempPage = parseNumberUndefined(urlFirstString(page)) ?? 0;
+      setCurrentPage(tempPage === 0 ? 0 : tempPage - 1);
     };
 
     const initialRenderResult = async () => {
@@ -51,32 +69,29 @@ export default function Wishlist() {
 
       setIsLoading(true);
       await fetchQueriesName();
-      if (urlFirstString(q) === qString) {
+      await fetchQueriesPage();
+      if (
+        urlFirstString(qWish) === qWishString
+        // && urlFirstString(page) == page
+      ) {
         const itemQueried = await WishlistQuery({
-          itemName: qString || "",
-          pMin: pMinNumber,
-          pMax: pMaxNumber,
-          hob: urlFirstString(hob),
-          itemCat: urlFirstString(itemCat),
-          inLevMerchant: urlFirstString(inLevMerchant),
-          inLevUser: urlFirstString(inLevUser),
+          pageNumber: currentPage + 1,
+          numberOfItem: 10, // bisa di ganti2 ntar tpi later
+          filters: {
+            itemName: qWishString || "",
+            pMin: pMinNumber,
+            pMax: pMaxNumber,
+            hob: urlFirstString(hob),
+            itemCat: urlFirstString(itemCat),
+            inLevMerchant: urlFirstString(inLevMerchant),
+            inLevUser: urlFirstString(inLevUser),
+          },
         });
 
         if (itemQueried) {
           if (itemQueried.resultContext.success) {
             setIsLoading(false);
             setItems(itemQueried);
-          } else if (
-            itemQueried.resultContext.resultCode === "SESSION_EXPIRED"
-          ) {
-            router.push("/login");
-          } else {
-            toast.error("An Unexpected error occured", {
-              position: "top-center",
-              autoClose: 5000,
-              hideProgressBar: false,
-              theme: "colored",
-            });
           }
         }
       }
@@ -93,7 +108,7 @@ export default function Wishlist() {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [router.isReady, q, qString]);
+  }, [router.isReady, qWish, qWishString, page]);
 
   function UpdateDiChild(replace_in_parent: WishlistQueryResult) {
     setItems(replace_in_parent);
@@ -109,9 +124,21 @@ export default function Wishlist() {
     event.preventDefault();
     router.push({
       pathname: `/wishlist`,
-      query: { q: inputValue },
+      query: { qWish: inputValue },
     });
   };
+
+  const handlePageClick = (selectedPage: { selected: number }) => {
+    setCurrentPage(selectedPage.selected);
+    router.push({
+      pathname: `/wishlist`,
+      query: {
+        ...router.query,
+        page: selectedPage.selected + 1,
+      },
+    });
+  };
+
   return (
     <>
       <Head>
@@ -149,7 +176,7 @@ export default function Wishlist() {
                     <div className="pt-4">
                       <WishlistFilterBar
                         page="wishlist"
-                        searchQuery={qString}
+                        searchQuery={qWishString}
                         setQueryResult={UpdateDiChild}
                       />
                     </div>
@@ -158,7 +185,7 @@ export default function Wishlist() {
               ) : (
                 <WishlistFilterBar
                   page="wishlist"
-                  searchQuery={qString}
+                  searchQuery={qWishString}
                   setQueryResult={UpdateDiChild}
                 />
               )}
@@ -167,15 +194,39 @@ export default function Wishlist() {
             {isLoading ? (
               <>Loading Placeholder</>
             ) : (
-              <div className="grid grid-cols-2 gap-4 py-2 px-2 lg:grid-cols-5 lg:py-4">
-                {items?.wishlistItems.length !== 0 && items ? (
-                  <>
-                    {items.wishlistItems.map((data) => {
-                      return <WishlistCard itemData={data} />;
-                    })}
-                  </>
-                ) : (
-                  <>KOSONG PLACEHOLDER</>
+              <div className="flex flex-col">
+                <div className="grid grid-cols-2 gap-4 py-2 px-2 lg:grid-cols-5 lg:py-4">
+                  {items?.wishlistItems.length !== 0 && items ? (
+                    <>
+                      {items.wishlistItems.map((data) => {
+                        return <WishlistCard itemData={data} />;
+                      })}
+                    </>
+                  ) : (
+                    <>KOSONG PLACEHOLDER</>
+                  )}
+                </div>
+                {items && (
+                  <ReactPaginate
+                    pageCount={items.pagingContext.totalPage}
+                    onPageChange={handlePageClick}
+                    // initialPage={currentPage}
+                    forcePage={currentPage}
+                    nextLabel=">"
+                    previousLabel="<"
+                    breakLabel="..."
+                    // disableInitialCallback
+                    // Stylings
+                    containerClassName={styles.pagination}
+                    pageLinkClassName={styles.pagelink}
+                    activeClassName={styles.active}
+                    activeLinkClassName={styles.active}
+                    breakClassName={styles.pagelink}
+                    previousLinkClassName={styles.pagelink}
+                    nextLinkClassName={styles.pagelink}
+                    disabledLinkClassName={styles.disabled}
+                    renderOnZeroPageCount={null}
+                  />
                 )}
               </div>
             )}
@@ -185,6 +236,3 @@ export default function Wishlist() {
     </>
   );
 }
-
-// Ntar
-const RenderContent = () => {};

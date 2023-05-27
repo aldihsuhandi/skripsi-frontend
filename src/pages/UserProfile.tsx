@@ -12,6 +12,7 @@ import { UserInfo } from "@/Components/UserInfo";
 import { useRouter } from "next/router";
 import { Session_Local_Key } from "@/types";
 import Link from "next/link";
+import { toast } from "react-toastify";
 
 export default function UserProfile() {
   const router = useRouter();
@@ -24,21 +25,25 @@ export default function UserProfile() {
       if (sessionString) {
         // Kalo session ada di local, check validity atau dah expired
         const sessionInfo = await SessionInfoCall({ sessionId: sessionString });
-        if (sessionInfo.resultContext.success) {
-          const emailUser = sessionInfo.sessionSummary.email;
+        if (sessionInfo) {
+          if (sessionInfo.resultContext.success) {
+            const emailUser = sessionInfo.sessionSummary.email;
 
-          const userData = await UserQuery({
-            key: emailUser,
-            identifier: "email",
-          }).then((userData) => {
-            setUserData(userData.userInfo);
-          });
+            const userData = await UserQuery({
+              key: emailUser,
+              identifier: "email",
+            });
 
-          setIsLoggedIn(true);
-        } else if (!sessionInfo.resultContext.success) {
-          localStorage.removeItem(Session_Local_Key);
+            if (userData) {
+              if (userData.resultContext.success) {
+                setUserData(userData.userInfo);
+              }
+            }
 
-          router.reload();
+            setIsLoggedIn(true);
+          } else if (!sessionInfo.resultContext.success) {
+            router.reload();
+          }
         }
       } else {
         setIsLoggedIn(false);
