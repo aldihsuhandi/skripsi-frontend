@@ -9,10 +9,14 @@ import { toast } from "react-toastify";
 import { PostCall } from "./PostCall";
 
 export const ItemFilterQuery = async ({
+  sorting,
+  sortingType,
   filters,
   pageNumber,
   numberOfItem,
 }: {
+  sorting?: string;
+  sortingType?: string;
   filters: ItemFilterValues;
   pageNumber?: number;
   numberOfItem?: number;
@@ -37,6 +41,8 @@ export const ItemFilterQuery = async ({
     url: "http://localhost:8080/item/query",
     config: config,
     body: {
+      sorting: sorting ? sorting : undefined,
+      sortingType: sortingType ? sortingType : undefined,
       pageNumber: pageNumber,
       numberOfItem: numberOfItem,
       itemFilterContext: {

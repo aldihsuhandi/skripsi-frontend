@@ -33,17 +33,29 @@ export const ItemFilterBar = ({
   const router = useRouter();
   // uat trigger form outside form(ik), dipake di useEffect
   // Soalnya klo user refresh ilang, perlu query lagi
-  const { q, pMin, pMax, pSort, hob, itemCat, inLevMerchant, inLevUser } =
-    router.query;
+  const {
+    q,
+    pMin,
+    pMax,
+    sortType,
+    itemSort,
+    hob,
+    itemCat,
+    inLevMerchant,
+    inLevUser,
+  } = router.query;
 
   const [hobbyList, setHobbyList] = useState<string[]>([]);
   const [categoryList, setCategoryList] = useState<string[]>([]);
   const [interestList, setInterestList] = useState<string[]>([]);
+  const [sortTypeList, setSortTypeList] = useState<string[]>([]);
+  const [itemSortList, setItemSortList] = useState<string[]>([]);
 
   const [ini, setIni] = useState<ItemFilterFormValues>({
     pMin: "",
     pMax: "",
-    pSort: "",
+    sortType: "",
+    itemSort: "",
     hob: "",
     itemCat: "",
     inLevMerchant: "",
@@ -54,7 +66,8 @@ export const ItemFilterBar = ({
     // get the initialValues for the form from the URL
     const pMin_string = urlFirstString(pMin);
     const pMax_string = urlFirstString(pMax);
-    const pSort_string = urlFirstString(pSort);
+    const sortType_string = urlFirstString(sortType);
+    const itemSort_string = urlFirstString(itemSort);
     const hob_string = urlFirstString(hob);
     const itemCat_string = urlFirstString(itemCat);
     const inLevMerchant_string = urlFirstString(inLevMerchant);
@@ -63,7 +76,8 @@ export const ItemFilterBar = ({
     setIni({
       pMin: pMin_string || "",
       pMax: pMax_string || "",
-      pSort: pSort_string || "",
+      sortType: sortType_string || "",
+      itemSort: itemSort_string || "",
       hob: hob_string || "",
       itemCat: itemCat_string || "",
       inLevMerchant: inLevMerchant_string || "",
@@ -79,10 +93,13 @@ export const ItemFilterBar = ({
       const inList = await FilterDictionary({
         dictionaryKey: "INTEREST_LEVEL",
       });
+      const stList = await FilterDictionary({
+        dictionaryKey: "SORTING_TYPE",
+      });
+      const isList = await FilterDictionary({
+        dictionaryKey: "ITEM_SORTING",
+      });
 
-      // hobList?.resultContext.success && setHobbyList(hobList.dictionaries);
-      // catList?.resultContext.success && setCategoryList(catList.dictionaries);
-      // inList?.resultContext.success && setInterestList(inList.dictionaries);
       hobList?.resultContext.success
         ? setHobbyList(hobList.dictionaries)
         : setHobbyList([
@@ -98,9 +115,19 @@ export const ItemFilterBar = ({
         : setInterestList([
             "There was an error fetching this data, try refreshing or try again later.",
           ]);
+      stList?.resultContext.success
+        ? setSortTypeList(stList.dictionaries)
+        : setSortTypeList([
+            "There was an error fetching this data, try refreshing or try again later.",
+          ]);
+      isList?.resultContext.success
+        ? setItemSortList(isList.dictionaries)
+        : setItemSortList([
+            "There was an error fetching this data, try refreshing or try again later.",
+          ]);
     };
     getDictionaries();
-  }, [pMin, pMax, pSort, hob, itemCat, inLevMerchant, inLevUser]);
+  }, [pMin, pMax, sortType, itemSort, hob, itemCat, inLevMerchant, inLevUser]);
 
   function handleKeyDownPreventWords(
     event: React.KeyboardEvent<HTMLInputElement>
@@ -146,8 +173,11 @@ export const ItemFilterBar = ({
         if (values.pMax) {
           Object.assign(flexible_object_for_url, { pMax: values.pMax });
         }
-        if (values.pSort) {
-          Object.assign(flexible_object_for_url, { pSort: values.pSort });
+        if (values.sortType) {
+          Object.assign(flexible_object_for_url, { sortType: values.sortType });
+        }
+        if (values.itemSort) {
+          Object.assign(flexible_object_for_url, { itemSort: values.itemSort });
         }
         if (values.hob) {
           Object.assign(flexible_object_for_url, { hob: values.hob });
@@ -166,14 +196,13 @@ export const ItemFilterBar = ({
           });
         }
 
-        console.log(flexible_object_for_url, "yang diapke di router.push ntar");
-        console.log(page + " " + searchQuery, "page + searchQuery");
-
         // 1. Transalte values to appropriate types
         const pMinNumber = parseNumberUndefined(values.pMin);
         const pMaxNumber = parseNumberUndefined(values.pMax);
         // 2. Api call item/query
         const itemQueried = await ItemFilterQuery({
+          sorting: values.itemSort,
+          sortingType: values.sortType,
           filters: {
             itemName: searchQuery || "",
             pMin: pMinNumber,
@@ -236,23 +265,47 @@ export const ItemFilterBar = ({
 
                 <div>
                   <label
-                    htmlFor="pSort"
+                    htmlFor="itemSort"
                     className="mb-1 block text-sm font-medium"
                   >
-                    Price Sort
+                    Item Sort
                   </label>
                   <Field
                     as="select"
-                    name="pSort"
+                    name="itemSort"
                     defaultValue={undefined}
                     onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
-                      setFieldValue("pSort", event.target.value);
+                      setFieldValue("itemSort", event.target.value);
                     }}
                     className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                   >
-                    <option value="">Price Sorting</option>
-                    <option value="desc">Decending</option>
-                    <option value="asc">Ascending</option>
+                    <option value="">Choose</option>
+                    {itemSortList.map((value) => (
+                      <option value={value}>{value}</option>
+                    ))}
+                  </Field>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="sortType"
+                    className="mb-1 block text-sm font-medium"
+                  >
+                    Sorting Type
+                  </label>
+                  <Field
+                    as="select"
+                    name="sortType"
+                    defaultValue={undefined}
+                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                      setFieldValue("sortType", event.target.value);
+                    }}
+                    className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                  >
+                    <option value="">Choose</option>
+                    {sortTypeList.map((value) => (
+                      <option value={value}>{value}</option>
+                    ))}
                   </Field>
                 </div>
 

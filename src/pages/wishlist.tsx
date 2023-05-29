@@ -19,17 +19,8 @@ export default function Wishlist() {
   // Uat Dropwdown filter klo kecil
   const [isOpen, setIsOpen] = useState(false);
 
-  const {
-    qWish,
-    pMin,
-    pMax,
-    pSort,
-    hob,
-    itemCat,
-    inLevMerchant,
-    inLevUser,
-    page,
-  } = router.query;
+  const { qWish, pMin, pMax, hob, itemCat, inLevMerchant, inLevUser, page } =
+    router.query;
   const [qWishString, setqWishString] = useState<string>();
   const [currentPage, setCurrentPage] = useState(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
