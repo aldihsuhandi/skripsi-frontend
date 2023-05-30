@@ -9,3 +9,4 @@ export * from "./Logout";
 export * from "./ForgotPass";
 export * from "./ResetPassQuery";
 export * from "./ResetPassSend";
+export * from "./UpdateProfile";
