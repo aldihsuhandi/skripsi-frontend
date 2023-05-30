@@ -1,11 +1,12 @@
-import { WishlistAdd } from "@/helper";
+import { WishlistAdd, WishlistRemove } from "@/helper";
 import { CLIENT_ID, CLIENT_SECRET, ItemSummary } from "@/types";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { HTMLAttributes, useEffect, useState } from "react";
-import { HiHeart } from "react-icons/hi";
+import { HiHeart, HiTrash } from "react-icons/hi";
 import { toast } from "react-toastify";
+import { DialogConfrim } from "../DialogConfirm";
 
 export interface ProductCardProps extends HTMLAttributes<HTMLDivElement> {
   itemData: ItemSummary;
@@ -15,6 +16,9 @@ export const ProductCard = ({ itemData, ...props }: ProductCardProps) => {
   const router = useRouter();
   const [image, setImage] = useState<string | undefined>();
   const [merchantEncoded, setMerchantEncoded] = useState<string | undefined>();
+  const [isWishlisted, setIsWishlisted] = useState<boolean>(
+    itemData.inWishlist
+  );
   useEffect(() => {
     async function yeah() {
       const response = await ProcessImage({
@@ -32,6 +36,11 @@ export const ProductCard = ({ itemData, ...props }: ProductCardProps) => {
       }
     }
     yeah();
+    if (image) {
+      return () => {
+        URL.revokeObjectURL(image);
+      };
+    }
   }, [itemData]);
   return (
     <Link href={`/merchant/${merchantEncoded}/item/${itemData.itemId}`}>
@@ -64,28 +73,60 @@ export const ProductCard = ({ itemData, ...props }: ProductCardProps) => {
         </div>
         <div className="mt-auto flex flex-row justify-end gap-2 p-3">
           <div className="group w-max">
-            <button
-              className="rounded-full bg-normal-blue p-2 hover:bg-bright-blue"
-              type="button"
-              onClick={async (e) => {
-                e.preventDefault();
-                const wishlistResult = await WishlistAdd({
-                  itemId: itemData.itemId,
-                });
-                if (wishlistResult) {
-                  if (wishlistResult.resultContext.success) {
-                    toast.success("Successfully added!", {
-                      position: "top-right",
-                      autoClose: 5000,
-                      hideProgressBar: false,
-                      theme: "colored",
-                    });
-                  }
+            {isWishlisted ? (
+              <DialogConfrim
+                trigger={
+                  <button
+                    className="rounded-full bg-red-500 p-2 hover:bg-red-400"
+                    type="button"
+                    onClick={(e) => e.preventDefault()}
+                  >
+                    <HiTrash size={20} className="fill-white" />
+                  </button>
                 }
-              }}
-            >
-              <HiHeart size={20} className="fill-white" />
-            </button>
+                title="Are you sure you want to remove from wishlist?"
+                onConfirm={async () => {
+                  const wishlistResult = await WishlistRemove({
+                    itemId: itemData.itemId,
+                  });
+                  if (wishlistResult) {
+                    if (wishlistResult.resultContext.success) {
+                      setIsWishlisted(false);
+                      toast.success("Successfully deleted!", {
+                        position: "top-center",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        theme: "colored",
+                      });
+                    }
+                  }
+                }}
+              />
+            ) : (
+              <button
+                className="rounded-full bg-normal-blue p-2 hover:bg-bright-blue"
+                type="button"
+                onClick={async (e) => {
+                  e.preventDefault();
+                  const wishlistResult = await WishlistAdd({
+                    itemId: itemData.itemId,
+                  });
+                  if (wishlistResult) {
+                    if (wishlistResult.resultContext.success) {
+                      setIsWishlisted(true);
+                      toast.success("Successfully added!", {
+                        position: "top-center",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        theme: "colored",
+                      });
+                    }
+                  }
+                }}
+              >
+                <HiHeart size={20} className="fill-white" />
+              </button>
+            )}
             <span className="pointer-events-none absolute -top-7 right-0 w-max rounded-md p-1 text-sm font-light opacity-0 transition-opacity group-hover:bg-bright-white group-hover:opacity-100">
               Add to Wishlist
             </span>

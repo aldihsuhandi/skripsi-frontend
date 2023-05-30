@@ -38,6 +38,50 @@ export default function Wishlist() {
 
   const [items, setItems] = useState<WishlistQueryResult | undefined>();
 
+  const fetchQueriesName = async () => {
+    setqWishString(urlFirstString(qWish));
+    setInputValue(urlFirstString(qWish) ?? "");
+  };
+
+  const fetchQueriesPage = async () => {
+    const tempPage = parseNumberUndefined(urlFirstString(page)) ?? 0;
+    setCurrentPage(tempPage === 0 ? 0 : tempPage - 1);
+  };
+
+  const initialRenderResult = async () => {
+    const pMinNumber = parseNumberUndefined(urlFirstString(pMin));
+    const pMaxNumber = parseNumberUndefined(urlFirstString(pMax));
+
+    setIsLoading(true);
+    await fetchQueriesName();
+    await fetchQueriesPage();
+    if (
+      urlFirstString(qWish) === qWishString
+      // && urlFirstString(page) == page
+    ) {
+      const itemQueried = await WishlistQuery({
+        pageNumber: currentPage + 1,
+        numberOfItem: 10, // bisa di ganti2 ntar tpi later
+        filters: {
+          itemName: qWishString || "",
+          pMin: pMinNumber,
+          pMax: pMaxNumber,
+          hob: urlFirstString(hob),
+          itemCat: urlFirstString(itemCat),
+          inLevMerchant: urlFirstString(inLevMerchant),
+          inLevUser: urlFirstString(inLevUser),
+        },
+      });
+
+      if (itemQueried) {
+        if (itemQueried.resultContext.success) {
+          setIsLoading(false);
+          setItems(itemQueried);
+        }
+      }
+    }
+  };
+
   useEffect(() => {
     // Check session, klo nggak valid
     const sessionCheck = async () => {
@@ -52,50 +96,6 @@ export default function Wishlist() {
     if (router.isReady) {
       sessionCheck();
     }
-
-    const fetchQueriesName = async () => {
-      setqWishString(urlFirstString(qWish));
-      setInputValue(urlFirstString(qWish) ?? "");
-    };
-
-    const fetchQueriesPage = async () => {
-      const tempPage = parseNumberUndefined(urlFirstString(page)) ?? 0;
-      setCurrentPage(tempPage === 0 ? 0 : tempPage - 1);
-    };
-
-    const initialRenderResult = async () => {
-      const pMinNumber = parseNumberUndefined(urlFirstString(pMin));
-      const pMaxNumber = parseNumberUndefined(urlFirstString(pMax));
-
-      setIsLoading(true);
-      await fetchQueriesName();
-      await fetchQueriesPage();
-      if (
-        urlFirstString(qWish) === qWishString
-        // && urlFirstString(page) == page
-      ) {
-        const itemQueried = await WishlistQuery({
-          pageNumber: currentPage + 1,
-          numberOfItem: 10, // bisa di ganti2 ntar tpi later
-          filters: {
-            itemName: qWishString || "",
-            pMin: pMinNumber,
-            pMax: pMaxNumber,
-            hob: urlFirstString(hob),
-            itemCat: urlFirstString(itemCat),
-            inLevMerchant: urlFirstString(inLevMerchant),
-            inLevUser: urlFirstString(inLevUser),
-          },
-        });
-
-        if (itemQueried) {
-          if (itemQueried.resultContext.success) {
-            setIsLoading(false);
-            setItems(itemQueried);
-          }
-        }
-      }
-    };
 
     // Update screensize klo dirubah
     const handleResize = () => {
@@ -199,7 +199,12 @@ export default function Wishlist() {
                   {items?.wishlistItems.length !== 0 && items ? (
                     <>
                       {items.wishlistItems.map((data) => {
-                        return <WishlistCard itemData={data} />;
+                        return (
+                          <WishlistCard
+                            itemData={data}
+                            onDelete={initialRenderResult}
+                          />
+                        );
                       })}
                     </>
                   ) : (

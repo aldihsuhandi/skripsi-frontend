@@ -16,12 +16,22 @@ export interface UserQueryRequest {
 
 // Reponse / Result
 
+export interface Location {
+  province: string;
+  city: string;
+  postCode: number;
+  detail: string;
+}
+
 export interface UserSummary {
   email: string;
   phoneNumber: string;
   username: string;
   role: UserRole;
   profilePicture?: string; //imageId
+  gender: string;
+  dateOfBirth: string;
+  location?: Location;
   gmtCreate: Date;
   gmtModified: Date;
 }

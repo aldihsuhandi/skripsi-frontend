@@ -1,8 +1,15 @@
 import { COLOR_HEX_STRING, Color } from "@/Components/Color";
+import { DialogConfrim } from "@/Components/DialogConfirm";
 import { ChatIcon, ForumIcon } from "@/Components/Icons";
 import { ItemImagesMultiple } from "@/Components/ItemImagesMultiple";
 import { MerchantInfo } from "@/Components/MerchantInfo";
-import { capitalizeFirstLetter, urlFirstString } from "@/helper";
+import {
+  CartAdd,
+  WishlistAdd,
+  WishlistRemove,
+  capitalizeFirstLetter,
+  urlFirstString,
+} from "@/helper";
 import { ItemDetail } from "@/helper/ItemDetail";
 import { ItemDetailResult } from "@/types";
 import classNames from "classnames";
@@ -27,9 +34,11 @@ export default function MerchantItem() {
 
   const { itemId } = router.query;
 
+  const [itemIdValid, setItemIdValid] = useState<string>();
   const [itemData, setItemData] = useState<ItemDetailResult | undefined>();
   const [pageTitle, setPageTitle] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isWishlisted, setIsWishlisted] = useState<boolean>(false);
 
   const [quantityToCart, setQuantityToCart] = useState(1);
 
@@ -41,9 +50,13 @@ export default function MerchantItem() {
         const itemDataFetch = await ItemDetail({
           itemId: itemId as string,
         });
+
+        setItemIdValid(urlFirstString(itemId));
+
         if (itemDataFetch) {
           if (itemDataFetch.resultContext.success) {
             setItemData(itemDataFetch);
+            setIsWishlisted(itemDataFetch.item.inWishlist);
             if (itemDataFetch.item) {
               setPageTitle(
                 itemDataFetch.item.itemName +
@@ -103,7 +116,7 @@ export default function MerchantItem() {
                 <ItemImagesMultiple imageIds={itemData.item.itemImages} />
               </div>
               {/* 1.2. Title, Interest Level, Item Desc, Rating, Cat, Hob, Merchant Info */}
-              <div className="flex flex-col px-0 lg:px-14">
+              <div className="flex flex-col px-0 lg:mx-14 lg:min-w-[460px]">
                 {/* 1.2.1 Title */}
                 <h3 className="mb-2 text-2xl font-bold">
                   {itemData.item.itemName}
@@ -226,7 +239,26 @@ export default function MerchantItem() {
                 </span>
                 {/* Add to Cart Button */}
                 <div className="px-4 pt-2 pb-1">
-                  <button className="w-full rounded bg-normal-blue py-2 px-4 font-bold text-white hover:bg-blue-700">
+                  <button
+                    className="w-full rounded bg-normal-blue py-2 px-4 font-bold text-white hover:bg-blue-700"
+                    onClick={async (e) => {
+                      e.preventDefault();
+                      if (itemIdValid) {
+                        const addResult = await CartAdd({
+                          itemId: itemIdValid,
+                          quantity: quantityToCart,
+                        });
+                        if (addResult && addResult.resultContext.success) {
+                          toast.success("Successfully added to cart!", {
+                            position: "top-center",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            theme: "colored",
+                          });
+                        }
+                      }
+                    }}
+                  >
                     Add to Cart
                   </button>
                 </div>
@@ -238,12 +270,66 @@ export default function MerchantItem() {
                 </div>
                 {/* Buttons, Wishlist, Chat, Forum, Share */}
                 <div className="flex flex-row justify-evenly pb-2">
-                  <div className="rounded bg-normal-blue px-1">
-                    <HiHeart
-                      className="text-white"
-                      style={{ height: "1.7em", width: "1.7em" }}
+                  {isWishlisted ? (
+                    <DialogConfrim
+                      trigger={
+                        <button
+                          className="rounded bg-normal-blue px-1 hover:bg-bright-blue"
+                          type="button"
+                          onClick={(e) => e.preventDefault()}
+                        >
+                          <HiHeart
+                            style={{ height: "1.7em", width: "1.7em" }}
+                            className="fill-red-500"
+                          />
+                        </button>
+                      }
+                      title="Are you sure you want to remove from wishlist?"
+                      onConfirm={async () => {
+                        const wishlistResult = await WishlistRemove({
+                          itemId: itemData.item.itemId,
+                        });
+                        if (wishlistResult) {
+                          if (wishlistResult.resultContext.success) {
+                            setIsWishlisted(false);
+                            toast.success("Successfully deleted!", {
+                              position: "top-center",
+                              autoClose: 5000,
+                              hideProgressBar: false,
+                              theme: "colored",
+                            });
+                          }
+                        }
+                      }}
                     />
-                  </div>
+                  ) : (
+                    <button
+                      className="rounded bg-normal-blue px-1 hover:bg-bright-blue"
+                      type="button"
+                      onClick={async (e) => {
+                        e.preventDefault();
+                        const wishlistResult = await WishlistAdd({
+                          itemId: itemData.item.itemId,
+                        });
+                        if (wishlistResult) {
+                          if (wishlistResult.resultContext.success) {
+                            setIsWishlisted(true);
+                            toast.success("Successfully added!", {
+                              position: "top-center",
+                              autoClose: 5000,
+                              hideProgressBar: false,
+                              theme: "colored",
+                            });
+                          }
+                        }
+                      }}
+                    >
+                      <HiHeart
+                        style={{ height: "1.7em", width: "1.7em" }}
+                        className="fill-white"
+                      />
+                    </button>
+                  )}
                   <div className="rounded bg-normal-blue px-1">
                     <ForumIcon
                       classNameIcon="h-7 w-7"

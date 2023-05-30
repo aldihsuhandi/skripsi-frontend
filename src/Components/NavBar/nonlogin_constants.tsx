@@ -10,7 +10,7 @@ export interface NonLoginHeaderProps {
 
 export const NonLoginHeaderNav: NonLoginHeaderProps[] = [
   {
-    href: "/ShoppingCart",
+    href: "/cart",
     icon: (
       <CartIcon
         htmlColor={COLOR_HEX_STRING[Color.NormalBlue]}

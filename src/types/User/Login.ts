@@ -11,7 +11,7 @@ import { ResultContext } from "../ResultContext";
 export interface LoginRequest {
   email: string;
   password: string;
-  // isRemembered?: boolean;
+  remembered?: boolean;
 }
 
 // Result / Response
