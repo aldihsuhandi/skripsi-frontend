@@ -62,7 +62,7 @@ export const UserInfo = ({ userData, ...props }: UserInfoProps) => {
             </div>
           </div>
 
-          <div className="flex flex-col space-y-5 p-6">
+          <div className="flex flex-col space-y-5 p-4">
             <h1 className="text-xl font-medium text-normal-blue">
               Your Personal Data
             </h1>

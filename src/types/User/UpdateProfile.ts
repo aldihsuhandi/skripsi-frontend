@@ -1,10 +1,10 @@
 import { ResultContext } from "../ResultContext";
 
 //Utk spesification location nya
-export interface Location {
+export interface UpdateLocation {
   province: string;
   city: string;
-  postCode: number;
+  postCode: string;
   detail: string;
 }
 
@@ -19,9 +19,9 @@ export interface UpdateProfileFormValues {
   oldPassword: string;
   password?: string;
   confirmPassword?: string;
-  location?: Location;
-  isActive?: boolean;
-  isDeleted?: boolean;
+  location?: UpdateLocation;
+  // isActive?: boolean;
+  // isDeleted?: boolean;
 }
 
 //REQUEST
@@ -43,7 +43,7 @@ export interface UpdateProfileRequest {
   oldPassword: string;
   password?: string;
   confirmPassword?: string;
-  location?: Location;
+  location?: UpdateLocation;
   isActive?: boolean;
   isDeleted?: boolean;
 }
