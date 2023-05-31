@@ -51,6 +51,7 @@ export const ItemFilterQuery = async ({
         maxItemPrice: filters.pMax,
         hobby: filters.hob,
         itemCategory: filters.itemCat,
+        merchantEmail: filters.merchantEmail,
         merchantInterestLevel: filters.inLevMerchant,
         userInterestLevel: filters.inLevUser,
       },

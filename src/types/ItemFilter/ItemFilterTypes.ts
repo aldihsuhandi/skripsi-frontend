@@ -4,6 +4,7 @@ export interface ItemFilterValues {
   pMax?: number;
   hob?: string;
   itemCat?: string;
+  merchantEmail?: string;
   inLevMerchant?: string;
   inLevUser?: string;
 }

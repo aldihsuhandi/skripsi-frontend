@@ -1,0 +1,8 @@
+.button {
+  padding: 8px;
+}
+
+.button_active {
+  border-bottom: 2px solid #20bbfc;
+  color: #20bbfc;
+}
