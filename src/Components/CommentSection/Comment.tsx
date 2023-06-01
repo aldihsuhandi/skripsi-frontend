@@ -1,4 +1,9 @@
-import { ImageDownload, ProcessImgBE, WishlistRemove } from "@/helper";
+import {
+  ImageDownload,
+  ProcessImgBE,
+  StringToDateAndBack,
+  WishlistRemove,
+} from "@/helper";
 import { CommentSummary } from "@/types/Comment";
 import { useEffect, useState } from "react";
 import { Avatar } from "../Avatar";
@@ -24,6 +29,15 @@ export const Comment = ({
 }: CommentProps) => {
   const [image, setImage] = useState<string | undefined>(undefined);
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const date_raw = new Date(commentData.gmtCreate);
+
+  const day = date_raw.getDate().toString().padStart(2, "0");
+  const month = (date_raw.getMonth() + 1).toString().padStart(2, "0");
+  const year = date_raw.getFullYear().toString();
+  const hours = date_raw.getHours().toString().padStart(2, "0");
+  const minutes = date_raw.getMinutes().toString().padStart(2, "0");
+
+  const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
 
   useEffect(() => {
     async function getMerchantImage() {
@@ -65,9 +79,13 @@ export const Comment = ({
           style={{ height: 40, width: 40 }}
         />
         <div className="flex w-full flex-col px-3">
-          <h3 className="text-base font-bold">
-            {commentData.commenter.username}
-          </h3>
+          <div className="flex flex-row items-center">
+            <h3 className="text-base font-bold">
+              {commentData.commenter.username}
+            </h3>
+            <div className="px-2"> - </div>
+            <h5 className="text-xs">{formattedDate}</h5>
+          </div>
           {isEditing ? (
             <CommentEditSection
               commentId={commentData.commentId}
