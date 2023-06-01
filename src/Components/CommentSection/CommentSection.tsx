@@ -62,12 +62,17 @@ export const CommentSection = ({ postId, userData }: CommentSectionProps) => {
   };
 
   return (
-    <div className="max-w-[800px]">
+    <div className="w-full px-3">
       <h2 className="pt-4 text-lg lg:pt-2 lg:text-xl">Discussion</h2>
+      <CommentCreateSection
+        postId={postId}
+        postTo="POST"
+        onCreate={fetchComment}
+      />
       {com &&
         com.comments.map((data) => {
           return (
-            <div className="my-2 max-w-[800px] rounded border-4 border-solid border-bright-white">
+            <div className="my-2 w-full rounded border-4 border-solid border-bright-white">
               <Comment
                 commentData={data}
                 userData={userData}
@@ -102,11 +107,6 @@ export const CommentSection = ({ postId, userData }: CommentSectionProps) => {
           renderOnZeroPageCount={null}
         />
       )}
-      <CommentCreateSection
-        postId={postId}
-        postTo="POST"
-        onCreate={fetchComment}
-      />
     </div>
   );
 };
