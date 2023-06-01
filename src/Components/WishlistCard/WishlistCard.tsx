@@ -1,4 +1,4 @@
-import { CLIENT_ID, CLIENT_SECRET, ItemSummary } from "@/types";
+import { CLIENT_ID, CLIENT_SECRET, WishlistSummary } from "@/types";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -9,7 +9,7 @@ import { CartAdd, WishlistRemove } from "@/helper";
 import { toast } from "react-toastify";
 
 export interface WishlistCardProps extends HTMLAttributes<HTMLDivElement> {
-  itemData: ItemSummary;
+  itemData: WishlistSummary;
   onDelete: () => void;
 }
 
