@@ -104,7 +104,39 @@ export const UserInfo = ({ userData, ...props }: UserInfoProps) => {
             </h1>
             <span className="flex flex-row items-center">
               <HiHome size={20} />
-              <p className="pl-3 text-lg font-normal">Address (WIP)</p>
+              <p className="pl-3 text-lg font-normal">
+                Province:{" "}
+                {userData.location?.province == null
+                  ? "Not Yet Set"
+                  : userData.location?.province}
+              </p>
+            </span>
+            <span className="flex flex-row items-center">
+              <HiHome size={20} />
+              <p className="pl-3 text-lg font-normal">
+                City:{" "}
+                {userData.location?.city == null
+                  ? "Not Yet Set"
+                  : userData.location?.city}
+              </p>
+            </span>
+            <span className="flex flex-row items-center">
+              <HiHome size={20} />
+              <p className="pl-3 text-lg font-normal">
+                Post Code:{" "}
+                {userData.location?.postCode == null
+                  ? "Not yet Set"
+                  : userData.location?.postCode}
+              </p>
+            </span>
+            <span className="flex flex-row items-center">
+              <HiHome size={20} />
+              <p className="pl-3 text-lg font-normal">
+                Detail:{" "}
+                {userData.location?.detail == null
+                  ? "Not Yet Set"
+                  : userData.location?.detail}
+              </p>
             </span>
           </div>
         </div>

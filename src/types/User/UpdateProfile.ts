@@ -1,12 +1,12 @@
 import { ResultContext } from "../ResultContext";
 
 //Utk spesification location nya
-export interface UpdateLocation {
-  province: string;
-  city: string;
-  postCode: string;
-  detail: string;
-}
+// export interface UpdateLocation {
+//   province: string;
+//   city: string;
+//   postCode: string;
+//   detail: string;
+// }
 
 // Form Values
 export interface UpdateProfileFormValues {
@@ -19,9 +19,16 @@ export interface UpdateProfileFormValues {
   oldPassword: string;
   password?: string;
   confirmPassword?: string;
-  location?: UpdateLocation;
-  // isActive?: boolean;
-  // isDeleted?: boolean;
+  location?: {
+    province: string;
+    city: string;
+    postCode: string;
+    detail: string;
+  };
+  isActive?: boolean;
+  isDeleted?: boolean;
+  canWhatsapp?: boolean;
+  canTelegram?: boolean;
 }
 
 //REQUEST
@@ -43,9 +50,16 @@ export interface UpdateProfileRequest {
   oldPassword: string;
   password?: string;
   confirmPassword?: string;
-  location?: UpdateLocation;
+  location?: {
+    province: string;
+    city: string;
+    postCode: string;
+    detail: string;
+  };
   isActive?: boolean;
   isDeleted?: boolean;
+  canWhatsapp?: boolean;
+  canTelegram?: boolean;
 }
 
 // RESULT
