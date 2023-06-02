@@ -13,6 +13,7 @@ import {
 import { HiMail } from "react-icons/hi";
 import { StringToDateAndBack } from "@/helper";
 import Link from "next/link";
+import { MerchantApplyCall } from "@/helper/MerchantApplyCall";
 
 export interface UserInfoProps extends HTMLAttributes<HTMLDivElement> {
   userData: UserSummary;
@@ -56,8 +57,14 @@ export const UserInfo = ({ userData, ...props }: UserInfoProps) => {
               >
                 <button className="text-white">Edit Profile</button>
               </Link>
-              <button className="rounded-md border bg-red-600 p-2 text-white shadow-sm hover:bg-red-500 hover:shadow-md">
-                Delete Account (??)
+              <button
+                className="rounded-md border border-red-500 bg-white p-2 text-red-500 shadow-sm hover:bg-red-500 hover:text-white hover:shadow-md"
+                onClick={async () => {
+                  await MerchantApplyCall();
+                }}
+                disabled={userData.role === "MERCHANT"}
+              >
+                Apply to Merchant
               </button>
             </div>
           </div>

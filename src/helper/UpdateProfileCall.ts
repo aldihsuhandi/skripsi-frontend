@@ -13,7 +13,7 @@ export const UpdateProfileCall = async (
       clientId: CLIENT_ID,
       clientSecret: CLIENT_SECRET,
       sessionId: sessionString,
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
       "Accept-Type": "application/json",
     };
 

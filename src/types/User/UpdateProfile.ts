@@ -41,7 +41,7 @@ Di Headers:
 */
 
 export interface UpdateProfileRequest {
-  profilePicture?: string;
+  profilePicture?: File;
   email?: string;
   username?: string;
   phoneNumber?: string;

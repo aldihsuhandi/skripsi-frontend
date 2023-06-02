@@ -29,24 +29,6 @@ import { ImageUploadResult } from "@/types/Image";
 const MAX_FILE_SIZE = 2 * 1024 * 1024; //2MB
 const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
 
-const initialValues: UpdateProfileFormValues = {
-  oldPassword: "",
-  profilePicture: undefined,
-  email: "",
-  username: "",
-  phoneNumber: "",
-  gender: "",
-  dateOfBirth: "",
-  password: "",
-  confirmPassword: "",
-  province: "",
-  city: "",
-  postCode: "",
-  detail: "",
-  canWhatsapp: false,
-  canTelegram: false,
-};
-
 const updateProfileSchema = Yup.object().shape({
   profilePicture: Yup.mixed<File>()
     .notRequired()
@@ -104,6 +86,24 @@ export interface OldUserInfoProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const UpdateUserInfo = ({ oldUserData, ...props }: OldUserInfoProps) => {
+  const initialValues: UpdateProfileFormValues = {
+    oldPassword: "",
+    profilePicture: undefined,
+    email: "",
+    username: "",
+    phoneNumber: "",
+    gender: "",
+    dateOfBirth: "",
+    password: "",
+    confirmPassword: "",
+    province: "",
+    city: "",
+    postCode: "",
+    detail: "",
+    canWhatsapp: oldUserData.canWhatsapp,
+    canTelegram: oldUserData.canTelegram,
+  };
+
   const router = useRouter();
   const [showPass, setShowPass] = useState(false);
   const [showCurPass, setShowCurPass] = useState(false);
@@ -144,20 +144,20 @@ export const UpdateUserInfo = ({ oldUserData, ...props }: OldUserInfoProps) => {
           initialValues={initialValues}
           validationSchema={updateProfileSchema}
           onSubmit={async (values) => {
-            async function uploadImage() {
-              if (values.profilePicture) {
-                const uploadImgResult = await ImageUpload({
-                  image: values.profilePicture,
-                });
-                // console.log(uploadImgResult?.data.imageId + "dalem function");
-                // console.log(
-                //   typeof uploadImgResult?.data.imageId + "dalem function"
-                // );
-                setUploadImg(uploadImgResult?.data.imageId);
-                // console.log(uploadImg + "setelah set");
-              }
-            }
-            await uploadImage();
+            // async function uploadImage() {
+            //   if (values.profilePicture) {
+            //     const uploadImgResult = await ImageUpload({
+            //       image: values.profilePicture,
+            //     });
+            //     console.log(uploadImgResult?.data.imageId + "dalem function");
+            //     console.log(
+            //       typeof uploadImgResult?.data.imageId + "dalem function"
+            //     );
+            //     setUploadImg(uploadImgResult?.data.imageId);
+            //     console.log(uploadImg + "setelah set");
+            //   }
+            // }
+            // await uploadImage();
             // console.log(uploadImg);
             const formUpdateProfile: UpdateProfileRequest = {
               email: !values.email ? oldUserData.email : values.email,
@@ -166,12 +166,12 @@ export const UpdateUserInfo = ({ oldUserData, ...props }: OldUserInfoProps) => {
                 : values.username,
               gender: !values.gender ? oldUserData.gender : values.gender,
               dateOfBirth: !values.dateOfBirth
-                ? oldUserData.dateOfBirth
+                ? undefined
                 : StringToDateAndBack(values.dateOfBirth as string),
               phoneNumber: !values.phoneNumber
                 ? oldUserData.phoneNumber
                 : "08" + values.phoneNumber,
-              profilePicture: uploadImg ?? undefined,
+              profilePicture: values.profilePicture ?? undefined,
               oldPassword: values.oldPassword,
               password: values.password,
               confirmPassword: values.confirmPassword,
@@ -200,7 +200,7 @@ export const UpdateUserInfo = ({ oldUserData, ...props }: OldUserInfoProps) => {
             }
           }}
         >
-          {({ setFieldValue, errors, touched }) => (
+          {({ setFieldValue, errors, touched, values }) => (
             <Form className="flex flex-col p-4 sm:flex-col lg:flex-row">
               <div className="items-center pr-4 sm:self-center lg:self-start">
                 {/*---> Update Profile Image Form <---*/}
@@ -326,12 +326,23 @@ export const UpdateUserInfo = ({ oldUserData, ...props }: OldUserInfoProps) => {
                     <Field
                       name="canWhatsapp"
                       type="checkbox"
+                      checked={values.canWhatsapp}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setFieldValue("canWhatsapp", e.target.checked)
+                      }
                       // className="pr-1"
                     />
                     <span className="pl-1 pr-2">Whatsapp</span>
                   </label>
                   <label className="flex flex-row pt-1">
-                    <Field name="canTelegram" type="checkbox" />
+                    <Field
+                      name="canTelegram"
+                      type="checkbox"
+                      checked={values.canTelegram}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setFieldValue("canTelegram", e.target.checked)
+                      }
+                    />
                     <span className="pl-1">Telegram</span>
                   </label>
                 </div>
@@ -347,7 +358,7 @@ export const UpdateUserInfo = ({ oldUserData, ...props }: OldUserInfoProps) => {
                       <Field
                         type="text"
                         name="province"
-                        placeholder="Province"
+                        placeholder={oldUserData.location?.province}
                         className={styles.input_text_location}
                       />
                     </div>
@@ -359,7 +370,7 @@ export const UpdateUserInfo = ({ oldUserData, ...props }: OldUserInfoProps) => {
                       <Field
                         type="text"
                         name="city"
-                        placeholder="City"
+                        placeholder={oldUserData.location?.city}
                         className={styles.input_text_location}
                       />
                     </div>
@@ -371,7 +382,7 @@ export const UpdateUserInfo = ({ oldUserData, ...props }: OldUserInfoProps) => {
                       <Field
                         type="text"
                         name="postCode"
-                        placeholder="Post Code"
+                        placeholder={oldUserData.location?.postCode}
                         className={styles.input_text_location}
                       />
                     </div>
@@ -383,7 +394,7 @@ export const UpdateUserInfo = ({ oldUserData, ...props }: OldUserInfoProps) => {
                   <Field
                     type="text"
                     name="detail"
-                    placeholder="Address Detail"
+                    placeholder={oldUserData.location?.detail}
                     className={styles.input_text_location}
                   />
                 </div>

@@ -32,7 +32,7 @@ export const CommentCreate = async ({
         replyId: replyId,
       },
     });
-
+    console.log(result);
     if (result?.resultContext.success) {
       return result;
     } else {

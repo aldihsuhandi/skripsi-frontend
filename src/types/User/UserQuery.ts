@@ -34,6 +34,8 @@ export interface UserSummary {
   location?: Location;
   gmtCreate: Date;
   gmtModified: Date;
+  canWhatsapp?: boolean;
+  canTelegram?: boolean;
 }
 
 export interface UserQueryResult {
