@@ -19,12 +19,12 @@ export interface UpdateProfileFormValues {
   oldPassword: string;
   password?: string;
   confirmPassword?: string;
-  location?: {
-    province: string;
-    city: string;
-    postCode: string;
-    detail: string;
-  };
+
+  province?: string;
+  city?: string;
+  postCode?: string;
+  detail?: string;
+
   isActive?: boolean;
   isDeleted?: boolean;
   canWhatsapp?: boolean;
@@ -41,7 +41,7 @@ Di Headers:
 */
 
 export interface UpdateProfileRequest {
-  profilePicture?: File;
+  profilePicture?: string;
   email?: string;
   username?: string;
   phoneNumber?: string;
@@ -51,10 +51,10 @@ export interface UpdateProfileRequest {
   password?: string;
   confirmPassword?: string;
   location?: {
-    province: string;
-    city: string;
-    postCode: string;
-    detail: string;
+    province?: string;
+    city?: string;
+    postCode?: string;
+    detail?: string;
   };
   isActive?: boolean;
   isDeleted?: boolean;

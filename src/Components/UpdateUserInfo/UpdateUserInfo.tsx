@@ -23,6 +23,8 @@ import { Field, Form, Formik } from "formik";
 import { UpdateProfileCall } from "@/helper/UpdateProfileCall";
 import styles from "../../styles/Form.module.css";
 import classNames from "classnames";
+import { ImageUpload } from "@/helper/ImageUploadCall";
+import { ImageUploadResult } from "@/types/Image";
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024; //2MB
 const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
@@ -37,7 +39,10 @@ const initialValues: UpdateProfileFormValues = {
   dateOfBirth: "",
   password: "",
   confirmPassword: "",
-  location: { province: "", city: "", postCode: "", detail: "" },
+  province: "",
+  city: "",
+  postCode: "",
+  detail: "",
   canWhatsapp: false,
   canTelegram: false,
 };
@@ -105,6 +110,7 @@ export const UpdateUserInfo = ({ oldUserData, ...props }: OldUserInfoProps) => {
   const [picture, setPicture] = useState<string | undefined>(undefined);
   const [newPicture, setNewPicture] = useState<string | undefined>(undefined);
   const imgRef = useRef<HTMLInputElement>(null);
+  const [uploadImg, setUploadImg] = useState<string | undefined>(undefined);
   // const [showError, setShowError] = useState<string | undefined>(undefined);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [resultMessage, setResultMessage] = useState<string | undefined>(
@@ -138,25 +144,48 @@ export const UpdateUserInfo = ({ oldUserData, ...props }: OldUserInfoProps) => {
           initialValues={initialValues}
           validationSchema={updateProfileSchema}
           onSubmit={async (values) => {
+            async function uploadImage() {
+              if (values.profilePicture) {
+                const uploadImgResult = await ImageUpload({
+                  image: values.profilePicture,
+                });
+                // console.log(uploadImgResult?.data.imageId + "dalem function");
+                // console.log(
+                //   typeof uploadImgResult?.data.imageId + "dalem function"
+                // );
+                setUploadImg(uploadImgResult?.data.imageId);
+                // console.log(uploadImg + "setelah set");
+              }
+            }
+            await uploadImage();
+            // console.log(uploadImg);
             const formUpdateProfile: UpdateProfileRequest = {
-              email: values.email,
-              username: values.username,
-              gender: values.gender,
-              dateOfBirth: StringToDateAndBack(values.dateOfBirth as string),
-              phoneNumber: "08" + values.phoneNumber,
-              profilePicture: values.profilePicture ?? undefined,
+              email: !values.email ? oldUserData.email : values.email,
+              username: !values.username
+                ? oldUserData.username
+                : values.username,
+              gender: !values.gender ? oldUserData.gender : values.gender,
+              dateOfBirth: !values.dateOfBirth
+                ? oldUserData.dateOfBirth
+                : StringToDateAndBack(values.dateOfBirth as string),
+              phoneNumber: !values.phoneNumber
+                ? oldUserData.phoneNumber
+                : "08" + values.phoneNumber,
+              profilePicture: uploadImg ?? undefined,
               oldPassword: values.oldPassword,
               password: values.password,
               confirmPassword: values.confirmPassword,
               location: {
-                province: values.location!.province,
-                city: values.location!.city,
-                postCode: values.location!.postCode,
-                detail: values.location!.detail,
+                province: values.province,
+                city: values.city,
+                postCode: values.postCode,
+                detail: values.detail,
               },
               canWhatsapp: values.canWhatsapp,
               canTelegram: values.canTelegram,
             };
+
+            // console.log(values?.province);
 
             const resultFromCall: UpdateProfileResult | undefined =
               await UpdateProfileCall(formUpdateProfile);
@@ -176,7 +205,7 @@ export const UpdateUserInfo = ({ oldUserData, ...props }: OldUserInfoProps) => {
               <div className="items-center pr-4 sm:self-center lg:self-start">
                 {/*---> Update Profile Image Form <---*/}
                 <img
-                  src={picture ? picture : newPicture}
+                  src={newPicture ? newPicture : picture}
                   alt=""
                   className="h-40 w-40 rounded-full md:h-72 md:w-72"
                 />
