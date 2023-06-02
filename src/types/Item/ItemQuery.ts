@@ -47,6 +47,7 @@ export interface PagingContext {
 
 export interface ItemSummary {
   itemId: string;
+  postId: string;
   itemName: string;
   /**
    * Kalo gk muat number, bigint
