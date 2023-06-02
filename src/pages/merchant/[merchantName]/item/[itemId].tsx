@@ -1,17 +1,21 @@
 import { COLOR_HEX_STRING, Color } from "@/Components/Color";
+import { CommentSection } from "@/Components/CommentSection";
 import { DialogConfrim } from "@/Components/DialogConfirm";
 import { ChatIcon, ForumIcon } from "@/Components/Icons";
 import { ItemImagesMultiple } from "@/Components/ItemImagesMultiple";
 import { MerchantInfo } from "@/Components/MerchantInfo";
 import {
   CartAdd,
+  SessionInfoCall,
+  UserQuery,
   WishlistAdd,
   WishlistRemove,
   capitalizeFirstLetter,
   urlFirstString,
 } from "@/helper";
 import { ItemDetail } from "@/helper/ItemDetail";
-import { ItemDetailResult } from "@/types";
+import { ItemDetailResult, Session_Local_Key } from "@/types";
+import { UserSummary } from "@/types/User";
 import classNames from "classnames";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -34,6 +38,7 @@ export default function MerchantItem() {
 
   const { itemId } = router.query;
 
+  const [userData, setUserData] = useState<UserSummary | undefined>(undefined);
   const [itemIdValid, setItemIdValid] = useState<string>();
   const [itemData, setItemData] = useState<ItemDetailResult | undefined>();
   const [pageTitle, setPageTitle] = useState("");
@@ -70,7 +75,24 @@ export default function MerchantItem() {
       }
     };
 
+    const fetchUserData = async () => {
+      const sessionString = localStorage.getItem(Session_Local_Key);
+      if (sessionString) {
+        const sessionInfo = await SessionInfoCall({ sessionId: sessionString });
+        if (sessionInfo && sessionInfo.resultContext.success) {
+          const userData = await UserQuery({
+            key: sessionInfo.sessionSummary.email,
+            identifier: "email",
+          });
+          if (userData && userData.resultContext.success) {
+            setUserData(userData.userInfo);
+          }
+        }
+      }
+    };
+
     fetchItemData();
+    itemId && fetchUserData();
   }, [itemId]);
 
   const InterestLevelComponent = ({
@@ -351,6 +373,7 @@ export default function MerchantItem() {
                 </div>
               </div>
             </div>
+            <CommentSection postId={itemData.item.postId} userData={userData} />
           </div>
         ) : itemData?.item ? (
           <>Loading</>
