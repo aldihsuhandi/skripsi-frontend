@@ -19,7 +19,7 @@ export interface UserQueryRequest {
 export interface Location {
   province: string;
   city: string;
-  postCode: number;
+  postCode: string; //number --> string
   detail: string;
 }
 
@@ -34,6 +34,8 @@ export interface UserSummary {
   location?: Location;
   gmtCreate: Date;
   gmtModified: Date;
+  canWhatsapp?: boolean;
+  canTelegram?: boolean;
 }
 
 export interface UserQueryResult {

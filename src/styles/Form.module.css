@@ -13,7 +13,7 @@
 }
 
 .input_checkbox {
-  @apply w-full py-0 px-2 flex justify-start items-center;
+  @apply flex w-full items-center justify-start py-0 px-2;
   @apply border-none focus:outline-none;
 }
 
@@ -50,3 +50,63 @@
   color: gray;
   @apply w-full appearance-none rounded-xl bg-bright-white py-2 px-2 hover:cursor-pointer;
 }
+
+.input_group_update {
+  /*---> Styling bwt group form update user profile <---*/
+  @apply flex h-10 rounded-md border md:min-w-[400px];
+  @apply static;
+}
+
+.input_text_update {
+  /*---> Styling bwt isi text dlm group form update user profile <---*/
+  @apply w-full rounded-l-md border bg-white py-2 px-2;
+  @apply border-none focus:outline-none;
+}
+
+.input_text_update + * {
+  @apply pl-2;
+  color: black;
+}
+
+.input_text_update:focus {
+  color: #008ec4;
+}
+
+.input_text_update:not([type="email"]) ~ span:hover * {
+  color: #008ec4;
+  cursor: pointer;
+}
+
+.custom_option_update {
+  color: gray;
+  @apply w-full appearance-none rounded-l-md bg-white py-2 px-2 hover:cursor-pointer;
+}
+
+.custom_option_update + * {
+  color: black;
+}
+
+.input_location {
+  @apply flex h-10 rounded-md border md:min-w-[180px];
+  @apply static;
+}
+
+.input_text_location {
+  @apply w-full rounded-l-md border bg-white py-2 px-2;
+  @apply border-none focus:outline-none;
+}
+
+.input_location_detail {
+  @apply flex h-10 rounded-md border md:min-w-[400px];
+  @apply static;
+}
+
+.input_pass_update {
+  @apply flex h-10 rounded-md border md:min-w-[300px];
+  @apply static;
+}
+
+/* .input_text_pass_update {
+  @apply w-full rounded-l-md border bg-white py-2 px-2;
+  @apply border-none focus:outline-none;
+} */

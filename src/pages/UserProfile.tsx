@@ -68,7 +68,7 @@ export default function UserProfile() {
             <div className="min-w-lg mx-auto flex min-h-[575px] max-w-4xl items-center justify-center rounded-lg bg-white shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]">
               <div className="flex flex-col items-center p-2">
                 <p className="text-2xl font-bold">
-                  UH OH! YOUR SESSION HAS EXPIRED!
+                  WHOOPS! YOUR SESSION HAS EXPIRED!
                 </p>
                 <p className="text-2xl font-semibold">_(:3 」∠)_</p>
                 <p className="text-2xl font-semibold">
