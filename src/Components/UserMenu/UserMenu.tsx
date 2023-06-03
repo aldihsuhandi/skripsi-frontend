@@ -15,6 +15,7 @@ import {
 } from "react-icons/hi2";
 
 import { HiMail } from "react-icons/hi";
+import { MerchantApplyCall } from "@/helper/MerchantApplyCall";
 
 export interface UserMenuProps {
   userData: UserSummary;
@@ -97,12 +98,20 @@ export const UserMenu = ({
             </DropdownMenu.Group>
             {/* <DropdownMenu.Item className="">{children}</DropdownMenu.Item> */}
             <DropdownMenu.Group className="flex w-1/2 flex-col p-1">
-              <DropdownMenu.Item className="rounded-md p-2 hover:border hover:shadow-md">
-                <Link href="#" className="flex flex-row items-center">
-                  <HiBuildingStorefront size={15} />
-                  <span className="px-2">Be a Merchant</span>
-                </Link>
-              </DropdownMenu.Item>
+              {userData.role !== "MERCHANT" && (
+                <DropdownMenu.Item className="rounded-md p-2 hover:border hover:shadow-md">
+                  <Link href="#" className="flex flex-row items-center">
+                    <HiBuildingStorefront size={15} />
+                    <button
+                      onClick={async () => {
+                        await MerchantApplyCall();
+                      }}
+                    >
+                      <span className="px-2">Be a Merchant</span>
+                    </button>
+                  </Link>
+                </DropdownMenu.Item>
+              )}
               <DropdownMenu.Item className="rounded-md p-2 hover:border hover:shadow-md">
                 <Link href="/wishlist" className="flex flex-row items-center">
                   <HiHeart size={15} />
