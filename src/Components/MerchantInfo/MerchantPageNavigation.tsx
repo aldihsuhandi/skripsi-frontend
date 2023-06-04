@@ -78,10 +78,6 @@ export const MerchantPageNavigation = ({
             link={`/merchant/${merchantEncoded}/create`}
             name={"Create"}
           />
-          <ButtonAware
-            link={`/merchant/${merchantEncoded}/update`}
-            name={"Update"}
-          />
         </>
       )}
     </div>

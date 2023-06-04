@@ -139,6 +139,8 @@ export default function MerchantPage() {
             setMerchantData(merchantInfo.userInfo);
             setIsLoading(false);
           }
+        } else {
+          router.back();
         }
       }
     }

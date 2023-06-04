@@ -19,13 +19,13 @@ export const ItemImagesMultiple = ({ imageIds }: ItemImagesMultipleProps) => {
   return (
     <>
       {/* The BEEG Image */}
-      <div className="flex h-80 w-80 self-center rounded border border-gray-500">
+      <div className="relative h-80 w-80 self-center rounded border border-gray-500">
         <ItemImage
           imageSrc={imageStringReady[imageIndex]}
-          className="self-center rounded"
           alt={`item-image-${imageIndex}`}
-          height={320}
-          width={320}
+          height="100%"
+          width="100%"
+          className="h-full w-full self-center rounded"
         />
       </div>
 
@@ -43,10 +43,10 @@ export const ItemImagesMultiple = ({ imageIds }: ItemImagesMultipleProps) => {
             >
               <ItemImage
                 imageSrc={ids}
-                className="self-center rounded"
                 alt={`item-image-${index}`}
-                height={64}
-                width={64}
+                height="100%"
+                width="100%"
+                className="h-full w-full self-center rounded"
               />
             </div>
           );

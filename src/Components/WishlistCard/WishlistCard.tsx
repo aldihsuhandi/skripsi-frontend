@@ -3,10 +3,11 @@ import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { HTMLAttributes, useEffect, useState } from "react";
-import { HiShoppingCart, HiTrash } from "react-icons/hi";
+import { HiShoppingCart, HiTrash, HiUserGroup } from "react-icons/hi";
 import { DialogConfrim } from "../DialogConfirm";
 import { CartAdd, WishlistRemove } from "@/helper";
 import { toast } from "react-toastify";
+import { HiBuildingStorefront } from "react-icons/hi2";
 
 export interface WishlistCardProps extends HTMLAttributes<HTMLDivElement> {
   itemData: WishlistSummary;
@@ -60,8 +61,27 @@ export const WishlistCard = ({
           <p className="font-sans text-sm font-semibold lg:text-base xl:text-lg">
             {itemData.itemName}
           </p>
-          <p className="font-sans text-sm lg:text-base">
+          <p className="flex font-sans text-sm lg:text-base">
+            <HiBuildingStorefront
+              style={{
+                height: "1.5em",
+                width: "1.5em",
+                color: "#581C87",
+                paddingRight: "2px",
+              }}
+            />
             {itemData.merchantLevel}
+          </p>
+          <p className="flex font-sans text-sm lg:text-base">
+            <HiUserGroup
+              style={{
+                height: "1.5em",
+                width: "1.5em",
+                color: "#581C87",
+                paddingRight: "2px",
+              }}
+            />
+            {itemData.userLevel === "" ? "No Review" : itemData.userLevel}
           </p>
           <p className="font-sans text-sm lg:text-base">
             {itemData.itemCategory}

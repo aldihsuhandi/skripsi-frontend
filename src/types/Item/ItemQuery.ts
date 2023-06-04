@@ -59,8 +59,10 @@ export interface ItemSummary {
   hobby: string;
   merchantInfo: UserSummary;
   merchantLevel: string;
+  userLevel: string;
   itemImages: string[];
   inWishlist: boolean;
+  review: number;
   gmtCreate: Date;
   gmtModified: Date;
 }

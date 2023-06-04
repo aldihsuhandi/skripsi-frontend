@@ -7,6 +7,7 @@ import { HTMLAttributes, useEffect, useState } from "react";
 import { HiHeart, HiTrash } from "react-icons/hi";
 import { toast } from "react-toastify";
 import { DialogConfrim } from "../DialogConfirm";
+import { HiBuildingStorefront, HiUserGroup } from "react-icons/hi2";
 
 export interface ProductCardProps extends HTMLAttributes<HTMLDivElement> {
   itemData: ItemSummary;
@@ -60,8 +61,27 @@ export const ProductCard = ({ itemData, ...props }: ProductCardProps) => {
           <p className="font-sans text-sm font-semibold lg:text-base xl:text-lg">
             {itemData.itemName}
           </p>
-          <p className="font-sans text-sm lg:text-base">
+          <p className="flex font-sans text-sm lg:text-base">
+            <HiBuildingStorefront
+              style={{
+                height: "1.5em",
+                width: "1.5em",
+                color: "#581C87",
+                paddingRight: "2px",
+              }}
+            />
             {itemData.merchantLevel}
+          </p>
+          <p className="flex font-sans text-sm lg:text-base">
+            <HiUserGroup
+              style={{
+                height: "1.5em",
+                width: "1.5em",
+                color: "#581C87",
+                paddingRight: "2px",
+              }}
+            />
+            {itemData.userLevel === "" ? "No Review" : itemData.userLevel}
           </p>
           <p className="font-sans text-sm lg:text-base">
             {itemData.itemCategory}
