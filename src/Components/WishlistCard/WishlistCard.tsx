@@ -29,15 +29,18 @@ export const WishlistCard = ({
       if (response?.status === 200 && response.data.byteLength !== 0) {
         const byteArray = new Uint8Array(response.data);
         const blobs = new Blob([byteArray], { type: "image/jpeg" });
-        const imgUrl = URL.createObjectURL(blobs);
-
+        setImage(URL.createObjectURL(blobs));
         setMerchantEncoded(encodeURIComponent(itemData.merchantInfo.username));
-        setImage(imgUrl);
       } else {
         setImage(undefined);
       }
     }
     yeah();
+    if (image) {
+      return () => {
+        URL.revokeObjectURL(image);
+      };
+    }
   }, []);
   return (
     <Link href={`/merchant/${merchantEncoded}/item/${itemData.itemId}`}>

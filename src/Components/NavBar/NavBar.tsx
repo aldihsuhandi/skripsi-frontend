@@ -70,7 +70,7 @@ export const NavBar = () => {
   };
 
   return (
-    <nav className="sticky top-0 h-fit w-full bg-white shadow-lg">
+    <nav className="sticky top-0 z-[9999] h-fit w-full bg-white shadow-lg">
       <div className="flex px-0 py-1 lg:px-2 lg:py-2">
         <Link href="/" className="self-center lg:self-center">
           <Image

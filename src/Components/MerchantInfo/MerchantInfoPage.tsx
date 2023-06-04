@@ -3,7 +3,7 @@ import React, { HTMLAttributes, useEffect, useState } from "react";
 import { Avatar } from "../Avatar";
 import { ImageDownload, ProcessImgBE } from "@/helper";
 import { HiStar } from "react-icons/hi";
-import { HiDevicePhoneMobile } from "react-icons/hi2";
+import { HiCheck, HiDevicePhoneMobile, HiXMark } from "react-icons/hi2";
 
 export interface MerchantInfoPageProps extends HTMLAttributes<HTMLDivElement> {
   data: UserSummary;
@@ -55,7 +55,7 @@ export const MerchantInfoPage = ({ data, ...props }: MerchantInfoPageProps) => {
                   }}
                 />
                 {/* msh placeholder */}
-                <span className="font-bold">4.6 / 5</span> <br />
+                <span className="font-bold">{data.review} / 5</span> <br />
               </div>
             </div>
           </div>
@@ -63,8 +63,26 @@ export const MerchantInfoPage = ({ data, ...props }: MerchantInfoPageProps) => {
           <div className="pt-2 pr-4">
             {/* Bikin bisa copy to clipboard phoneNumber-nya */}
             <p className="font-bold lg:text-center">Contact Info</p>
-            <div className="flex flex-row">
+            <div className="flex flex-row items-center">
               <HiDevicePhoneMobile size={20} /> {data.phoneNumber}
+            </div>
+            <div>
+              <div className="flex flex-row items-center lg:justify-center">
+                {data.canWhatsapp ? (
+                  <HiCheck size={20} />
+                ) : (
+                  <HiXMark size={20} />
+                )}
+                Whatsapp
+              </div>
+              <div className="flex flex-row items-center lg:justify-center">
+                {data.canTelegram ? (
+                  <HiCheck size={20} />
+                ) : (
+                  <HiXMark size={20} />
+                )}
+                Telegram
+              </div>
             </div>
           </div>
         </div>

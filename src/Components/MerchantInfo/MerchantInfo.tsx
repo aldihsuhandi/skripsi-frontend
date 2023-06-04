@@ -58,7 +58,7 @@ export const MerchantInfo = ({ data, ...props }: MerchantInfoProps) => {
                 }}
               />
               {/* msh placeholder */}
-              <span className="font-bold">4.6 / 5</span> <br />
+              <span className="font-bold">{data.review} / 5</span> <br />
             </div>
           </div>
         </div>

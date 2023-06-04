@@ -33,7 +33,7 @@ export const MerchantPageNavigation = ({
     },
     {
       name: "Reviews",
-      link: "",
+      link: `/merchant/${merchantEncoded}/reviews`,
     },
   ];
 
@@ -72,7 +72,17 @@ export const MerchantPageNavigation = ({
         return <ButtonAware link={data.link} name={data.name} />;
       })}
       {userData && userData.username === merchantName && (
-        <button>Update/Create Items</button>
+        // <button>Update/Create Items</button>
+        <>
+          <ButtonAware
+            link={`/merchant/${merchantEncoded}/create`}
+            name={"Create"}
+          />
+          <ButtonAware
+            link={`/merchant/${merchantEncoded}/update`}
+            name={"Update"}
+          />
+        </>
       )}
     </div>
   );

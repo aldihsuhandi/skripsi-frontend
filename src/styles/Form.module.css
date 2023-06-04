@@ -6,9 +6,19 @@
   position: relative;
 }
 
+.input_group_create_item {
+  @apply mb-2 flex rounded-xl border;
+  position: relative;
+}
+
 .input_text {
   /*---> Utk group text formnya (isi dlm formnya) <---*/
   @apply w-full rounded-xl border bg-bright-white py-2 px-2;
+  @apply border-none focus:outline-none;
+}
+
+.input_text_create_item {
+  @apply w-full rounded-xl border bg-white py-2 px-2;
   @apply border-none focus:outline-none;
 }
 
@@ -104,6 +114,19 @@
 .input_pass_update {
   @apply flex h-10 rounded-md border md:min-w-[300px];
   @apply static;
+}
+
+.label_create {
+  @apply mb-1 block text-sm font-medium;
+}
+
+/* .overlay:hover {
+  @apply absolute top-0 left-0 z-30 h-full w-full bg-white bg-opacity-50;
+} */
+
+.overlay {
+  @apply absolute top-0 left-0 z-30 h-full w-full bg-white opacity-0;
+  @apply hover:opacity-50;
 }
 
 /* .input_text_pass_update {
