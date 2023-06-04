@@ -2,42 +2,92 @@ import Head from "next/head";
 import { ProductCard } from "@/Components/ProductCard";
 import { TrendingIcon } from "@/Components/Icons/TrendingIcon";
 import { Color, COLOR_HEX_STRING } from "@/Components/Color";
-import { ItemSummary, ItemQueryResult } from "@/types";
+import {
+  ItemSummary,
+  ItemQueryResult,
+  CLIENT_ID,
+  CLIENT_SECRET,
+} from "@/types";
 import { useRouter } from "next/router";
-import { ItemFilterQuery, ItemQuery, urlFirstString } from "@/helper";
+import {
+  ItemFilterQuery,
+  ItemQuery,
+  parseNumberUndefined,
+  urlFirstString,
+} from "@/helper";
 import { useEffect, useState } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
+import {
+  CheckExistSessionLocal,
+  CheckSessionValid,
+} from "@/helper/SessionHelper";
+import { log } from "console";
+import { ItemRecommendation } from "@/helper/RecommendCalls";
+import { PostCall } from "@/helper/PostCall";
+import { ItemRecommendationResult } from "@/types/Item/ItemRecommendation";
 
 export default function Home() {
   const router = useRouter();
-  const { q, hob, itemCat, inLev } = router.query;
+  const { q, pMin, pMax, hob, itemCat, inLev } = router.query;
   const [qString, setQString] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [items, setItems] = useState<ItemQueryResult | undefined>();
+  const [totalItems, setTotalItems] = useState<ItemSummary[]>([]);
+  const [sessionId, setSessionId] = useState<String>();
+  const [recommend, setRecommend] = useState<ItemSummary[]>([]);
 
-  // const mockData: ItemSummary = {
-  //   itemId: "test",
-  //   itemName: "Test Name",
-  //   itemPrice: 69420,
-  //   itemDescription: "Test Desc",
-  //   itemQuantity: 10,
-  //   itemCategory: "Test Cat",
-  //   hobby: "Test Hob",
-  //   merchantInfo: {
-  //     email: "testEmail@mail.com",
-  //     phoneNumber: "085674566685",
-  //     username: "test",
-  //     role: "MERCHANT",
-  //     profilePicture: undefined,
-  //     gmtCreate: new Date("2023-04-24 12:17:53"),
-  //     gmtModified: new Date("2023-04-24 12:18:00"),
-  //   },
-  //   merchantLevel: "BEGINNER",
-  //   itemImages: [],
-  //   gmtCreate: new Date("2023-04-25 12:17:53"),
-  //   gmtModified: new Date("2023-04-25 12:18:00"),
-  // };
+  const [curPage, setCurPage] = useState(2);
 
-  //Idk wtf I'm doing awkokawkok
+  const infiniteScrollFetch = async () => {
+    const pMinNumber = parseNumberUndefined(urlFirstString(pMin));
+    const pMaxNumber = parseNumberUndefined(urlFirstString(pMax));
+
+    const items = await ItemFilterQuery({
+      pageNumber: curPage,
+      numberOfItem: 10,
+      filters: {
+        itemName: "",
+        pMin: pMinNumber,
+        pMax: pMaxNumber,
+        hob: "",
+        itemCat: "",
+        inLevMerchant: "",
+        inLevUser: "",
+      },
+    });
+
+    setCurPage(curPage + 1);
+    if (items && items.resultContext.success) {
+      setItems(items);
+      setTotalItems(totalItems.concat(items.items));
+    }
+  };
+
+  const recommendCall = async () => {
+    ItemRecommendation();
+  };
+
+  const Recommend = () => {
+    if (!sessionId) {
+      return <></>;
+    }
+
+    recommendCall();
+
+    return (
+      <div className="m-0 pb-4 lg:mx-auto lg:flex  lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
+        <div className="flex px-2 pt-3">
+          <p className="text-sm font-bold lg:text-lg"></p>
+          <TrendingIcon
+            htmlColor={COLOR_HEX_STRING[Color.BrightYellow]}
+            classNameIcon="h-7 w-7"
+          />
+          &ensp;Base on your activites
+        </div>
+      </div>
+    );
+  };
+
   useEffect(() => {
     const fetchingQueries = async () => {
       setQString(urlFirstString(q));
@@ -56,10 +106,15 @@ export default function Home() {
             inLevUser: "",
           },
         });
-        setIsLoading(false);
-        setItems(itemQueried);
+        if (itemQueried && itemQueried.resultContext.success) {
+          setIsLoading(false);
+          setItems(itemQueried);
+          setTotalItems(totalItems.concat(itemQueried.items));
+        }
       }
     };
+
+    setSessionId(CheckExistSessionLocal() ?? "");
 
     if (router.isReady) {
       renderResult();
@@ -75,28 +130,19 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
+        <Recommend />
         <div className="m-0 lg:mx-auto lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl ">
-          <div className="flex px-2 pt-3">
-            <p className="text-sm font-bold lg:text-lg">
-              Section Title, ini yang placeholder (Maybe jadiin component pisah
-              nanti idk)
-            </p>
-            <TrendingIcon
-              htmlColor={COLOR_HEX_STRING[Color.BrightYellow]}
-              classNameIcon="h-7 w-7"
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-4  py-2 px-2 lg:grid-cols-5 lg:py-4">
+          <div className="m-0 min-h-screen lg:mx-auto lg:flex lg:max-w-screen-lg  xl:max-w-screen-xl 2xl:max-w-screen-2xl">
             {isLoading ? (
               <>Loading Placeholder</>
-            ) : items?.resultContext.success ? (
+            ) : (
               <>
-                {items.items.map((data) => {
-                  return <ProductCard itemData={data} />;
+                {renderResult({
+                  items: items,
+                  totalItems: totalItems,
+                  fetchMore: infiniteScrollFetch,
                 })}
               </>
-            ) : (
-              <>Error! {items?.resultContext.resultMsg}</>
             )}
           </div>
         </div>
@@ -104,3 +150,60 @@ export default function Home() {
     </>
   );
 }
+
+const renderResult = ({
+  items,
+  totalItems,
+  fetchMore,
+}: {
+  items: ItemQueryResult | undefined;
+  totalItems: ItemSummary[];
+  fetchMore: () => void;
+}) => {
+  if (items) {
+    if (items.resultContext.success) {
+      if (totalItems.length !== 0) {
+        return (
+          <>
+            {RenderItems({
+              items: items,
+              totalItems: totalItems,
+              fetchMore: fetchMore,
+            })}
+          </>
+        );
+      } else {
+        return <>Result is Empty!</>;
+      }
+    } else {
+      <>An Error Occured!</>;
+    }
+  } else {
+    <>Encoutered a Problem</>;
+  }
+};
+
+const RenderItems = ({
+  items,
+  totalItems,
+  fetchMore,
+}: {
+  items: ItemQueryResult;
+  totalItems: ItemSummary[];
+  fetchMore: () => void;
+}) => {
+  return (
+    <InfiniteScroll
+      dataLength={totalItems.length}
+      next={fetchMore}
+      hasMore={items.pagingContext.hasNext}
+      loader={<h4 className="text-center">Loading...</h4>}
+    >
+      <div className="grid grid-cols-2 gap-4 py-2 px-2 lg:grid-cols-5 lg:py-4">
+        {totalItems.map((data) => (
+          <ProductCard itemData={data} />
+        ))}
+      </div>
+    </InfiniteScroll>
+  );
+};
