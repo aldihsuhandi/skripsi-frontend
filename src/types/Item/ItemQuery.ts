@@ -42,7 +42,7 @@ export interface PagingContext {
    * Kalo gk muat number, bigint
    */
   totalItem?: number;
-  totalPage?: number;
+  totalPage: number;
 }
 
 export interface ItemSummary {

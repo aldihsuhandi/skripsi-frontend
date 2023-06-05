@@ -19,7 +19,7 @@ export type ItemFilterBarProps = {
    * Run the setState given from Parent
    */
   setItemQueryResult: (replace_in_parent: ItemQueryResult) => void;
-  setTotalItemQueryResult: (
+  setTotalItemQueryResult?: (
     replace_total_items_in_parent: ItemSummary[]
   ) => void;
 };
@@ -218,7 +218,8 @@ export const ItemFilterBar = ({
         if (itemQueried) {
           if (itemQueried.resultContext.success) {
             setItemQueryResult(itemQueried);
-            setTotalItemQueryResult(itemQueried.items);
+            setTotalItemQueryResult &&
+              setTotalItemQueryResult(itemQueried.items);
 
             router.push({
               pathname: `/${page}`,
