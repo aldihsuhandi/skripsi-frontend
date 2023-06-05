@@ -301,15 +301,22 @@ export default function MerchantItem() {
                 </div>
                 {/* Update Item Button */}
                 {userData?.username === itemData.item.merchantInfo.username && (
-                  <div className="px-4 pt-1 pb-2">
-                    <Link
-                      href={`/merchant/${merchantEncoded}/update/${itemData.item.itemId}`}
-                    >
-                      <button className="w-full rounded bg-normal-green py-2 px-4 font-bold text-white hover:bg-blue-700">
-                        Update Item
+                  <>
+                    <div className="px-4 pt-1 pb-2">
+                      <Link
+                        href={`/merchant/${merchantEncoded}/update/${itemData.item.itemId}`}
+                      >
+                        <button className="w-full rounded bg-normal-green py-2 px-4 font-bold text-white hover:bg-blue-700">
+                          Update Item
+                        </button>
+                      </Link>
+                    </div>
+                    <div className="px-4 pt-1 pb-2">
+                      <button className="w-full rounded bg-normal-red py-2 px-4 font-bold text-white hover:bg-blue-700">
+                        Delete Item
                       </button>
-                    </Link>
-                  </div>
+                    </div>
+                  </>
                 )}
                 {/* Buttons, Wishlist, Chat, Forum, Share */}
                 <div className="flex flex-row justify-evenly pb-2">
