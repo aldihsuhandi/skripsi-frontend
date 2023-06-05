@@ -16,6 +16,7 @@ import {
 
 import { HiMail } from "react-icons/hi";
 import { MerchantApplyCall } from "@/helper/MerchantApplyCall";
+import { useRouter } from "next/router";
 
 export interface UserMenuProps {
   userData: UserSummary;
@@ -28,6 +29,7 @@ export const UserMenu = ({
   onLogoutClick,
   children,
 }: UserMenuProps) => {
+  const router = useRouter();
   const [image, setImage] = useState<string | undefined>(undefined);
   const ref = useRef<HTMLDivElement>(null);
   const [merchantEncoded, setMerchantEncoded] = useState<string | undefined>();
@@ -116,7 +118,10 @@ export const UserMenu = ({
                   ) : (
                     <button
                       onClick={async () => {
-                        await MerchantApplyCall();
+                        const re = await MerchantApplyCall();
+                        if (re?.resultContext.success) {
+                          router.reload();
+                        }
                       }}
                     >
                       <span className="px-2">Be a Merchant</span>

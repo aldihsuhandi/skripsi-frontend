@@ -24,13 +24,13 @@ export const MerchantApplyCall = async () => {
       config: config,
       body: {},
     });
-    console.log(result);
     if (result?.resultContext.success) {
       return result;
     } else {
       toast.error(
         // "An Error Occured when applying to merchant, please try again.\n" +
-        result?.resultContext.resultMsg,
+        result?.resultContext.resultMsg ??
+          "Something went wrong when applying to merchant",
         {
           position: "top-center",
           autoClose: 5000,
