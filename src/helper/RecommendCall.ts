@@ -6,7 +6,7 @@ import { ItemRecommendationResult } from "@/types/Item/ItemRecommendation";
 import { PostCall } from "./PostCall";
 import { CheckExistSessionLocal, CheckSessionValid } from "./SessionHelper";
 
-export const ItemRecommendation = async () => {
+export const RecommendCall = async () => {
     const headers = {
       clientId: CLIENT_ID,
       clientSecret: CLIENT_SECRET,
@@ -15,7 +15,6 @@ export const ItemRecommendation = async () => {
     };
 
     const session = CheckExistSessionLocal();
-    console.log("session inside recommend calls: " + session)
     if (session && (await CheckSessionValid(session))) {
       Object.assign(headers, { sesisonId: session });
     }
@@ -29,5 +28,5 @@ export const ItemRecommendation = async () => {
       body: {},
     });
 
-    console.log(result);
+    return result;
 }

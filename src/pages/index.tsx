@@ -1,30 +1,18 @@
-import Head from "next/head";
-import { ProductCard } from "@/Components/ProductCard";
-import { TrendingIcon } from "@/Components/Icons/TrendingIcon";
 import { Color, COLOR_HEX_STRING } from "@/Components/Color";
-import {
-  ItemSummary,
-  ItemQueryResult,
-  CLIENT_ID,
-  CLIENT_SECRET,
-} from "@/types";
-import { useRouter } from "next/router";
+import { TrendingIcon } from "@/Components/Icons/TrendingIcon";
+import { ProductCard } from "@/Components/ProductCard";
 import {
   ItemFilterQuery,
-  ItemQuery,
   parseNumberUndefined,
   urlFirstString,
 } from "@/helper";
+import { RecommendCall } from "@/helper/RecommendCall";
+import { CheckExistSessionLocal } from "@/helper/SessionHelper";
+import { ItemQueryResult, ItemSummary } from "@/types";
+import Head from "next/head";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import {
-  CheckExistSessionLocal,
-  CheckSessionValid,
-} from "@/helper/SessionHelper";
-import { log } from "console";
-import { ItemRecommendation } from "@/helper/RecommendCalls";
-import { PostCall } from "@/helper/PostCall";
-import { ItemRecommendationResult } from "@/types/Item/ItemRecommendation";
 
 export default function Home() {
   const router = useRouter();
@@ -63,8 +51,11 @@ export default function Home() {
     }
   };
 
-  const recommendCall = async () => {
-    ItemRecommendation();
+  const RecommendationCall = async () => {
+    const result = await RecommendCall();
+    if (result && result.resultContext.success) {
+      setRecommend(result.items);
+    }
   };
 
   const Recommend = () => {
@@ -72,7 +63,10 @@ export default function Home() {
       return <></>;
     }
 
-    recommendCall();
+    console.log("before recommendation call");
+    // RecommendationCall();
+
+    console.log(recommend);
 
     return (
       <div className="m-0 pb-4 lg:mx-auto lg:flex  lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
