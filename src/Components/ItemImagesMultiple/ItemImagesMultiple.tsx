@@ -25,7 +25,7 @@ export const ItemImagesMultiple = ({ imageIds }: ItemImagesMultipleProps) => {
           alt={`item-image-${imageIndex}`}
           height="100%"
           width="100%"
-          className="h-full w-full self-center rounded"
+          className="h-full w-full self-center rounded object-scale-down"
         />
       </div>
 
@@ -46,7 +46,7 @@ export const ItemImagesMultiple = ({ imageIds }: ItemImagesMultipleProps) => {
                 alt={`item-image-${index}`}
                 height="100%"
                 width="100%"
-                className="h-full w-full self-center rounded"
+                className="h-full w-full self-center rounded object-scale-down"
               />
             </div>
           );

@@ -274,7 +274,7 @@ export default function MerchantPage() {
                                   altMessage={`${file.name} - ${index}`}
                                   width={80}
                                   height={80}
-                                  className="h-full w-full"
+                                  className="h-full w-full object-scale-down"
                                 />
                                 <div
                                   className={styles.overlay}

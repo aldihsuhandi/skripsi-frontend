@@ -355,7 +355,7 @@ export default function UpdateItem() {
                                         alt={`currentImage-${data}-${index}`}
                                         height="100%"
                                         width="100%"
-                                        className="h-full w-full self-center rounded"
+                                        className="h-full w-full self-center rounded object-scale-down"
                                       />
 
                                       <div
@@ -396,7 +396,7 @@ export default function UpdateItem() {
                                       altMessage={`${file.name} - ${index}`}
                                       width={80}
                                       height={80}
-                                      className="h-full w-full"
+                                      className="h-full w-full object-scale-down"
                                     />
                                     <div
                                       className={styles.overlay}
@@ -474,7 +474,7 @@ export default function UpdateItem() {
                               alt={`updadedImage-${data}`}
                               height="100%"
                               width="100%"
-                              className="h-full w-full self-center rounded"
+                              className="h-full w-full self-center rounded object-scale-down"
                             />
                           </div>
                         );
@@ -490,7 +490,7 @@ export default function UpdateItem() {
                               altMessage={`updadedImage-${data.name}`}
                               width={80}
                               height={80}
-                              className="h-full w-full"
+                              className="h-full w-full object-scale-down"
                             />
                           </div>
                         );
