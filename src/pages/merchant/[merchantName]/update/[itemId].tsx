@@ -65,7 +65,7 @@ const UpdateSchema = Yup.object().shape({
       }
     )
     .test("arrayLenght", "Maximum is 10 images", (value) => {
-      if (value && value.length < 10) {
+      if (value && value.length <= 10) {
         return true;
       } else {
         return false;
@@ -437,7 +437,7 @@ export default function UpdateItem() {
                         ) => {
                           if (
                             values.addedImage &&
-                            values.addedImage.length < 10
+                            values.addedImage.length <= 10
                           ) {
                             const currentImage = event.target.files;
                             const beforeImage = values.addedImage;

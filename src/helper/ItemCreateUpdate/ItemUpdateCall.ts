@@ -34,7 +34,7 @@ export const ItemUpdate = async ({
         itemUpdateContext: itemUpdateContext,
       },
     });
-    console.log(result);
+
     if (result?.resultContext.success) {
       return result;
     } else {
