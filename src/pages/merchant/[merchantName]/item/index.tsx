@@ -176,7 +176,7 @@ export default function MerchantItems() {
             <>
               <MerchantInfoPage data={merchantData} />
               <MerchantPageNavigation merchantName={merchantData.username} />
-              <p className="px-3 pt-2 text-sm font-bold lg:text-lg">Wishlist</p>
+              <p className="px-3 pt-2 text-sm font-bold lg:text-lg">Products</p>
               <form className="px-3" onSubmit={handleEnter}>
                 <SearchBar
                   onChange={handleChange}
