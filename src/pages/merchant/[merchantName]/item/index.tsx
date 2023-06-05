@@ -51,12 +51,12 @@ export default function MerchantItems() {
   const [merchantData, setMerchantData] = useState<UserSummary | undefined>(
     undefined
   );
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [merchantEncoded, setMerchantEncoded] = useState<string | undefined>();
 
   async function getMerchantInfo() {
     const checkMerchantName = urlFirstString(merchantName);
-    if (checkMerchantName) {
+    if (checkMerchantName && !merchantData) {
       const merchantInfo = await UserQuery({
         key: checkMerchantName,
         identifier: "username",
@@ -83,13 +83,12 @@ export default function MerchantItems() {
     const pMaxNumber = parseNumberUndefined(urlFirstString(pMax));
 
     setIsLoading(true);
+
     await getMerchantInfo();
+
     await fetchQueriesName();
     await fetchQueriesPage();
-    if (
-      urlFirstString(qMerchant) === qMerchantString
-      // && urlFirstString(page) == page
-    ) {
+    if (urlFirstString(qMerchant) === qMerchantString && merchantData) {
       const itemQueried = await ItemFilterQuery({
         pageNumber: currentPage + 1,
         numberOfItem: 10, // bisa di ganti2 ntar tpi later
@@ -101,7 +100,7 @@ export default function MerchantItems() {
           itemCat: urlFirstString(itemCat),
           inLevMerchant: urlFirstString(inLevMerchant),
           inLevUser: urlFirstString(inLevUser),
-          merchantEmail: merchantData?.email,
+          merchantEmail: merchantData.email,
         },
       });
 
@@ -131,7 +130,14 @@ export default function MerchantItems() {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [router.isReady, merchantName, qMerchant, qMerchantString, page]);
+  }, [
+    router.isReady,
+    merchantName,
+    merchantData,
+    qMerchant,
+    qMerchantString,
+    page,
+  ]);
 
   function UpdateDiChild(replace_in_parent: ItemQueryResult) {
     setItems(replace_in_parent);
