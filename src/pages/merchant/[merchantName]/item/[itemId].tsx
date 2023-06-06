@@ -6,6 +6,7 @@ import { ItemImagesMultiple } from "@/Components/ItemImagesMultiple";
 import { MerchantInfo } from "@/Components/MerchantInfo";
 import {
   CartAdd,
+  ItemDelete,
   SessionInfoCall,
   UserQuery,
   WishlistAdd,
@@ -312,9 +313,28 @@ export default function MerchantItem() {
                       </Link>
                     </div>
                     <div className="px-4 pt-1 pb-2">
-                      <button className="w-full rounded bg-normal-red py-2 px-4 font-bold text-white hover:bg-blue-700">
-                        Delete Item
-                      </button>
+                      <DialogConfrim
+                        trigger={
+                          <button
+                            className="w-full rounded bg-normal-red py-2 px-4 font-bold text-white hover:bg-blue-700"
+                            type="button"
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            Delete Item
+                          </button>
+                        }
+                        title="Are you sure you want to delete this item?"
+                        onConfirm={async () => {
+                          const wishlistResult = await ItemDelete({
+                            itemId: itemData.item.itemId,
+                          });
+                          if (wishlistResult) {
+                            if (wishlistResult.resultContext.success) {
+                              router.push(`/merchant/${merchantEncoded}`);
+                            }
+                          }
+                        }}
+                      />
                     </div>
                   </>
                 )}
