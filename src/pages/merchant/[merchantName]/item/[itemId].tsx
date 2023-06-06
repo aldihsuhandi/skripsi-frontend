@@ -401,18 +401,6 @@ export default function MerchantItem() {
                     </button>
                   )}
                   <div className="rounded bg-normal-blue px-1">
-                    <ForumIcon
-                      classNameIcon="h-7 w-7"
-                      htmlColor={COLOR_HEX_STRING[Color.BrightWhite]}
-                    />
-                  </div>
-                  <div className="rounded bg-normal-blue px-1">
-                    <ChatIcon
-                      classNameIcon="h-7 w-7"
-                      htmlColor={COLOR_HEX_STRING[Color.BrightWhite]}
-                    />
-                  </div>
-                  <div className="rounded bg-normal-blue px-1">
                     <HiShare
                       className="text-white"
                       style={{ height: "1.7em", width: "1.7em" }}
