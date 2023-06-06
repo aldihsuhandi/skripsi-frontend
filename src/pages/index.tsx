@@ -1,17 +1,15 @@
-import { Color, COLOR_HEX_STRING } from "@/Components/Color";
-import { TrendingIcon } from "@/Components/Icons/TrendingIcon";
 import { ProductCard } from "@/Components/ProductCard";
+import { Recommend } from "@/Components/Recommendation/Recommend";
 import {
   ItemFilterQuery,
   parseNumberUndefined,
   urlFirstString,
 } from "@/helper";
-import { RecommendCall } from "@/helper/RecommendCall";
-import { CheckExistSessionLocal } from "@/helper/SessionHelper";
 import { ItemQueryResult, ItemSummary } from "@/types";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { HiOutlineShoppingBag } from "react-icons/hi2";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 export default function Home() {
@@ -21,8 +19,6 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [items, setItems] = useState<ItemQueryResult | undefined>();
   const [totalItems, setTotalItems] = useState<ItemSummary[]>([]);
-  const [sessionId, setSessionId] = useState<String>();
-  const [recommend, setRecommend] = useState<ItemSummary[]>([]);
 
   const [curPage, setCurPage] = useState(2);
 
@@ -51,37 +47,6 @@ export default function Home() {
     }
   };
 
-  const RecommendationCall = async () => {
-    const result = await RecommendCall();
-    if (result && result.resultContext.success) {
-      setRecommend(result.items);
-    }
-  };
-
-  const Recommend = () => {
-    if (!sessionId) {
-      return <></>;
-    }
-
-    console.log("before recommendation call");
-    // RecommendationCall();
-
-    console.log(recommend);
-
-    return (
-      <div className="m-0 pb-4 lg:mx-auto lg:flex  lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
-        <div className="flex px-2 pt-3">
-          <p className="text-sm font-bold lg:text-lg"></p>
-          <TrendingIcon
-            htmlColor={COLOR_HEX_STRING[Color.BrightYellow]}
-            classNameIcon="h-7 w-7"
-          />
-          &ensp;Base on your activites
-        </div>
-      </div>
-    );
-  };
-
   useEffect(() => {
     const fetchingQueries = async () => {
       setQString(urlFirstString(q));
@@ -108,8 +73,6 @@ export default function Home() {
       }
     };
 
-    setSessionId(CheckExistSessionLocal() ?? "");
-
     if (router.isReady) {
       renderResult();
     }
@@ -125,7 +88,12 @@ export default function Home() {
       </Head>
       <main>
         <Recommend />
+
         <div className="m-0 lg:mx-auto lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl ">
+          <p className="flex flex-row text-sm font-bold lg:text-lg">
+            <HiOutlineShoppingBag className="h-7 w-7" />
+            &ensp;Marketplace
+          </p>
           <div className="m-0 min-h-screen lg:mx-auto lg:flex lg:max-w-screen-lg  xl:max-w-screen-xl 2xl:max-w-screen-2xl">
             {isLoading ? (
               <>Loading Placeholder</>
