@@ -18,12 +18,21 @@ export const ImageUpload = async (image: ImageUploadRequest) => {
       }
     );
     return response;
-  } catch (error) {
-    toast.error("The System is busy, please try again later", {
-      position: "top-center",
-      autoClose: 10000,
-      hideProgressBar: false,
-      theme: "colored",
-    });
+  } catch (error: any) {
+    if (error.response.status === 500) {
+      toast.error("The Server encountered an unexpected condition", {
+        position: "top-center",
+        autoClose: 10000,
+        hideProgressBar: false,
+        theme: "colored",
+      });
+    } else {
+      toast.error("The System is busy, please try again later", {
+        position: "top-center",
+        autoClose: 10000,
+        hideProgressBar: false,
+        theme: "colored",
+      });
+    }
   }
 };

@@ -229,29 +229,38 @@ export default function MerchantPage() {
               validationSchema={CreateSchema}
               onSubmit={async (values) => {
                 // Upload Images
-                const imageIds: string[] =
+                const imageIds: string[] | undefined =
                   await ReturnArrayImageIdFromArrayFile(values.itemImages);
 
-                const resultFromCreate = await ItemCreate({
-                  itemName: values.itemName,
-                  itemPrice: values.itemPrice,
-                  itemDescription: values.itemDescription,
-                  itemQuantity: values.itemQuantity,
-                  categoryName: values.categoryName,
-                  hobbyName: values.hobbyName,
-                  merchantInterestLevel: values.merchantInterestLevel,
-                  itemImages: imageIds,
-                });
-
-                if (
-                  resultFromCreate &&
-                  resultFromCreate.resultContext.success
-                ) {
-                  router.push({
-                    pathname: `/merchant/${merchantData?.username}/item/${resultFromCreate.itemId}`,
+                if (imageIds) {
+                  const resultFromCreate = await ItemCreate({
+                    itemName: values.itemName,
+                    itemPrice: values.itemPrice,
+                    itemDescription: values.itemDescription,
+                    itemQuantity: values.itemQuantity,
+                    categoryName: values.categoryName,
+                    hobbyName: values.hobbyName,
+                    merchantInterestLevel: values.merchantInterestLevel,
+                    itemImages: imageIds,
                   });
-                } else {
-                  setShowError(resultFromCreate?.resultContext.resultMsg);
+
+                  if (
+                    resultFromCreate &&
+                    resultFromCreate.resultContext.success
+                  ) {
+                    router.push({
+                      pathname: `/merchant/${merchantData?.username}/item/${resultFromCreate.itemId}`,
+                    });
+                  } else {
+                    setShowError(resultFromCreate?.resultContext.resultMsg);
+                  }
+                } else if (!imageIds) {
+                  toast.error("A problem occured when uploading the image", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    theme: "colored",
+                  });
                 }
               }}
             >

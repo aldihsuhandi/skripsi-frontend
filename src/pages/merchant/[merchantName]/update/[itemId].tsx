@@ -247,9 +247,18 @@ export default function UpdateItem() {
               validationSchema={UpdateSchema}
               enableReinitialize
               onSubmit={async (values) => {
-                const imageIds: string[] | undefined = values.addedImage
-                  ? await ReturnArrayImageIdFromArrayFile(values.addedImage)
-                  : undefined;
+                let isUploadFine: boolean = true;
+                let imageIds: string[] | undefined;
+                if (values.addedImage) {
+                  imageIds = await ReturnArrayImageIdFromArrayFile(
+                    values.addedImage
+                  );
+                }
+
+                // Kalau values.added itu ada, berarti harusnya imageIds nggak undefined
+                if (values.addedImage && !imageIds) {
+                  isUploadFine = false;
+                }
 
                 const currentImageLen = curImages?.length ?? 0;
                 const addedImageLen = imageIds?.length ?? 0;
@@ -259,6 +268,13 @@ export default function UpdateItem() {
                   setShowError("An Item needs at least 1 Image!");
                 } else if (totalImage > 10) {
                   setShowError("An Item has a maximun of 10 Images");
+                } else if (isUploadFine === false) {
+                  toast.error("A problem occured when uploading the image", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    theme: "colored",
+                  });
                 } else if (totalImage > 0 && totalImage <= 10) {
                   const resultFromUpdate = await ItemUpdate({
                     itemId: legitItemId,
