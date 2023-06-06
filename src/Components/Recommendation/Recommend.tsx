@@ -25,7 +25,7 @@ export const Recommend = () => {
     recommendationCall();
   }, []);
 
-  if (session) {
+  if (session && recommend.length != 0) {
     return (
       <div className="m-0 pb-4 lg:mx-auto lg:flex  lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
         <div className="flex flex-col px-2 pt-3">
