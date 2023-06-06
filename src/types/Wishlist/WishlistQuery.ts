@@ -58,6 +58,7 @@ export interface WishlistSummary {
   hobby: string;
   merchantInfo: UserSummary;
   merchantLevel: string;
+  userLevel: string;
   itemImages: string[];
   inWishlist: boolean;
   gmtCreate: Date;

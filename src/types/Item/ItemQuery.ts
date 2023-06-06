@@ -42,7 +42,7 @@ export interface PagingContext {
    * Kalo gk muat number, bigint
    */
   totalItem?: number;
-  totalPage?: number;
+  totalPage: number;
 }
 
 export interface ItemSummary {
@@ -59,8 +59,10 @@ export interface ItemSummary {
   hobby: string;
   merchantInfo: UserSummary;
   merchantLevel: string;
+  userLevel: string;
   itemImages: string[];
   inWishlist: boolean;
+  review: number;
   gmtCreate: Date;
   gmtModified: Date;
 }

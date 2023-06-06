@@ -14,12 +14,14 @@ import { HiMail } from "react-icons/hi";
 import { StringToDateAndBack } from "@/helper";
 import Link from "next/link";
 import { MerchantApplyCall } from "@/helper/MerchantApplyCall";
+import { useRouter } from "next/router";
 
 export interface UserInfoProps extends HTMLAttributes<HTMLDivElement> {
   userData: UserSummary;
 }
 
 export const UserInfo = ({ userData, ...props }: UserInfoProps) => {
+  const router = useRouter();
   const [image, setImage] = useState<string | undefined>(undefined);
   useEffect(() => {
     async function getUserImage() {
@@ -60,7 +62,10 @@ export const UserInfo = ({ userData, ...props }: UserInfoProps) => {
               <button
                 className="rounded-md border border-red-500 bg-white p-2 text-red-500 shadow-sm hover:bg-red-500 hover:text-white hover:shadow-md"
                 onClick={async () => {
-                  await MerchantApplyCall();
+                  const re = await MerchantApplyCall();
+                  if (re?.resultContext.success) {
+                    router.reload();
+                  }
                 }}
                 disabled={userData.role === "MERCHANT"}
               >

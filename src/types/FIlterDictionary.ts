@@ -6,7 +6,12 @@ import { ResultContext } from "./ResultContext";
  *  clientSecret
  */
 
-export type dictionaryKey = "INTEREST_LEVEL" | "CATEGORY" | "HOBBY";
+export type dictionaryKey =
+  | "INTEREST_LEVEL"
+  | "CATEGORY"
+  | "HOBBY"
+  | "ITEM_SORTING"
+  | "SORTING_TYPE";
 
 export interface FilterDictionaryRequestBody {
   dictionaryKey: dictionaryKey;

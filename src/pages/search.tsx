@@ -19,8 +19,17 @@ export default function Search() {
   // Uat Dropwdown filter klo kecil
   const [isOpen, setIsOpen] = useState(false);
 
-  const { q, pMin, pMax, pSort, hob, itemCat, inLevMerchant, inLevUser } =
-    router.query;
+  const {
+    q,
+    pMin,
+    pMax,
+    sortType,
+    itemSort,
+    hob,
+    itemCat,
+    inLevMerchant,
+    inLevUser,
+  } = router.query;
   const pageTitle = `Search ${urlFirstString(q) ?? ""}`;
   const [qString, setQString] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -45,6 +54,8 @@ export default function Search() {
       await fetchQueriesName();
       if (urlFirstString(q) === qString) {
         const itemQueried = await ItemFilterQuery({
+          sorting: urlFirstString(itemSort),
+          sortingType: urlFirstString(sortType),
           filters: {
             itemName: qString || "",
             pMin: pMinNumber,
@@ -101,6 +112,8 @@ export default function Search() {
     const infiniteItemFetchMore = await ItemFilterQuery({
       pageNumber: curPage,
       numberOfItem: 10,
+      sorting: urlFirstString(itemSort),
+      sortingType: urlFirstString(sortType),
       filters: {
         itemName: qString || "",
         pMin: pMinNumber,

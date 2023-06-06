@@ -31,6 +31,7 @@ export interface UserSummary {
   profilePicture?: string; //imageId
   gender: string;
   dateOfBirth: string;
+  review: number;
   location?: Location;
   gmtCreate: Date;
   gmtModified: Date;
