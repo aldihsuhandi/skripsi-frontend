@@ -132,7 +132,7 @@ export const UserMenu = ({
               <DropdownMenu.Item className="rounded-md p-2 hover:border hover:shadow-md">
                 <Link href="/wishlist" className="flex flex-row items-center">
                   <HiHeart size={15} />
-                  <span className="px-2">Wishlist (WIP)</span>
+                  <span className="px-2">Wishlist</span>
                 </Link>
               </DropdownMenu.Item>
               <DropdownMenu.Item className="rounded-md p-2 hover:border hover:shadow-md">
