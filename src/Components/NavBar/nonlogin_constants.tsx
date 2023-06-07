@@ -18,15 +18,15 @@ export const NonLoginHeaderNav: NonLoginHeaderProps[] = [
       />
     ),
   },
-  {
-    href: "/Forum",
-    icon: (
-      <ForumIcon
-        htmlColor={COLOR_HEX_STRING[Color.NormalBlue]}
-        classNameIcon="h-7 w-7"
-      />
-    ),
-  },
+  // {
+  //   href: "/Forum",
+  //   icon: (
+  //     <ForumIcon
+  //       htmlColor={COLOR_HEX_STRING[Color.NormalBlue]}
+  //       classNameIcon="h-7 w-7"
+  //     />
+  //   ),
+  // },
   // {
   //   href: "/Chat",
   //   icon: (

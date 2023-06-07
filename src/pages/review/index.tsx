@@ -14,7 +14,7 @@ export default function Review() {
       </Head>
       <main>
         <div className="mx-auto p-4">
-          <div className="mx-auto flex min-h-screen min-w-fit max-w-4xl items-center rounded-lg bg-white shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]"></div>
+          <div className="mx-auto flex min-h-screen min-w-fit max-w-4xl rounded-lg bg-white shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]"></div>
         </div>
       </main>
     </>
