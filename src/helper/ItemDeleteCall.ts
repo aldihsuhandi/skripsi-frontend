@@ -1,11 +1,15 @@
-import { CLIENT_ID, CLIENT_SECRET } from "@/types";
-import { MerchantApplyResult } from "@/types/User";
+import {
+  CLIENT_ID,
+  CLIENT_SECRET,
+  ItemDeleteRequest,
+  ItemDeleteResult,
+  Session_Local_Key,
+} from "@/types";
 import { toast } from "react-toastify";
 import { PostCall } from "./PostCall";
-import { CheckExistSessionLocal } from "./SessionHelper";
 
-export const MerchantApplyCall = async () => {
-  const sessionString = CheckExistSessionLocal();
+export const ItemDelete = async (itemId: ItemDeleteRequest) => {
+  const sessionString = localStorage.getItem(Session_Local_Key);
   if (sessionString) {
     const headers = {
       clientId: CLIENT_ID,
@@ -19,28 +23,27 @@ export const MerchantApplyCall = async () => {
       headers: headers,
     };
 
-    const result = await PostCall<MerchantApplyResult>({
-      url: "http://localhost:8080/user/merchant/apply",
+    const result = await PostCall<ItemDeleteResult>({
+      url: "http://localhost:8080/item/delete",
       config: config,
-      body: {},
+      body: itemId,
     });
+
     if (result?.resultContext.success) {
       return result;
     } else {
       toast.error(
-        // "An Error Occured when applying to merchant, please try again.\n" +
-        result?.resultContext.resultMsg ??
-          "Something went wrong when applying to merchant",
+        "An Error Occured when deleting this item's data, please try again.",
         {
           position: "top-center",
-          autoClose: 5000,
+          autoClose: 10000,
           hideProgressBar: false,
           theme: "colored",
         }
       );
     }
-    return result;
   } else {
+    // Harusnya gk pernah bisa ke trigger
     toast.error("You need to be logged in to apply!", {
       position: "top-center",
       autoClose: 5000,

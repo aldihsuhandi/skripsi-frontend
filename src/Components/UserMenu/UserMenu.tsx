@@ -16,6 +16,7 @@ import {
 
 import { HiMail, HiClipboardList } from "react-icons/hi";
 import { MerchantApplyCall } from "@/helper/MerchantApplyCall";
+import { useRouter } from "next/router";
 
 export interface UserMenuProps {
   userData: UserSummary;
@@ -28,9 +29,10 @@ export const UserMenu = ({
   onLogoutClick,
   children,
 }: UserMenuProps) => {
+  const router = useRouter();
   const [image, setImage] = useState<string | undefined>(undefined);
   const ref = useRef<HTMLDivElement>(null);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [merchantEncoded, setMerchantEncoded] = useState<string | undefined>();
   useEffect(() => {
     async function ProcessImage() {
       if (userData.profilePicture) {
@@ -47,10 +49,11 @@ export const UserMenu = ({
       }
     }
     ProcessImage();
+    setMerchantEncoded(encodeURIComponent(userData.username));
   }, [userData.profilePicture]);
 
   return (
-    <div className="relative flex">
+    <div className="relative  flex">
       <DropdownMenu.Root>
         <DropdownMenu.Trigger asChild>
           <div
@@ -63,7 +66,7 @@ export const UserMenu = ({
         <DropdownMenu.Portal>
           <DropdownMenu.Content
             // className="absolute right-2 top-10 flex w-52 flex-col rounded-md border border-gray-600 bg-white p-2 py-2"
-            className="mr-5 min-w-[380px] rounded-md border-gray-600 bg-white p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform]"
+            className="z-[10000] mr-5 min-w-[380px] rounded-md border-gray-600 bg-white p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform]"
             // ref={ref}
             side="bottom"
             sideOffset={5}
@@ -96,22 +99,36 @@ export const UserMenu = ({
                 </Link>
               </DropdownMenu.Item>
             </DropdownMenu.Group>
-            {/* <DropdownMenu.Item className="">{children}</DropdownMenu.Item> */}
-            <DropdownMenu.Group className="flex w-1/2 flex-col p-1">
-              {userData.role !== "MERCHANT" && (
-                <DropdownMenu.Item className="rounded-md p-2 hover:border hover:shadow-md">
-                  <Link href="#" className="flex flex-row items-center">
-                    <HiBuildingStorefront size={15} />
+
+            <DropdownMenu.Group className="flex w-full flex-col p-1">
+              <DropdownMenu.Item className="rounded-md p-2 hover:border hover:shadow-md">
+                <Link
+                  href={
+                    userData.role === "MERCHANT"
+                      ? `/merchant/${merchantEncoded}`
+                      : "#"
+                  }
+                  className="flex flex-row items-center"
+                >
+                  <HiBuildingStorefront size={15} />
+                  {userData.role === "MERCHANT" ? (
+                    <button>
+                      <span className="px-2">Your Merchant Page</span>
+                    </button>
+                  ) : (
                     <button
                       onClick={async () => {
-                        await MerchantApplyCall();
+                        const re = await MerchantApplyCall();
+                        if (re?.resultContext.success) {
+                          router.reload();
+                        }
                       }}
                     >
                       <span className="px-2">Be a Merchant</span>
                     </button>
-                  </Link>
-                </DropdownMenu.Item>
-              )}
+                  )}
+                </Link>
+              </DropdownMenu.Item>
               <DropdownMenu.Item className="rounded-md p-2 hover:border hover:shadow-md">
                 <Link href="/wishlist" className="flex flex-row items-center">
                   <HiHeart size={15} />

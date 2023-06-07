@@ -1,10 +1,17 @@
-import { CLIENT_ID, CLIENT_SECRET } from "@/types";
-import { MerchantApplyResult } from "@/types/User";
+import {
+  CLIENT_ID,
+  CLIENT_SECRET,
+  ItemUpdateRequest,
+  ItemUpdateResult,
+} from "@/types";
 import { toast } from "react-toastify";
-import { PostCall } from "./PostCall";
-import { CheckExistSessionLocal } from "./SessionHelper";
+import { PostCall } from "../PostCall";
+import { CheckExistSessionLocal } from "../SessionHelper";
 
-export const MerchantApplyCall = async () => {
+export const ItemUpdate = async ({
+  itemId,
+  itemUpdateContext,
+}: ItemUpdateRequest) => {
   const sessionString = CheckExistSessionLocal();
   if (sessionString) {
     const headers = {
@@ -19,18 +26,20 @@ export const MerchantApplyCall = async () => {
       headers: headers,
     };
 
-    const result = await PostCall<MerchantApplyResult>({
-      url: "http://localhost:8080/user/merchant/apply",
+    const result = await PostCall<ItemUpdateResult>({
+      url: "http://localhost:8080/item/update",
       config: config,
-      body: {},
+      body: {
+        itemId: itemId,
+        itemUpdateContext: itemUpdateContext,
+      },
     });
+
     if (result?.resultContext.success) {
       return result;
     } else {
       toast.error(
-        // "An Error Occured when applying to merchant, please try again.\n" +
-        result?.resultContext.resultMsg ??
-          "Something went wrong when applying to merchant",
+        "An Error Occured when updating the item, please try again.",
         {
           position: "top-center",
           autoClose: 5000,
@@ -39,9 +48,8 @@ export const MerchantApplyCall = async () => {
         }
       );
     }
-    return result;
   } else {
-    toast.error("You need to be logged in to apply!", {
+    toast.error("You need to be logged in to update items!", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,

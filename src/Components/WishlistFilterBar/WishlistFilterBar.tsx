@@ -4,7 +4,10 @@ import React, { useEffect, useState } from "react";
 import { WishlistQuery, parseNumberUndefined, urlFirstString } from "@/helper";
 import { SessionValidate } from "@/helper/SessionHelper";
 import { WishlistQueryResult } from "@/types";
-import { ItemFilterFormValues } from "@/types/ItemFilter";
+import {
+  ItemFilterFormValues,
+  WishlistFilterFormValues,
+} from "@/types/ItemFilter";
 import { Field, Form, Formik } from "formik";
 import { FilterDictionary } from "@/helper/FilterDictionary/FIlterDictionaryCall";
 import { toast } from "react-toastify";
@@ -26,17 +29,16 @@ export const WishlistFilterBar = ({
   const router = useRouter();
   // uat trigger form outside form(ik), dipake di useEffect
   // Soalnya klo user refresh ilang, perlu query lagi
-  const { q, pMin, pMax, pSort, hob, itemCat, inLevMerchant, inLevUser } =
+  const { q, pMin, pMax, hob, itemCat, inLevMerchant, inLevUser } =
     router.query;
 
   const [hobbyList, setHobbyList] = useState<string[]>([]);
   const [categoryList, setCategoryList] = useState<string[]>([]);
   const [interestList, setInterestList] = useState<string[]>([]);
 
-  const [ini, setIni] = useState<ItemFilterFormValues>({
+  const [ini, setIni] = useState<WishlistFilterFormValues>({
     pMin: "",
     pMax: "",
-    pSort: "",
     hob: "",
     itemCat: "",
     inLevMerchant: "",
@@ -47,7 +49,6 @@ export const WishlistFilterBar = ({
     // get the initialValues for the form from the URL
     const pMin_string = urlFirstString(pMin);
     const pMax_string = urlFirstString(pMax);
-    const pSort_string = urlFirstString(pSort);
     const hob_string = urlFirstString(hob);
     const itemCat_string = urlFirstString(itemCat);
     const inLevMerchant_string = urlFirstString(inLevMerchant);
@@ -56,7 +57,6 @@ export const WishlistFilterBar = ({
     setIni({
       pMin: pMin_string || "",
       pMax: pMax_string || "",
-      pSort: pSort_string || "",
       hob: hob_string || "",
       itemCat: itemCat_string || "",
       inLevMerchant: inLevMerchant_string || "",
@@ -93,7 +93,7 @@ export const WishlistFilterBar = ({
           ]);
     };
     getDictionaries();
-  }, [pMin, pMax, pSort, hob, itemCat, inLevMerchant, inLevUser]);
+  }, [pMin, pMax, hob, itemCat, inLevMerchant, inLevUser]);
 
   function handleKeyDownPreventWords(
     event: React.KeyboardEvent<HTMLInputElement>
@@ -135,16 +135,13 @@ export const WishlistFilterBar = ({
 
         let flexible_object_for_url = {};
         if (searchQuery) {
-          Object.assign(flexible_object_for_url, { q: searchQuery });
+          Object.assign(flexible_object_for_url, { qWish: searchQuery });
         }
         if (values.pMin) {
           Object.assign(flexible_object_for_url, { pMin: values.pMin });
         }
         if (values.pMax) {
           Object.assign(flexible_object_for_url, { pMax: values.pMax });
-        }
-        if (values.pSort) {
-          Object.assign(flexible_object_for_url, { pSort: values.pSort });
         }
         if (values.hob) {
           Object.assign(flexible_object_for_url, { hob: values.hob });
@@ -224,28 +221,6 @@ export const WishlistFilterBar = ({
                     onKeyDown={handleKeyDownPreventWords}
                     className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                   />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="pSort"
-                    className="mb-1 block text-sm font-medium"
-                  >
-                    Price Sort
-                  </label>
-                  <Field
-                    as="select"
-                    name="pSort"
-                    defaultValue={undefined}
-                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
-                      setFieldValue("pSort", event.target.value);
-                    }}
-                    className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-                  >
-                    <option value="">Price Sorting</option>
-                    <option value="desc">Decending</option>
-                    <option value="asc">Ascending</option>
-                  </Field>
                 </div>
 
                 <div>

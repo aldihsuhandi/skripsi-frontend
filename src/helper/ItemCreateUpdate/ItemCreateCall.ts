@@ -1,14 +1,23 @@
-import { CLIENT_ID, CLIENT_SECRET, Session_Local_Key } from "@/types";
-import { CommentCreateRequest, CommentCreateResult } from "@/types/Comment";
+import {
+  CLIENT_ID,
+  CLIENT_SECRET,
+  ItemCreateRequest,
+  ItemCreateResult,
+} from "@/types";
 import { toast } from "react-toastify";
 import { PostCall } from "../PostCall";
 import { CheckExistSessionLocal } from "../SessionHelper";
 
-export const CommentCreate = async ({
-  content,
-  replyTo,
-  replyId,
-}: CommentCreateRequest) => {
+export const ItemCreate = async ({
+  itemName,
+  itemPrice,
+  itemDescription,
+  itemQuantity,
+  categoryName,
+  hobbyName,
+  merchantInterestLevel,
+  itemImages,
+}: ItemCreateRequest) => {
   const sessionString = CheckExistSessionLocal();
   if (sessionString) {
     const headers = {
@@ -23,21 +32,26 @@ export const CommentCreate = async ({
       headers: headers,
     };
 
-    const result = await PostCall<CommentCreateResult>({
-      url: "http://localhost:8080/comment/create",
+    const result = await PostCall<ItemCreateResult>({
+      url: "http://localhost:8080/item/create",
       config: config,
       body: {
-        content: content,
-        replyTo: replyTo,
-        replyId: replyId,
+        itemName: itemName,
+        itemPrice: itemPrice,
+        itemDescription: itemDescription,
+        itemQuantity: itemQuantity,
+        categoryName: categoryName,
+        hobbyName: hobbyName,
+        merchantInterestLevel: merchantInterestLevel,
+        itemImages: itemImages,
       },
     });
-
+    console.log(result);
     if (result?.resultContext.success) {
       return result;
     } else {
       toast.error(
-        "An Error Occured when creating the comment, please try again.",
+        "An Error Occured when creating the item, please try again.",
         {
           position: "top-center",
           autoClose: 5000,
@@ -47,7 +61,7 @@ export const CommentCreate = async ({
       );
     }
   } else {
-    toast.error("You need to be logged in to comment!", {
+    toast.error("You need to be logged in to create items!", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,

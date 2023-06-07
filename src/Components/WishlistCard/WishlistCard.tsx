@@ -3,10 +3,11 @@ import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { HTMLAttributes, useEffect, useState } from "react";
-import { HiShoppingCart, HiTrash } from "react-icons/hi";
+import { HiShoppingCart, HiTrash, HiUserGroup } from "react-icons/hi";
 import { DialogConfrim } from "../DialogConfirm";
 import { CartAdd, WishlistRemove } from "@/helper";
 import { toast } from "react-toastify";
+import { HiBuildingStorefront } from "react-icons/hi2";
 
 export interface WishlistCardProps extends HTMLAttributes<HTMLDivElement> {
   itemData: WishlistSummary;
@@ -29,47 +30,69 @@ export const WishlistCard = ({
       if (response?.status === 200 && response.data.byteLength !== 0) {
         const byteArray = new Uint8Array(response.data);
         const blobs = new Blob([byteArray], { type: "image/jpeg" });
-        const imgUrl = URL.createObjectURL(blobs);
-
+        setImage(URL.createObjectURL(blobs));
         setMerchantEncoded(encodeURIComponent(itemData.merchantInfo.username));
-        setImage(imgUrl);
       } else {
         setImage(undefined);
       }
     }
     yeah();
+    if (image) {
+      return () => {
+        URL.revokeObjectURL(image);
+      };
+    }
   }, []);
   return (
     <Link href={`/merchant/${merchantEncoded}/item/${itemData.itemId}`}>
       <div
-        className="h-fit w-fit rounded-lg border-2 border-solid border-normal-white hover:shadow-lg"
+        className="flex h-full w-full flex-col rounded-lg border-2 border-solid border-normal-white hover:shadow-lg"
         {...props}
       >
         <div className="flex flex-col p-3">
           <img
-            className="rounded-md"
+            className="h-60 w-60 self-center rounded-md object-scale-down lg:h-32 xl:h-40 2xl:h-60"
             src={
               image ??
               "https://i1.sndcdn.com/artworks-dCikqEVyCfTCgdq0-0hSQRQ-t500x500.jpg"
             }
-            alt="WishlistCardImage"
+            alt="ProductCardImage"
           />
-          <p className="font-sans text-sm font-semibold lg:text-xl">
+          <p className="font-sans text-sm font-semibold lg:text-base xl:text-lg">
             {itemData.itemName}
           </p>
-          <p className="font-sans text-sm lg:text-lg">
+          <p className="flex font-sans text-sm lg:text-base">
+            <HiBuildingStorefront
+              style={{
+                height: "1.5em",
+                width: "1.5em",
+                color: "#581C87",
+                paddingRight: "2px",
+              }}
+            />
             {itemData.merchantLevel}
           </p>
-          <p className="font-sans text-sm lg:text-lg">
+          <p className="flex font-sans text-sm lg:text-base">
+            <HiUserGroup
+              style={{
+                height: "1.5em",
+                width: "1.5em",
+                color: "#581C87",
+                paddingRight: "2px",
+              }}
+            />
+            {itemData.userLevel === "" ? "No Review" : itemData.userLevel}
+          </p>
+          <p className="font-sans text-sm lg:text-base">
             {itemData.itemCategory}
           </p>
-          <p className="font-sans text-sm lg:text-lg">{itemData.hobby}</p>
-          <p className="font-sans text-sm lg:text-lg">
+          <p className="font-sans text-sm lg:text-base">{itemData.hobby}</p>
+          <p className="font-sans text-sm lg:text-base">
             Rp. {itemData.itemPrice.toLocaleString()}
           </p>
         </div>
-        <div className="flex flex-row justify-end gap-2 p-3">
-          <div className="group relative w-max">
+        <div className="mt-auto flex flex-row justify-end gap-2 p-3">
+          <div className="group w-max">
             <button
               className="rounded-full bg-normal-blue p-2 hover:bg-bright-blue"
               type="button"

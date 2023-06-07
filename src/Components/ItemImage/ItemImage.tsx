@@ -1,7 +1,16 @@
 import { ImageDownload, ProcessImgBE } from "@/helper";
-import React, { ImgHTMLAttributes, useEffect, useState } from "react";
+import React, {
+  DetailedHTMLProps,
+  ImgHTMLAttributes,
+  useEffect,
+  useState,
+} from "react";
 
-export interface ItemImageProps extends ImgHTMLAttributes<HTMLImageElement> {
+export interface ItemImageProps
+  extends Omit<
+    DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>,
+    "src"
+  > {
   imageId?: string;
   imageSrc?: string;
 }
@@ -24,12 +33,5 @@ export const ItemImage = ({ imageId, imageSrc, ...props }: ItemImageProps) => {
     ProcessImage();
   }, [imageId]);
 
-  return (
-    <img
-      src={imageSrc ?? image}
-      alt="item-image"
-      className="object-scale-down"
-      {...props}
-    />
-  );
+  return <img src={imageSrc ?? image} alt="item-image" {...props} />;
 };

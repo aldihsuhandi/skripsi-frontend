@@ -47,12 +47,21 @@ export const PostCall = async <T extends APIResultTemplate>({
   } catch (error: any) {
     if (error.response) {
       // The request was made and the server responded with a non-2xx status code
-      toast.error("We encountered a problem with the server", {
-        position: "top-center",
-        autoClose: 10000,
-        hideProgressBar: false,
-        theme: "colored",
-      });
+      if (error.response.status === 500) {
+        toast.error("The Server encountered an unexpected condition", {
+          position: "top-center",
+          autoClose: 10000,
+          hideProgressBar: false,
+          theme: "colored",
+        });
+      } else {
+        toast.error("We encountered a problem with the server", {
+          position: "top-center",
+          autoClose: 10000,
+          hideProgressBar: false,
+          theme: "colored",
+        });
+      }
     } else if (error.request) {
       // The request was made but no response was received
       toast.error("The System is busy or is offline, please try again later", {

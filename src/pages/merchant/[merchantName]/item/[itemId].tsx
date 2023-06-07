@@ -6,6 +6,7 @@ import { ItemImagesMultiple } from "@/Components/ItemImagesMultiple";
 import { MerchantInfo } from "@/Components/MerchantInfo";
 import {
   CartAdd,
+  ItemDelete,
   SessionInfoCall,
   UserQuery,
   WishlistAdd,
@@ -18,6 +19,7 @@ import { ItemDetailResult, Session_Local_Key } from "@/types";
 import { UserSummary } from "@/types/User";
 import classNames from "classnames";
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { ReactNode, useEffect, useState } from "react";
 import {
@@ -44,6 +46,7 @@ export default function MerchantItem() {
   const [pageTitle, setPageTitle] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isWishlisted, setIsWishlisted] = useState<boolean>(false);
+  const [merchantEncoded, setMerchantEncoded] = useState<string | undefined>();
 
   const [quantityToCart, setQuantityToCart] = useState(1);
 
@@ -62,6 +65,10 @@ export default function MerchantItem() {
           if (itemDataFetch.resultContext.success) {
             setItemData(itemDataFetch);
             setIsWishlisted(itemDataFetch.item.inWishlist);
+            setMerchantEncoded(
+              encodeURIComponent(itemDataFetch.item.merchantInfo.username)
+            );
+
             if (itemDataFetch.item) {
               setPageTitle(
                 itemDataFetch.item.itemName +
@@ -112,7 +119,9 @@ export default function MerchantItem() {
             {level}
           </span>
         </div>
-        <div className="self-center text-normal-yellow">{description}</div>
+        <div className="self-center whitespace-pre text-normal-yellow">
+          {description}
+        </div>
       </div>
     );
   };
@@ -153,7 +162,8 @@ export default function MerchantItem() {
                       width: "1.5em",
                     }}
                   />
-                  <span className="font-bold">4.6 / 5</span> <br />
+                  <span className="font-bold">{itemData.item.review} / 5</span>{" "}
+                  <br />
                   <span className="font-bold">Overall Product Review</span>
                 </div>
 
@@ -179,9 +189,10 @@ export default function MerchantItem() {
                     logo={
                       <HiBuildingStorefront
                         style={{
-                          height: "3em",
-                          width: "3em",
+                          height: "2em",
+                          width: "2em",
                           color: "#581C87",
+                          paddingRight: "2px",
                         }}
                       />
                     }
@@ -192,13 +203,18 @@ export default function MerchantItem() {
                     logo={
                       <HiUserGroup
                         style={{
-                          height: "3em",
-                          width: "3em",
+                          height: "2em",
+                          width: "2em",
                           color: "#581C87",
+                          paddingRight: "2px",
                         }}
                       />
                     }
-                    level={"Placeholder"}
+                    level={
+                      itemData.item.userLevel === ""
+                        ? "No Review"
+                        : itemData.item.userLevel
+                    }
                     description={"Community Rating"}
                   />
                 </div>
@@ -284,12 +300,44 @@ export default function MerchantItem() {
                     Add to Cart
                   </button>
                 </div>
-                {/* Buy Now Button */}
-                <div className="px-4 pt-1 pb-2">
-                  <button className="w-full rounded bg-normal-blue py-2 px-4 font-bold text-white hover:bg-blue-700">
-                    Buy Now
-                  </button>
-                </div>
+                {/* Update Item Button */}
+                {userData?.username === itemData.item.merchantInfo.username && (
+                  <>
+                    <div className="px-4 pt-1 pb-2">
+                      <Link
+                        href={`/merchant/${merchantEncoded}/update/${itemData.item.itemId}`}
+                      >
+                        <button className="w-full rounded bg-normal-green py-2 px-4 font-bold text-white hover:bg-blue-700">
+                          Update Item
+                        </button>
+                      </Link>
+                    </div>
+                    <div className="px-4 pt-1 pb-2">
+                      <DialogConfrim
+                        trigger={
+                          <button
+                            className="w-full rounded bg-normal-red py-2 px-4 font-bold text-white hover:bg-blue-700"
+                            type="button"
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            Delete Item
+                          </button>
+                        }
+                        title="Are you sure you want to delete this item?"
+                        onConfirm={async () => {
+                          const wishlistResult = await ItemDelete({
+                            itemId: itemData.item.itemId,
+                          });
+                          if (wishlistResult) {
+                            if (wishlistResult.resultContext.success) {
+                              router.push(`/merchant/${merchantEncoded}`);
+                            }
+                          }
+                        }}
+                      />
+                    </div>
+                  </>
+                )}
                 {/* Buttons, Wishlist, Chat, Forum, Share */}
                 <div className="flex flex-row justify-evenly pb-2">
                   {isWishlisted ? (
