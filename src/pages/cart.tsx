@@ -11,10 +11,14 @@ export default function Cart() {
   const router = useRouter();
   const [windowWidth, setWindowWidth] = useState(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [cartPrice, setCartPrice] = useState<number | undefined>();
+  const [cartPrice, setCartPrice] = useState<bigint | undefined>();
   // uat cek paginContext yang support infinite Scroll
   const [cartLatest, setCartLatest] = useState<CartQueryResult | undefined>();
   const [totalCartItems, setTotalCartItems] = useState<CartSummary[]>([]);
+  // Uat tau yang selected yang mana aja
+  const [arraySelected, setArraySelected] = useState<Map<string, number>>(
+    new Map()
+  );
   const [curPage, setCurPage] = useState(2);
 
   useEffect(() => {
@@ -33,6 +37,15 @@ export default function Cart() {
             setCartLatest(cartQueryItem);
             setTotalCartItems(totalCartItems.concat(cartQueryItem.carts));
             setCartPrice(cartQueryItem.price);
+
+            cartQueryItem.carts.forEach((element) => {
+              if (element.selected) {
+                // setArraySelected(
+                //   arraySelected.concat(element.itemSummary.itemId)
+                // );
+                arraySelected.set(element.itemSummary.itemId, element.quantity);
+              }
+            });
           }
         }
       };
@@ -77,15 +90,11 @@ export default function Cart() {
     }
   };
 
-  function UpdateCartPrice(price_replacement: number) {
+  function UpdateCartPrice(price_replacement: bigint) {
     setCartPrice(price_replacement);
   }
 
   const DeleteFromTotal = (itemId: string) => {
-    // totalCartItems.splice(
-    //   totalCartItems.findIndex((e) => e.itemSummary.itemId === itemId),
-    //   1
-    // );
     setTotalCartItems((prevItems) => {
       const temp = [...prevItems];
       temp.splice(
@@ -94,7 +103,22 @@ export default function Cart() {
       );
       return temp;
     });
-    console.log(totalCartItems);
+  };
+
+  const UpdateSelectedArray = ({
+    itemId,
+    quantity,
+    add,
+  }: {
+    itemId: string;
+    quantity: number;
+    add: boolean;
+  }) => {
+    if (add) {
+      arraySelected.set(itemId, quantity);
+    } else {
+      arraySelected.delete(itemId);
+    }
   };
 
   return (
@@ -107,7 +131,9 @@ export default function Cart() {
       </Head>
       <main>
         <div className="m-0 min-h-screen lg:mx-auto lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
-          <p className="px-3 pt-2 text-sm font-bold lg:text-lg">Cart</p>
+          <div className="flex flex-row px-3 pt-2 lg:px-0">
+            <p className="ml-2 text-sm font-bold lg:text-lg">Cart</p>
+          </div>
 
           <div className="flex flex-row">
             {isLoading ? (
@@ -126,6 +152,7 @@ export default function Cart() {
                         <CartItem
                           cartItemData={e}
                           setUpdateCartPrice={UpdateCartPrice}
+                          onCheckChanged={UpdateSelectedArray}
                           onDelete={DeleteFromTotal}
                         />
                       </div>
