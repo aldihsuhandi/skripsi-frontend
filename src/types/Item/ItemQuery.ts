@@ -78,6 +78,8 @@ export interface HistoryItemSummary {
   merchantLevel: string;
   userLevel: string;
   itemImages: string[];
+  gmtCreate: Date;
+  gmtModified: Date;
 }
 
 export interface ItemQueryResult extends APIResultTemplate {

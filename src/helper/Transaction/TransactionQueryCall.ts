@@ -41,6 +41,7 @@ export const TransactionQuery = async (status: string, page: number) => {
 
 export const TransactionDetail = async (id: string) => {
   const session = CheckExistSessionLocal();
+  console.log("session: " + session);
   if (!session) {
     return;
   }
@@ -64,4 +65,6 @@ export const TransactionDetail = async (id: string) => {
       transactionId: id,
     },
   });
+
+  return result;
 };

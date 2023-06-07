@@ -16,6 +16,7 @@ export interface TransactionSummary {
   status: string;
   paymentType: string;
   paymentCode: string;
+  details: Map<string, TransactionDetailSummary[]>;
   gmtCreate: string;
   gmtModified: Date;
 }

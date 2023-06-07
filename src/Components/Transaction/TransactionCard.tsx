@@ -1,6 +1,7 @@
 import { DateToFormattedString } from "@/helper";
 import { FormatCurrencyIdrBigInt } from "@/helper/GeneralHelper/CurrencyHelper";
 import { TransactionSummary } from "@/types/Transaction/TransactionQuery";
+import Link from "next/link";
 import { HTMLAttributes } from "react";
 import { HiShoppingBag } from "react-icons/hi2";
 
@@ -38,6 +39,18 @@ const getStatusStr = (status: string) => {
   }
 };
 
+const optionalButton = (status: string) => {
+  console.log("status optional button: " + status);
+  if (status === "ONGOING") {
+    return (
+      <button className="m-1 rounded-md border-2 border-green-600 bg-green-100 p-1.5 text-sm font-semibold text-green-600">
+        Selesaikan Pesanan
+      </button>
+    );
+  }
+  return <></>;
+};
+
 export const TransactionCard = ({ trx, ...props }: TransactionCardProps) => {
   return (
     <div className="m-2 w-full rounded-md border-2 border-solid border-gray-100 p-3 shadow-sm">
@@ -68,8 +81,10 @@ export const TransactionCard = ({ trx, ...props }: TransactionCardProps) => {
         </div>
       </div>
       <div className="flex w-full flex-row justify-end pt-2 text-sm">
+        {optionalButton(trx.status)}
         <a
-          href="#"
+          href={`/transaction/${trx.transactionId}`}
+          target="_blank"
           className="m-1 rounded-md border-2 border-blue-500 p-1.5 text-sm font-semibold text-blue-500"
         >
           Lihat Detail Transaksi
