@@ -144,14 +144,12 @@ export const UserMenu = ({
                   <span className="px-2">Shopping History</span>
                 </Link>
               </DropdownMenu.Item>
-              {userData.role !== "MERCHANT" && (
-                <DropdownMenu.Item className="rounded-md p-2 hover:border hover:shadow-md">
-                  <Link href="/review" className="flex flex-row items-center">
-                    <HiClipboardList size={15} />
-                    <span className="px-2">Review</span>
-                  </Link>
-                </DropdownMenu.Item>
-              )}
+              <DropdownMenu.Item className="rounded-md p-2 hover:border hover:shadow-md">
+                <Link href="/review" className="flex flex-row items-center">
+                  <HiClipboardList size={15} />
+                  <span className="px-2">Review</span>
+                </Link>
+              </DropdownMenu.Item>
               <DropdownMenu.Item className="group rounded-md p-2 hover:bg-red-500">
                 <div
                   className="flex cursor-pointer flex-row items-center"
