@@ -65,7 +65,12 @@ export default function TransactionDetailPage() {
     if (transaction.status === "WAITING_PAYMENT") {
       return (
         <>
-          <button className="mx-1 rounded-md border-2 border-yellow-600 bg-yellow-100 p-1.5 text-sm font-semibold text-yellow-600">
+          <button
+            onClick={() => {
+              router.reload();
+            }}
+            className="mx-1 rounded-md border-2 border-yellow-600 bg-yellow-100 p-1.5 text-sm font-semibold text-yellow-600"
+          >
             Check Payment Status
           </button>
           <DialogConfrim
@@ -111,6 +116,7 @@ export default function TransactionDetailPage() {
           onConfirm={async () => {
             const result = await TransactionFinish(transaction.transactionId);
             if (result && result.resultContext.success) {
+              router.reload();
             } else if (result && !result.resultContext.success) {
               toast.warning(result.resultContext.resultMsg, {
                 position: "top-center",
