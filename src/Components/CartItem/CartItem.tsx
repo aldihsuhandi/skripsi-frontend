@@ -21,6 +21,13 @@ export interface CartItemProps extends HTMLAttributes<HTMLDivElement> {
     quantity: number;
     add: boolean;
   }) => void;
+  onQuantityChange: ({
+    itemId,
+    quantity,
+  }: {
+    itemId: string;
+    quantity: number;
+  }) => void;
   onDelete: (itemId: string) => void;
 }
 
@@ -28,6 +35,7 @@ export const CartItem = ({
   cartItemData,
   setUpdateCartPrice,
   onCheckChanged,
+  onQuantityChange,
   onDelete,
   ...props
 }: CartItemProps) => {
@@ -170,6 +178,10 @@ export const CartItem = ({
                       if (calPrice?.resultContext.success) {
                         setUpdateCartPrice(calPrice.price);
                       }
+                      onQuantityChange({
+                        itemId: cartItemData.itemSummary.itemId,
+                        quantity: quantity - 1,
+                      });
                     }
                     setQuantity(quantity - 1);
                   }
@@ -197,6 +209,10 @@ export const CartItem = ({
                       if (calPrice?.resultContext.success) {
                         setUpdateCartPrice(calPrice.price);
                       }
+                      onQuantityChange({
+                        itemId: cartItemData.itemSummary.itemId,
+                        quantity: quantity + 1,
+                      });
                     }
                     setQuantity(quantity + 1);
                   }
