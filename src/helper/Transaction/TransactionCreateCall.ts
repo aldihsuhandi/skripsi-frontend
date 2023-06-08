@@ -1,14 +1,9 @@
 import { CLIENT_ID, CLIENT_SECRET } from "@/types";
-import {
-  TransactionCreateRequest,
-  TransactionCreateResult,
-} from "@/types/Transaction";
+import { TransactionCreateResult } from "@/types/Transaction";
 import { PostCall } from "../PostCall";
 import { CheckExistSessionLocal } from "../SessionHelper";
 
-export const TransactionCreate = async ({
-  items,
-}: TransactionCreateRequest) => {
+export const TransactionCreate = async () => {
   const session = CheckExistSessionLocal();
   if (!session) {
     return;
@@ -30,7 +25,7 @@ export const TransactionCreate = async ({
     url: "http://localhost:8080/transaction/create",
     config: config,
     body: {
-      items: items,
+      fromCart: true,
     },
   });
 
