@@ -4,12 +4,12 @@ import {
   TransactionFinish,
 } from "@/helper";
 import { FormatCurrencyIdrBigInt } from "@/helper/GeneralHelper/CurrencyHelper";
-import transaction from "@/pages/transaction";
 import { TransactionSummary } from "@/types/Transaction/TransactionQuery";
-import Link from "next/link";
+import router from "next/router";
 import { HTMLAttributes } from "react";
 import { HiShoppingBag } from "react-icons/hi2";
 import { toast } from "react-toastify";
+import { DialogConfrim } from "../DialogConfirm";
 
 export interface TransactionCardProps extends HTMLAttributes<HTMLDivElement> {
   trx: TransactionSummary;
@@ -50,8 +50,17 @@ export const TransactionCard = ({ trx, ...props }: TransactionCardProps) => {
     console.log("status optional button: " + status);
     if (status === "ONGOING") {
       return (
-        <button
-          onClick={async () => {
+        <DialogConfrim
+          title="Please inspect your items to make sure it arrives safely"
+          trigger={
+            <button
+              onClick={(e) => e.preventDefault()}
+              className="m-1 rounded-md border-2 border-green-600 bg-green-100 p-1.5 text-sm font-semibold text-green-600"
+            >
+              Finish Transaction
+            </button>
+          }
+          onConfirm={async () => {
             const result = await TransactionFinish(trx.transactionId);
             if (result && result.resultContext.success) {
             } else if (result && !result.resultContext.success) {
@@ -63,19 +72,26 @@ export const TransactionCard = ({ trx, ...props }: TransactionCardProps) => {
               });
             }
           }}
-          className="m-1 rounded-md border-2 border-green-600 bg-green-100 p-1.5 text-sm font-semibold text-green-600"
-        >
-          Finish Transaction
-        </button>
+        />
       );
     }
 
     if (status === "WAITING_PAYMENT") {
       return (
-        <button
-          onClick={async () => {
+        <DialogConfrim
+          trigger={
+            <button
+              onClick={(e) => e.preventDefault()}
+              className="mx-1 rounded-md border-2 border-red-600 bg-red-100 p-1.5 text-sm font-semibold text-red-600"
+            >
+              Cancel Transaction
+            </button>
+          }
+          title="Are you sure want to cancel this transaction?"
+          onConfirm={async () => {
             const result = await TransactionCancel(trx.transactionId);
             if (result && result.resultContext.success) {
+              router.reload();
             } else if (result && !result.resultContext.success) {
               toast.warning(result.resultContext.resultMsg, {
                 position: "top-center",
@@ -85,10 +101,7 @@ export const TransactionCard = ({ trx, ...props }: TransactionCardProps) => {
               });
             }
           }}
-          className="m-1 rounded-md border-2 border-red-600 bg-red-100 p-1.5 text-sm font-semibold text-red-600"
-        >
-          Cancel Transaction
-        </button>
+        />
       );
     }
     return <></>;

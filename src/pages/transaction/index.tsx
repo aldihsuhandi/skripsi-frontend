@@ -1,15 +1,18 @@
 import { TransactionCard } from "@/Components/Transaction";
 import { NotFoundWidget } from "@/Components/Widget";
-import { parseNumberUndefined, urlFirstString } from "@/helper";
+import {
+  urlFirstString,
+  parseNumberUndefined,
+  TransactionQuery,
+} from "@/helper";
 import { SessionValidate } from "@/helper/SessionHelper";
-import { TransactionQuery } from "@/helper/Transaction/TransactionQueryCall";
-import { TransactionQueryResult } from "@/types/Transaction/TransactionQuery";
+import { TransactionQueryResult } from "@/types";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { HiShoppingCart } from "react-icons/hi2";
 import ReactPaginate from "react-paginate";
-import styles from "../styles/Paginate.module.css";
+import styles from "../../styles/Paginate.module.css";
 
 export default function transaction() {
   const router = useRouter();

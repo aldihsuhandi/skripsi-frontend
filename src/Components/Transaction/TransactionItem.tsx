@@ -40,7 +40,13 @@ export const TransactionItem = ({ detail, ...props }: TransactionItemProps) => {
 
   return (
     <>
-      <div className="flex h-auto w-full flex-row justify-center p-4">
+      <a
+        target="_blank"
+        href={`/merchant/${encodeURIComponent(
+          detail.item.merchantInfo.username
+        )}/item/${detail.item.itemId}`}
+        className="flex h-auto w-full flex-row justify-center p-4"
+      >
         <img
           className="h-28 w-28 rounded border-2 border-solid p-3"
           src={
@@ -82,7 +88,7 @@ export const TransactionItem = ({ detail, ...props }: TransactionItemProps) => {
             </p>
           </div>
         </div>
-      </div>
+      </a>
     </>
   );
 };

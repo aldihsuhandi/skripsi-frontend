@@ -1,3 +1,4 @@
+import { DialogConfrim } from "@/Components/DialogConfirm";
 import { TransactionItem } from "@/Components/Transaction/TransactionItem";
 import {
   DateToFormattedString,
@@ -67,8 +68,17 @@ export default function TransactionDetailPage() {
           <button className="mx-1 rounded-md border-2 border-yellow-600 bg-yellow-100 p-1.5 text-sm font-semibold text-yellow-600">
             Check Payment Status
           </button>
-          <button
-            onClick={async () => {
+          <DialogConfrim
+            trigger={
+              <button
+                onClick={(e) => e.preventDefault()}
+                className="mx-1 rounded-md border-2 border-red-600 bg-red-100 p-1.5 text-sm font-semibold text-red-600"
+              >
+                Cancel Transaction
+              </button>
+            }
+            title="Are you sure want to cancel this transaction?"
+            onConfirm={async () => {
               const result = await TransactionCancel(transaction.transactionId);
               if (result && result.resultContext.success) {
                 router.reload();
@@ -81,21 +91,26 @@ export default function TransactionDetailPage() {
                 });
               }
             }}
-            className="mx-1 rounded-md border-2 border-red-600 bg-red-100 p-1.5 text-sm font-semibold text-red-600"
-          >
-            Cancel Transaction
-          </button>
+          />
         </>
       );
     }
 
     if (transaction.status === "ONGOING") {
       return (
-        <button
-          onClick={async () => {
+        <DialogConfrim
+          title="Please inspect your items to make sure it arrives safely"
+          trigger={
+            <button
+              onClick={(e) => e.preventDefault()}
+              className="m-1 rounded-md border-2 border-green-600 bg-green-100 p-1.5 text-sm font-semibold text-green-600"
+            >
+              Finish Transaction
+            </button>
+          }
+          onConfirm={async () => {
             const result = await TransactionFinish(transaction.transactionId);
             if (result && result.resultContext.success) {
-              router.reload();
             } else if (result && !result.resultContext.success) {
               toast.warning(result.resultContext.resultMsg, {
                 position: "top-center",
@@ -105,10 +120,7 @@ export default function TransactionDetailPage() {
               });
             }
           }}
-          className="mx-1 rounded-md border-2 border-yellow-600 bg-yellow-100 p-1.5 text-sm font-semibold text-yellow-600"
-        >
-          Finish Transaction
-        </button>
+        />
       );
     }
     return <></>;
