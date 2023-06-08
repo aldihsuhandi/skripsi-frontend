@@ -12,7 +12,7 @@ export default function Cart() {
   const router = useRouter();
   const [windowWidth, setWindowWidth] = useState(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [cartPrice, setCartPrice] = useState<bigint>();
+  const [cartPrice, setCartPrice] = useState<bigint>(BigInt(0));
   // uat cek paginContext yang support infinite Scroll
   const [cartLatest, setCartLatest] = useState<CartQueryResult | undefined>();
   const [totalCartItems, setTotalCartItems] = useState<CartSummary[]>([]);
@@ -172,7 +172,7 @@ export default function Cart() {
                   {isLoading ? (
                     <>Loading...</>
                   ) : (
-                    <>{cartPrice ? FormatCurrencyIdrBigInt(cartPrice) : FormatCurrencyIdr(0)}</>
+                    <>{FormatCurrencyIdrBigInt(cartPrice)}</>
                   )}
                 </div>
                 <div className="min-w-[64px] px-4 pb-2">
@@ -193,7 +193,7 @@ export default function Cart() {
                 {isLoading ? (
                   <>Loading...</>
                 ) : (
-                  <>{cartPrice ? FormatCurrencyIdrBigInt(cartPrice) : FormatCurrencyIdr(0)}</>
+                  <>{FormatCurrencyIdrBigInt(cartPrice)}</>
                 )}
               </div>
               <div className="min-w-[64px] px-4 pb-2">
