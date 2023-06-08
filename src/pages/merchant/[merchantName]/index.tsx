@@ -1,13 +1,9 @@
 import { MerchantPageNavigation } from "@/Components/MerchantInfo";
 import { MerchantInfoPage } from "@/Components/MerchantInfo/MerchantInfoPage";
 import { ProductCard } from "@/Components/ProductCard";
-import {
-  ItemFilterQuery,
-  SessionInfoCall,
-  UserQuery,
-  urlFirstString,
-} from "@/helper";
-import { ItemQueryResult, Session_Local_Key } from "@/types";
+import { NotFoundWidget } from "@/Components/Widget";
+import { ItemFilterQuery, UserQuery, urlFirstString } from "@/helper";
+import { ItemQueryResult } from "@/types";
 import { UserSummary } from "@/types/User";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -85,7 +81,9 @@ export default function MerchantPage() {
                     })}
                   </>
                 ) : (
-                  <>KOSONG PLACEHOLDER</>
+                  <>
+                    <NotFoundWidget name="item" />
+                  </>
                 )}
               </div>
             </>

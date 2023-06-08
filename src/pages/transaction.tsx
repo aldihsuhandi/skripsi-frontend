@@ -1,17 +1,15 @@
 import { TransactionCard } from "@/Components/Transaction";
+import { NotFoundWidget } from "@/Components/Widget";
 import { parseNumberUndefined, urlFirstString } from "@/helper";
 import { SessionValidate } from "@/helper/SessionHelper";
 import { TransactionQuery } from "@/helper/Transaction/TransactionQueryCall";
-import {
-  TransactionQueryResult,
-  TransactionSummary,
-} from "@/types/Transaction/TransactionQuery";
-import styles from "../styles/Paginate.module.css";
+import { TransactionQueryResult } from "@/types/Transaction/TransactionQuery";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { HiShoppingCart, HiXCircle } from "react-icons/hi2";
+import { HiShoppingCart } from "react-icons/hi2";
 import ReactPaginate from "react-paginate";
+import styles from "../styles/Paginate.module.css";
 
 export default function transaction() {
   const router = useRouter();
@@ -94,10 +92,11 @@ export default function transaction() {
         <TransactionCard trx={data} />
       ));
     }
-    return <><div className="flex flex-col w-full items-center justify-center h-auto p-10  opacity-30">
-      <HiXCircle className="h-64 w-64 text-gray-300"/>
-      <p>Tidak ada pembelian</p>
-    </div></>;
+    return (
+      <>
+        <NotFoundWidget name="transaction" />
+      </>
+    );
   };
 
   return (
@@ -113,7 +112,7 @@ export default function transaction() {
           <div className="flex flex-col p-10">
             <p className="flex flex-row pt-2 pb-5 text-xl font-bold">
               <HiShoppingCart className="mx-1 h-7 w-7" />
-              Daftar Pembelian
+              Shopping History
             </p>
             <div className="w-full rounded-lg border-2 border-solid border-gray-200 p-3">
               <div className="flex w-full flex-row flex-wrap items-center pb-2">
@@ -121,7 +120,7 @@ export default function transaction() {
                 <button
                   className={`${getSelected(
                     ""
-                  )} mx-1 rounded-lg border-2 border-solid py-1 px-2 `}
+                  )} mx-1 my-1 rounded-lg border-2 border-solid py-1 px-2 md:my-0 `}
                   onClick={() => {
                     changeStatus("");
                   }}
@@ -131,7 +130,7 @@ export default function transaction() {
                 <button
                   className={`${getSelected(
                     "Waiting Payment"
-                  )}  mx-1 rounded-lg border-2 border-solid py-1 px-2 `}
+                  )} mx-1 my-1 rounded-lg border-2 border-solid py-1 px-2 md:my-0 `}
                   onClick={() => {
                     changeStatus("Waiting Payment");
                   }}
@@ -141,7 +140,7 @@ export default function transaction() {
                 <button
                   className={`${getSelected(
                     "Ongoing"
-                  )}  mx-1 rounded-lg border-2 border-solid py-1 px-2 `}
+                  )} mx-1 my-1 rounded-lg border-2 border-solid py-1 px-2 md:my-0 `}
                   onClick={() => {
                     changeStatus("Ongoing");
                   }}
@@ -151,7 +150,7 @@ export default function transaction() {
                 <button
                   className={`${getSelected(
                     "Done"
-                  )}  mx-1 rounded-lg border-2 border-solid py-1 px-2 `}
+                  )} mx-1 my-1 rounded-lg border-2 border-solid py-1 px-2 md:my-0 `}
                   onClick={() => {
                     changeStatus("Done");
                   }}
@@ -161,7 +160,7 @@ export default function transaction() {
                 <button
                   className={`${getSelected(
                     "Canceled"
-                  )}  mx-1 rounded-lg border-2 border-solid py-1 px-2 `}
+                  )} mx-1 my-1 rounded-lg border-2 border-solid py-1 px-2 md:my-0 `}
                   onClick={() => {
                     changeStatus("Canceled");
                   }}

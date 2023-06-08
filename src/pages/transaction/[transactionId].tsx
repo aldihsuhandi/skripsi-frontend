@@ -65,7 +65,7 @@ export default function TransactionDetailPage() {
       return (
         <>
           <button className="mx-1 rounded-md border-2 border-yellow-600 bg-yellow-100 p-1.5 text-sm font-semibold text-yellow-600">
-            Check pembayaran
+            Check Payment Status
           </button>
           <button
             onClick={async () => {
@@ -83,7 +83,7 @@ export default function TransactionDetailPage() {
             }}
             className="mx-1 rounded-md border-2 border-red-600 bg-red-100 p-1.5 text-sm font-semibold text-red-600"
           >
-            Batalkan pesanan
+            Cancel Transaction
           </button>
         </>
       );
@@ -107,7 +107,7 @@ export default function TransactionDetailPage() {
           }}
           className="mx-1 rounded-md border-2 border-yellow-600 bg-yellow-100 p-1.5 text-sm font-semibold text-yellow-600"
         >
-          Selesaikan Pesanan
+          Finish Transaction
         </button>
       );
     }
@@ -190,13 +190,13 @@ export default function TransactionDetailPage() {
         <div className="flex flex-col p-10">
           <p className="flex flex-row pt-2 pb-5 text-xl font-bold">
             <HiShoppingBag className="mx-1 h-7 w-7" />
-            Detil Pembelian
+            Shopping detail
           </p>
 
           <div className="my-1 w-full rounded-lg border-2 border-solid border-gray-200 p-4">
             <div className="flex flex-col justify-between md:flex-row md:items-center">
               <div className="flex flex-col md:flex-row">
-                <div className="w-48 text-gray-500">Invoice Pembelian</div>
+                <div className="w-48 text-gray-500">Invoice</div>
                 <div>:&ensp;{transaction.transactionId}</div>
               </div>
               <div
@@ -209,7 +209,7 @@ export default function TransactionDetailPage() {
             </div>
             <div className="flex flex-row items-center justify-between">
               <div className="flex flex-row">
-                <div className="w-48 text-gray-500">Tanggal pembelian</div>
+                <div className="w-48 text-gray-500">Shopping Date</div>
                 <div>:&ensp;{DateToFormattedString(transaction.gmtCreate)}</div>
               </div>
             </div>
@@ -222,7 +222,7 @@ export default function TransactionDetailPage() {
           <div className="my-1 w-full rounded-lg border-2 border-solid border-gray-200 p-4">
             <div className="flex w-full flex-col">
               <div className="text-md flex flex-row items-center font-semibold">
-                <HiOutlineReceiptTax className="h-7 w-7" /> Detil Pembayaran
+                <HiOutlineReceiptTax className="h-7 w-7" /> Payment Detail
               </div>
 
               <div className="flex w-full flex-col items-center justify-start md:flex-row md:justify-between">
@@ -235,7 +235,7 @@ export default function TransactionDetailPage() {
                   </div>
                 </div>
                 <div className="flex flex-col items-center justify-center border-l-2 border-gray-400 pl-5 md:w-1/4 md:items-start ">
-                  <div className="text-gray-600">Total Belanja</div>
+                  <div className="text-gray-600">Total Price</div>
                   <div>{FormatCurrencyIdrBigInt(transaction.price)}</div>
                 </div>
               </div>

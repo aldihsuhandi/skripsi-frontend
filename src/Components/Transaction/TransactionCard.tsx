@@ -65,7 +65,7 @@ export const TransactionCard = ({ trx, ...props }: TransactionCardProps) => {
           }}
           className="m-1 rounded-md border-2 border-green-600 bg-green-100 p-1.5 text-sm font-semibold text-green-600"
         >
-          Selesaikan Pesanan
+          Finish Transaction
         </button>
       );
     }
@@ -87,7 +87,7 @@ export const TransactionCard = ({ trx, ...props }: TransactionCardProps) => {
           }}
           className="m-1 rounded-md border-2 border-red-600 bg-red-100 p-1.5 text-sm font-semibold text-red-600"
         >
-          Batalkan Pesanan
+          Cancel Transaction
         </button>
       );
     }
@@ -97,9 +97,9 @@ export const TransactionCard = ({ trx, ...props }: TransactionCardProps) => {
   return (
     <div className="m-2 w-full rounded-md border-2 border-solid border-gray-100 p-3 shadow-sm">
       <div className="flex flex-row items-center">
-        <HiShoppingBag className="mr-2 h-5 w-5" />
-        <div className="flex flex-row items-center text-sm">
-          <div className="font-semibold">Belanja &ensp;</div>
+        <div className="flex flex-row flex-wrap items-center text-sm">
+          <HiShoppingBag className="mr-2 h-5 w-5" />
+          <div className="font-semibold">Shopping &ensp;</div>
           <div>{DateToFormattedString(trx.gmtCreate)}&ensp;</div>
           <div
             className={`${getStatusColor(
@@ -112,13 +112,13 @@ export const TransactionCard = ({ trx, ...props }: TransactionCardProps) => {
         </div>
       </div>
       <div className="flex w-full flex-row justify-between pt-2 text-sm">
-        <div className="w-3/4">
+        <div className="w-1/2 md:w-3/4">
           <p className="font-semibold">Payment</p>
-          <div className="pt-2">&emsp;Payment type : {trx.paymentType}</div>
-          <div className="pt-1">&emsp;Payment Number : {trx.paymentCode}</div>
+          <div className="pt-2">Payment type : {trx.paymentType}</div>
+          <div className="pt-1">Payment Number : {trx.paymentCode}</div>
         </div>
-        <div className="flex w-1/4 flex-col items-start justify-center border-l-2 border-gray-400 pl-5 ">
-          <div className="text-gray-600">Total Belanja</div>
+        <div className="flex w-1/2 flex-col flex-wrap items-start justify-center border-l-2 border-gray-400 pl-5 md:w-1/4 ">
+          <div className="text-gray-600">Total Price</div>
           <div>{FormatCurrencyIdrBigInt(trx.price)}</div>
         </div>
       </div>
@@ -127,9 +127,9 @@ export const TransactionCard = ({ trx, ...props }: TransactionCardProps) => {
         <a
           href={`/transaction/${trx.transactionId}`}
           target="_blank"
-          className="m-1 rounded-md border-2 border-blue-500 p-1.5 text-sm font-semibold text-blue-500"
+          className="m-1 justify-center rounded-md border-2 border-blue-500 p-1.5 text-sm font-semibold text-blue-500"
         >
-          Lihat Detail Transaksi
+          See Detail
         </a>
       </div>
     </div>
