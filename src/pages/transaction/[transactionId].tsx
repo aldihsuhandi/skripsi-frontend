@@ -2,6 +2,7 @@ import { TransactionItem } from "@/Components/Transaction/TransactionItem";
 import {
   DateToFormattedString,
   TransactionCancel,
+  TransactionFinish,
   urlFirstString,
 } from "@/helper";
 import { FormatCurrencyIdrBigInt } from "@/helper/GeneralHelper/CurrencyHelper";
@@ -90,7 +91,22 @@ export default function TransactionDetailPage() {
 
     if (transaction.status === "ONGOING") {
       return (
-        <button className="mx-1 rounded-md border-2 border-yellow-600 bg-yellow-100 p-1.5 text-sm font-semibold text-yellow-600">
+        <button
+          onClick={async () => {
+            const result = await TransactionFinish(transaction.transactionId);
+            if (result && result.resultContext.success) {
+              router.reload();
+            } else if (result && !result.resultContext.success) {
+              toast.warning(result.resultContext.resultMsg, {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                theme: "colored",
+              });
+            }
+          }}
+          className="mx-1 rounded-md border-2 border-yellow-600 bg-yellow-100 p-1.5 text-sm font-semibold text-yellow-600"
+        >
           Selesaikan Pesanan
         </button>
       );

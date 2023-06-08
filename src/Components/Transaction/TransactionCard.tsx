@@ -1,9 +1,15 @@
-import { DateToFormattedString } from "@/helper";
+import {
+  DateToFormattedString,
+  TransactionCancel,
+  TransactionFinish,
+} from "@/helper";
 import { FormatCurrencyIdrBigInt } from "@/helper/GeneralHelper/CurrencyHelper";
+import transaction from "@/pages/transaction";
 import { TransactionSummary } from "@/types/Transaction/TransactionQuery";
 import Link from "next/link";
 import { HTMLAttributes } from "react";
 import { HiShoppingBag } from "react-icons/hi2";
+import { toast } from "react-toastify";
 
 export interface TransactionCardProps extends HTMLAttributes<HTMLDivElement> {
   trx: TransactionSummary;
@@ -39,19 +45,55 @@ const getStatusStr = (status: string) => {
   }
 };
 
-const optionalButton = (status: string) => {
-  console.log("status optional button: " + status);
-  if (status === "ONGOING") {
-    return (
-      <button className="m-1 rounded-md border-2 border-green-600 bg-green-100 p-1.5 text-sm font-semibold text-green-600">
-        Selesaikan Pesanan
-      </button>
-    );
-  }
-  return <></>;
-};
-
 export const TransactionCard = ({ trx, ...props }: TransactionCardProps) => {
+  const optionalButton = (status: string) => {
+    console.log("status optional button: " + status);
+    if (status === "ONGOING") {
+      return (
+        <button
+          onClick={async () => {
+            const result = await TransactionFinish(trx.transactionId);
+            if (result && result.resultContext.success) {
+            } else if (result && !result.resultContext.success) {
+              toast.warning(result.resultContext.resultMsg, {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                theme: "colored",
+              });
+            }
+          }}
+          className="m-1 rounded-md border-2 border-green-600 bg-green-100 p-1.5 text-sm font-semibold text-green-600"
+        >
+          Selesaikan Pesanan
+        </button>
+      );
+    }
+
+    if (status === "WAITING_PAYMENT") {
+      return (
+        <button
+          onClick={async () => {
+            const result = await TransactionCancel(trx.transactionId);
+            if (result && result.resultContext.success) {
+            } else if (result && !result.resultContext.success) {
+              toast.warning(result.resultContext.resultMsg, {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                theme: "colored",
+              });
+            }
+          }}
+          className="m-1 rounded-md border-2 border-red-600 bg-red-100 p-1.5 text-sm font-semibold text-red-600"
+        >
+          Batalkan Pesanan
+        </button>
+      );
+    }
+    return <></>;
+  };
+
   return (
     <div className="m-2 w-full rounded-md border-2 border-solid border-gray-100 p-3 shadow-sm">
       <div className="flex flex-row items-center">
