@@ -3,7 +3,6 @@ import { CartQuery } from "@/helper";
 import { SessionValidate } from "@/helper/SessionHelper";
 import { TransactionCreate } from "@/helper/Transaction";
 import { CartQueryResult, CartSummary } from "@/types";
-import { TransactionItem } from "@/types/Transaction";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -100,7 +99,7 @@ export default function Cart() {
     return (
       <button
         className="w-full rounded bg-normal-blue px-24 py-2  font-bold text-white hover:bg-blue-700"
-        disabled={isLoading}
+        disabled={isLoading || cartPrice === BigInt(0)}
         onClick={async () => {
           const createTransRes = await TransactionCreate();
 

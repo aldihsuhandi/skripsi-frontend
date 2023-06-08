@@ -64,44 +64,32 @@ export default function PickPaymentType() {
       </Head>
       <main>
         {!isLoading && (
-          <div className="m-0 flex min-h-screen flex-col py-0 lg:mx-auto lg:max-w-screen-lg lg:py-7 xl:max-w-screen-xl 2xl:max-w-screen-2xl">
-            <div>
-              <p className="mb-2 font-semibold">Pick Payment Type!</p>
-              {!dictionryLoading && (
-                <Formik
-                  initialValues={initialValues}
-                  validationSchema={PaymentTypeSchema}
-                  onSubmit={async (values) => {
-                    if (transId) {
-                      const transIdstring = Array.isArray(transId)
-                        ? transId[0]
-                        : transId;
-                      const pickPaymentResult = await TransactionPayment({
-                        transactionId: transIdstring,
-                        paymentType: values.paymentType,
-                      });
+          <div className="m-0 flex min-h-screen flex-col items-center py-0 lg:mx-auto lg:max-w-screen-lg lg:py-7 xl:max-w-screen-xl 2xl:max-w-screen-2xl">
+            <p className="mb-2 font-semibold">Pick Payment Type!</p>
+            {!dictionryLoading && (
+              <Formik
+                initialValues={initialValues}
+                validationSchema={PaymentTypeSchema}
+                onSubmit={async (values) => {
+                  if (transId) {
+                    const transIdstring = Array.isArray(transId)
+                      ? transId[0]
+                      : transId;
+                    const pickPaymentResult = await TransactionPayment({
+                      transactionId: transIdstring,
+                      paymentType: values.paymentType,
+                    });
 
-                      if (
-                        pickPaymentResult &&
-                        pickPaymentResult.resultContext.success
-                      ) {
-                        router.push({
-                          pathname: `/transaction/${transIdstring}`,
-                        });
-                      } else {
-                        toast.error(
-                          "A problem occured when completing your transaction, please try again later",
-                          {
-                            position: "top-center",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            theme: "colored",
-                          }
-                        );
-                      }
+                    if (
+                      pickPaymentResult &&
+                      pickPaymentResult.resultContext.success
+                    ) {
+                      router.push({
+                        pathname: `/transaction/${transIdstring}`,
+                      });
                     } else {
                       toast.error(
-                        "We were unable to get your transaction Id, please try again later",
+                        "A problem occured when completing your transaction, please try again later",
                         {
                           position: "top-center",
                           autoClose: 5000,
@@ -110,65 +98,77 @@ export default function PickPaymentType() {
                         }
                       );
                     }
-                  }}
-                >
-                  {({ setFieldValue, values }) => (
-                    <Form>
-                      <div className="px-2 lg:px-0">
-                        {paymentTypeList.map((data, index) => {
-                          let imageSrc: string;
-                          if (data === "BCA Virtual Account") {
-                            imageSrc = "/bca_mini.png";
-                          } else if (data === "BNI Virtual Account") {
-                            imageSrc = "/bni_mini.png";
-                          } else {
-                            imageSrc = "logo not found";
-                          }
-                          return (
-                            <div
-                              className="flex w-fit flex-row py-1"
-                              key={index}
-                              onClick={() => {
-                                setFieldValue("paymentType", data);
-                              }}
-                            >
-                              <div className="mr-2 self-center">
-                                <input
-                                  type="radio"
-                                  name="paymentType"
-                                  checked={data === values.paymentType}
-                                />
-                              </div>
-                              <div className="flex min-w-[320px] max-w-[320px] flex-col rounded border-2 border-normal-white p-4">
-                                <img src={imageSrc} alt="Payment-Type-Logo" />
-                                <p>{data}</p>
-                              </div>
+                  } else {
+                    toast.error(
+                      "We were unable to get your transaction Id, please try again later",
+                      {
+                        position: "top-center",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        theme: "colored",
+                      }
+                    );
+                  }
+                }}
+              >
+                {({ setFieldValue, values }) => (
+                  <Form>
+                    <div className="mx-2 flex flex-col items-center rounded-sm border-2 border-normal-white p-1 lg:mx-0 lg:p-5">
+                      {paymentTypeList.map((data, index) => {
+                        let imageSrc: string;
+                        if (data === "BCA Virtual Account") {
+                          imageSrc = "/bca_mini.png";
+                        } else if (data === "BNI Virtual Account") {
+                          imageSrc = "/bni_mini.png";
+                        } else {
+                          imageSrc = "logo not found";
+                        }
+                        return (
+                          <div
+                            className="my-1 flex w-fit flex-row rounded border-2 border-normal-white"
+                            key={index}
+                            onClick={() => {
+                              setFieldValue("paymentType", data);
+                            }}
+                          >
+                            <div className="mr-2 self-center">
+                              <input
+                                type="radio"
+                                name="paymentType"
+                                checked={data === values.paymentType}
+                                className="ml-2"
+                              />
                             </div>
-                          );
-                        })}
-                        <ErrorMessage
-                          name="paymentType"
-                          component="div"
-                          className="text-red-600"
-                        />
-                        {/*---> Confirm Button <---*/}
-                        <div
-                          className="input-button"
-                          style={{
-                            maxWidth: 320,
-                            paddingTop: 8,
-                          }}
-                        >
-                          <button type="submit" className={styles.button}>
-                            Confirm
-                          </button>
-                        </div>
+                            <div className="flex min-w-[320px] max-w-[320px] flex-col  p-4">
+                              <img src={imageSrc} alt="Payment-Type-Logo" />
+                              <p>{data}</p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                      <ErrorMessage
+                        name="paymentType"
+                        component="div"
+                        className="text-red-600"
+                      />
+                      {/*---> Confirm Button <---*/}
+                      <div
+                        className="input-button"
+                        style={{
+                          maxWidth: 320,
+                          minWidth: 320,
+                          paddingTop: 8,
+                        }}
+                      >
+                        <button type="submit" className={styles.button}>
+                          Confirm
+                        </button>
                       </div>
-                    </Form>
-                  )}
-                </Formik>
-              )}
-            </div>
+                    </div>
+                  </Form>
+                )}
+              </Formik>
+            )}
           </div>
         )}
         {isLoading && <>Loading</>}
