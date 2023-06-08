@@ -8,6 +8,7 @@ import { HiHeart, HiTrash } from "react-icons/hi";
 import { toast } from "react-toastify";
 import { DialogConfrim } from "../DialogConfirm";
 import { HiBuildingStorefront, HiUserGroup } from "react-icons/hi2";
+import { FormatCurrencyIdr } from "@/helper/GeneralHelper/CurrencyHelper";
 
 export interface ProductCardProps extends HTMLAttributes<HTMLDivElement> {
   itemData: ItemSummary;
@@ -88,7 +89,7 @@ export const ProductCard = ({ itemData, ...props }: ProductCardProps) => {
           </p>
           <p className="font-sans text-sm lg:text-base">{itemData.hobby}</p>
           <p className="font-sans text-sm lg:text-base">
-            Rp. {itemData.itemPrice.toLocaleString()}
+            {FormatCurrencyIdr(itemData.itemPrice)}
           </p>
         </div>
         <div className="mt-auto flex flex-row justify-end gap-2 p-3">

@@ -8,6 +8,7 @@ import { DialogConfrim } from "../DialogConfirm";
 import { CartAdd, WishlistRemove } from "@/helper";
 import { toast } from "react-toastify";
 import { HiBuildingStorefront } from "react-icons/hi2";
+import { FormatCurrencyIdr } from "@/helper/GeneralHelper/CurrencyHelper";
 
 export interface WishlistCardProps extends HTMLAttributes<HTMLDivElement> {
   itemData: WishlistSummary;
@@ -88,7 +89,7 @@ export const WishlistCard = ({
           </p>
           <p className="font-sans text-sm lg:text-base">{itemData.hobby}</p>
           <p className="font-sans text-sm lg:text-base">
-            Rp. {itemData.itemPrice.toLocaleString()}
+            {FormatCurrencyIdr(itemData.itemPrice)}
           </p>
         </div>
         <div className="mt-auto flex flex-row justify-end gap-2 p-3">

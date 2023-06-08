@@ -1,5 +1,6 @@
 import { CartItem } from "@/Components/CartItem";
 import { CartQuery } from "@/helper";
+import { FormatCurrencyIdr, FormatCurrencyIdrBigInt } from "@/helper/GeneralHelper/CurrencyHelper";
 import { SessionValidate } from "@/helper/SessionHelper";
 import { CartQueryResult, CartSummary } from "@/types";
 import Head from "next/head";
@@ -11,7 +12,7 @@ export default function Cart() {
   const router = useRouter();
   const [windowWidth, setWindowWidth] = useState(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [cartPrice, setCartPrice] = useState<bigint | undefined>();
+  const [cartPrice, setCartPrice] = useState<bigint>();
   // uat cek paginContext yang support infinite Scroll
   const [cartLatest, setCartLatest] = useState<CartQueryResult | undefined>();
   const [totalCartItems, setTotalCartItems] = useState<CartSummary[]>([]);
@@ -171,7 +172,7 @@ export default function Cart() {
                   {isLoading ? (
                     <>Loading...</>
                   ) : (
-                    <>Rp. {cartPrice?.toLocaleString()}</>
+                    <>{cartPrice ? FormatCurrencyIdrBigInt(cartPrice) : FormatCurrencyIdr(0)}</>
                   )}
                 </div>
                 <div className="min-w-[64px] px-4 pb-2">
@@ -192,7 +193,7 @@ export default function Cart() {
                 {isLoading ? (
                   <>Loading...</>
                 ) : (
-                  <>Rp. {cartPrice?.toLocaleString()}</>
+                  <>{cartPrice ? FormatCurrencyIdrBigInt(cartPrice) : FormatCurrencyIdr(0)}</>
                 )}
               </div>
               <div className="min-w-[64px] px-4 pb-2">
