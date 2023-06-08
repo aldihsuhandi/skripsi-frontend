@@ -2,11 +2,13 @@ import { CartItem } from "@/Components/CartItem";
 import { CartQuery } from "@/helper";
 import { FormatCurrencyIdr, FormatCurrencyIdrBigInt } from "@/helper/GeneralHelper/CurrencyHelper";
 import { SessionValidate } from "@/helper/SessionHelper";
+import { TransactionCreate } from "@/helper/Transaction";
 import { CartQueryResult, CartSummary } from "@/types";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { toast } from "react-toastify";
 
 export default function Cart() {
   const router = useRouter();
@@ -17,9 +19,6 @@ export default function Cart() {
   const [cartLatest, setCartLatest] = useState<CartQueryResult | undefined>();
   const [totalCartItems, setTotalCartItems] = useState<CartSummary[]>([]);
   // Uat tau yang selected yang mana aja
-  const [arraySelected, setArraySelected] = useState<Map<string, number>>(
-    new Map()
-  );
   const [curPage, setCurPage] = useState(2);
 
   useEffect(() => {
@@ -29,7 +28,7 @@ export default function Cart() {
         setIsLoading(true);
         const cartQueryItem = await CartQuery({
           pageNumber: 1,
-          numberOfItems: 10,
+          numberOfItems: 5,
         });
 
         if (cartQueryItem) {
@@ -38,15 +37,6 @@ export default function Cart() {
             setCartLatest(cartQueryItem);
             setTotalCartItems(totalCartItems.concat(cartQueryItem.carts));
             setCartPrice(cartQueryItem.price);
-
-            cartQueryItem.carts.forEach((element) => {
-              if (element.selected) {
-                // setArraySelected(
-                //   arraySelected.concat(element.itemSummary.itemId)
-                // );
-                arraySelected.set(element.itemSummary.itemId, element.quantity);
-              }
-            });
           }
         }
       };
@@ -76,7 +66,7 @@ export default function Cart() {
   const infiniteCartFetchMore = async () => {
     const cartQueryItem = await CartQuery({
       pageNumber: curPage,
-      numberOfItems: 10,
+      numberOfItems: 2,
     });
 
     setCurPage(curPage + 1);
@@ -106,20 +96,35 @@ export default function Cart() {
     });
   };
 
-  const UpdateSelectedArray = ({
-    itemId,
-    quantity,
-    add,
-  }: {
-    itemId: string;
-    quantity: number;
-    add: boolean;
-  }) => {
-    if (add) {
-      arraySelected.set(itemId, quantity);
-    } else {
-      arraySelected.delete(itemId);
-    }
+  const BuyButton = () => {
+    return (
+      <button
+        className="w-full rounded bg-normal-blue px-24 py-2  font-bold text-white hover:bg-blue-700"
+        disabled={isLoading || cartPrice === BigInt(0)}
+        onClick={async () => {
+          const createTransRes = await TransactionCreate();
+
+          if (createTransRes && createTransRes.resultContext.success) {
+            router.push({
+              pathname: "/transaction/PickPaymentType",
+              query: { transId: createTransRes.transactionId },
+            });
+          } else if (!createTransRes?.resultContext.success) {
+            toast.error(
+              "Something went wrong when trying to create the transaction",
+              {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                theme: "colored",
+              }
+            );
+          }
+        }}
+      >
+        Buy
+      </button>
+    );
   };
 
   return (
@@ -153,7 +158,6 @@ export default function Cart() {
                         <CartItem
                           cartItemData={e}
                           setUpdateCartPrice={UpdateCartPrice}
-                          onCheckChanged={UpdateSelectedArray}
                           onDelete={DeleteFromTotal}
                         />
                       </div>
@@ -176,12 +180,7 @@ export default function Cart() {
                   )}
                 </div>
                 <div className="min-w-[64px] px-4 pb-2">
-                  <button
-                    className="w-full rounded bg-normal-blue px-24 py-2  font-bold text-white hover:bg-blue-700"
-                    disabled={isLoading}
-                  >
-                    Buy
-                  </button>
+                  <BuyButton />
                 </div>
               </div>
             ) : undefined}
@@ -197,12 +196,7 @@ export default function Cart() {
                 )}
               </div>
               <div className="min-w-[64px] px-4 pb-2">
-                <button
-                  className="w-full rounded bg-normal-blue px-24 py-2  font-bold text-white hover:bg-blue-700"
-                  disabled={isLoading}
-                >
-                  Buy
-                </button>
+                <BuyButton />
               </div>
             </div>
           ) : undefined}

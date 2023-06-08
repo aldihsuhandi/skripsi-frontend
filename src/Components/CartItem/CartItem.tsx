@@ -13,26 +13,15 @@ import { HiMinusCircle, HiPlusCircle, HiTrash } from "react-icons/hi2";
 export interface CartItemProps extends HTMLAttributes<HTMLDivElement> {
   cartItemData: CartSummary;
   setUpdateCartPrice: (price_replacement: bigint) => void;
-  onCheckChanged: ({
-    itemId,
-    quantity,
-    add,
-  }: {
-    itemId: string;
-    quantity: number;
-    add: boolean;
-  }) => void;
   onDelete: (itemId: string) => void;
 }
 
 export const CartItem = ({
   cartItemData,
   setUpdateCartPrice,
-  onCheckChanged,
   onDelete,
   ...props
 }: CartItemProps) => {
-  const router = useRouter();
   const [image, setImage] = useState<string | undefined>();
   const merchantEncoded = encodeURIComponent(
     cartItemData.itemSummary.merchantInfo.username
@@ -83,11 +72,6 @@ export const CartItem = ({
             });
             if (resultSelect && resultSelect.resultContext.success) {
               setChecked(resultSelect.selected);
-              onCheckChanged({
-                itemId: cartItemData.itemSummary.itemId,
-                quantity: quantity,
-                add: resultSelect.selected,
-              });
               const priceResponse = await CartPrice();
 
               if (priceResponse && priceResponse.resultContext) {
