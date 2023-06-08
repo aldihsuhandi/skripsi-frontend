@@ -1,4 +1,6 @@
+import { PagingContext } from "../Item";
 import { APIResultTemplate } from "../ResultContext";
+// import { UserRole } from "../User";
 
 // REQUEST
 
@@ -19,21 +21,12 @@ export interface QueryReviewRequest {
 
 // RESULT
 
-//Review Paging Context
-export interface ReviewPagingContext {
-  pageNumber: number;
-  numberOfItem: number;
-  hasNext: boolean;
-  totalItem: number;
-  totalPage: number;
-}
-
 // Review Summary
 export interface ReviewSummary {
   reviewId: string;
   itemId: string;
   review: number;
-  images?: FileList;
+  images?: string[];
   interestLevel: string;
   description: string;
   needReview: boolean;
@@ -41,5 +34,5 @@ export interface ReviewSummary {
 
 export interface QueryReviewResult extends APIResultTemplate {
   reviews: ReviewSummary[];
-  pagingContext: ReviewPagingContext;
+  pagingContext: PagingContext;
 }

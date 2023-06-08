@@ -1,5 +1,13 @@
 import { APIResultTemplate } from "../ResultContext";
 
+//Form Values
+export interface CreateReviewFormValues {
+  review: number;
+  images?: File[];
+  description?: string;
+  interestLevel: string;
+}
+
 // REQUEST
 
 /*
@@ -13,7 +21,7 @@ import { APIResultTemplate } from "../ResultContext";
 export interface CreateReviewRequest {
   reviewId: string;
   review: number;
-  images?: FileList;
+  images?: string[];
   description?: string;
   interestLevel: string;
 }

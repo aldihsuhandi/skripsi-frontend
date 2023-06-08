@@ -14,7 +14,7 @@ export default function MyReviews() {
         <div className="mx-auto p-4">
           <div className="mx-auto flex min-h-screen min-w-fit max-w-4xl flex-col rounded-lg bg-white shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]">
             <ReviewPageNavigation />
-            <h1>INI PAGE ISINYA LIST ITEM2 YG UDH REVIEW</h1>
+            <h1>INI PAGE ISINYA LIST ITEM2 YG UDH DIREVIEW</h1>
           </div>
         </div>
       </main>
