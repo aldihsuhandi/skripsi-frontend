@@ -11,7 +11,8 @@ export type dictionaryKey =
   | "CATEGORY"
   | "HOBBY"
   | "ITEM_SORTING"
-  | "SORTING_TYPE";
+  | "SORTING_TYPE"
+  | "PAYMENT";
 
 export interface FilterDictionaryRequestBody {
   dictionaryKey: dictionaryKey;

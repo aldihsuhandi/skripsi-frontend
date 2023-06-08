@@ -30,8 +30,8 @@ export const CartQuery = async ({
       url: "http://localhost:8080/cart/query",
       config: config,
       body: {
-        pageNumber,
-        numberOfItems,
+        pageNumber: pageNumber,
+        numberOfItem: numberOfItems,
       },
     });
 
