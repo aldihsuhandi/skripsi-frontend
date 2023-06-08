@@ -10,7 +10,7 @@ import styles from "../styles/Paginate.module.css";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { HiShoppingCart } from "react-icons/hi2";
+import { HiShoppingCart, HiXCircle } from "react-icons/hi2";
 import ReactPaginate from "react-paginate";
 
 export default function transaction() {
@@ -94,7 +94,10 @@ export default function transaction() {
         <TransactionCard trx={data} />
       ));
     }
-    return <>empty</>;
+    return <><div className="flex flex-col w-full items-center justify-center h-auto p-10  opacity-30">
+      <HiXCircle className="h-64 w-64 text-gray-300"/>
+      <p>Tidak ada pembelian</p>
+    </div></>;
   };
 
   return (

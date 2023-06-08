@@ -3,7 +3,7 @@ import { CheckExistSessionLocal } from "../SessionHelper";
 import { PostCall } from "../PostCall";
 import { TransactionFinishResult } from "@/types/Transaction/TransactionFinish";
 
-export const TransactionFinish = async (id: strign) => {
+export const TransactionFinish = async (id: string) => {
   const session = CheckExistSessionLocal();
   if (!session) {
     return;
