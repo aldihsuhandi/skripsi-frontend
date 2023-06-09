@@ -14,6 +14,7 @@ import {
   capitalizeFirstLetter,
   urlFirstString,
 } from "@/helper";
+import { FormatCurrencyIdr, FormatCurrencyIdrBigInt } from "@/helper/GeneralHelper/CurrencyHelper";
 import { ItemDetail } from "@/helper/ItemDetail";
 import { ItemDetailResult, Session_Local_Key } from "@/types";
 import { UserSummary } from "@/types/User";
@@ -72,8 +73,8 @@ export default function MerchantItem() {
             if (itemDataFetch.item) {
               setPageTitle(
                 itemDataFetch.item.itemName +
-                  " from" +
-                  itemDataFetch.item.merchantInfo.username
+                " from" +
+                itemDataFetch.item.merchantInfo.username
               );
             }
             setIsLoading(false);
@@ -168,7 +169,7 @@ export default function MerchantItem() {
                 </div>
 
                 <h1 className="py-3 text-3xl font-bold">
-                  Rp. {itemData.item.itemPrice.toLocaleString()}
+                  {FormatCurrencyIdr(itemData.item.itemPrice)}
                 </h1>
 
                 {/* 1.2.3 Category */}
@@ -272,8 +273,7 @@ export default function MerchantItem() {
                 </div>
                 {/* Total Price */}
                 <span className="self-center text-lg font-bold">
-                  Total: Rp.{" "}
-                  {(quantityToCart * itemData.item.itemPrice).toLocaleString()}
+                  Total: {FormatCurrencyIdrBigInt(BigInt(quantityToCart * itemData.item.itemPrice))}
                 </span>
                 {/* Add to Cart Button */}
                 <div className="px-4 pt-2 pb-1">

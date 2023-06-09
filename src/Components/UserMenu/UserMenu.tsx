@@ -137,7 +137,7 @@ export const UserMenu = ({
               </DropdownMenu.Item>
               <DropdownMenu.Item className="rounded-md p-2 hover:border hover:shadow-md">
                 <Link
-                  href="/ShoppingHistory"
+                  href="/transaction"
                   className="flex flex-row items-center"
                 >
                   <HiClock size={15} />

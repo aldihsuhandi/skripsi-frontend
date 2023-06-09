@@ -9,3 +9,14 @@ export function StringToDateAndBack(stringDate: string) {
 
   return convertedStringDate;
 }
+
+export function DateToFormattedString(dateStr: string) {
+  const date = new Date(dateStr);
+  const formattedDate = date.toLocaleString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+
+  return formattedDate;
+}

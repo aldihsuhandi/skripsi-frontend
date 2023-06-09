@@ -1,20 +1,24 @@
 import { CartItem } from "@/Components/CartItem";
 import { CartQuery } from "@/helper";
+import { FormatCurrencyIdr, FormatCurrencyIdrBigInt } from "@/helper/GeneralHelper/CurrencyHelper";
 import { SessionValidate } from "@/helper/SessionHelper";
+import { TransactionCreate } from "@/helper/Transaction";
 import { CartQueryResult, CartSummary } from "@/types";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { toast } from "react-toastify";
 
 export default function Cart() {
   const router = useRouter();
   const [windowWidth, setWindowWidth] = useState(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [cartPrice, setCartPrice] = useState<number | undefined>();
+  const [cartPrice, setCartPrice] = useState<bigint>(BigInt(0));
   // uat cek paginContext yang support infinite Scroll
   const [cartLatest, setCartLatest] = useState<CartQueryResult | undefined>();
   const [totalCartItems, setTotalCartItems] = useState<CartSummary[]>([]);
+  // Uat tau yang selected yang mana aja
   const [curPage, setCurPage] = useState(2);
 
   useEffect(() => {
@@ -24,7 +28,7 @@ export default function Cart() {
         setIsLoading(true);
         const cartQueryItem = await CartQuery({
           pageNumber: 1,
-          numberOfItems: 10,
+          numberOfItems: 5,
         });
 
         if (cartQueryItem) {
@@ -62,7 +66,7 @@ export default function Cart() {
   const infiniteCartFetchMore = async () => {
     const cartQueryItem = await CartQuery({
       pageNumber: curPage,
-      numberOfItems: 10,
+      numberOfItems: 2,
     });
 
     setCurPage(curPage + 1);
@@ -77,15 +81,11 @@ export default function Cart() {
     }
   };
 
-  function UpdateCartPrice(price_replacement: number) {
+  function UpdateCartPrice(price_replacement: bigint) {
     setCartPrice(price_replacement);
   }
 
   const DeleteFromTotal = (itemId: string) => {
-    // totalCartItems.splice(
-    //   totalCartItems.findIndex((e) => e.itemSummary.itemId === itemId),
-    //   1
-    // );
     setTotalCartItems((prevItems) => {
       const temp = [...prevItems];
       temp.splice(
@@ -94,7 +94,37 @@ export default function Cart() {
       );
       return temp;
     });
-    console.log(totalCartItems);
+  };
+
+  const BuyButton = () => {
+    return (
+      <button
+        className="w-full rounded bg-normal-blue px-24 py-2  font-bold text-white hover:bg-blue-700"
+        disabled={isLoading || cartPrice === BigInt(0)}
+        onClick={async () => {
+          const createTransRes = await TransactionCreate();
+
+          if (createTransRes && createTransRes.resultContext.success) {
+            router.push({
+              pathname: "/transaction/PickPaymentType",
+              query: { transId: createTransRes.transactionId },
+            });
+          } else if (!createTransRes?.resultContext.success) {
+            toast.error(
+              "Something went wrong when trying to create the transaction",
+              {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                theme: "colored",
+              }
+            );
+          }
+        }}
+      >
+        Buy
+      </button>
+    );
   };
 
   return (
@@ -107,7 +137,9 @@ export default function Cart() {
       </Head>
       <main>
         <div className="m-0 min-h-screen lg:mx-auto lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
-          <p className="px-3 pt-2 text-sm font-bold lg:text-lg">Cart</p>
+          <div className="flex flex-row px-3 pt-2 lg:px-0">
+            <p className="ml-2 text-sm font-bold lg:text-lg">Cart</p>
+          </div>
 
           <div className="flex flex-row">
             {isLoading ? (
@@ -144,16 +176,11 @@ export default function Cart() {
                   {isLoading ? (
                     <>Loading...</>
                   ) : (
-                    <>Rp. {cartPrice?.toLocaleString()}</>
+                    <>{FormatCurrencyIdrBigInt(cartPrice)}</>
                   )}
                 </div>
                 <div className="min-w-[64px] px-4 pb-2">
-                  <button
-                    className="w-full rounded bg-normal-blue px-24 py-2  font-bold text-white hover:bg-blue-700"
-                    disabled={isLoading}
-                  >
-                    Buy
-                  </button>
+                  <BuyButton />
                 </div>
               </div>
             ) : undefined}
@@ -165,16 +192,11 @@ export default function Cart() {
                 {isLoading ? (
                   <>Loading...</>
                 ) : (
-                  <>Rp. {cartPrice?.toLocaleString()}</>
+                  <>{FormatCurrencyIdrBigInt(cartPrice)}</>
                 )}
               </div>
               <div className="min-w-[64px] px-4 pb-2">
-                <button
-                  className="w-full rounded bg-normal-blue px-24 py-2  font-bold text-white hover:bg-blue-700"
-                  disabled={isLoading}
-                >
-                  Buy
-                </button>
+                <BuyButton />
               </div>
             </div>
           ) : undefined}

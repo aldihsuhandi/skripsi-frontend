@@ -5,6 +5,7 @@ import {
 } from "@/Components/MerchantInfo";
 import { ProductCard } from "@/Components/ProductCard";
 import { SearchBar } from "@/Components/SearchBar";
+import { NotFoundWidget } from "@/Components/Widget";
 import {
   ItemFilterQuery,
   UserQuery,
@@ -236,7 +237,9 @@ export default function MerchantItems() {
                           })}
                         </>
                       ) : (
-                        <>KOSONG PLACEHOLDER</>
+                        <>
+                          <NotFoundWidget name="item" />
+                        </>
                       )}
                     </div>
                     {items && (
