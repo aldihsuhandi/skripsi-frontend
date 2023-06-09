@@ -1,4 +1,5 @@
 import { SearchBar } from "@/Components/SearchBar";
+import { NotFoundWidget } from "@/Components/Widget";
 import { WishlistCard } from "@/Components/WishlistCard";
 import { WishlistFilterBar } from "@/Components/WishlistFilterBar";
 import { WishlistQuery, parseNumberUndefined, urlFirstString } from "@/helper";
@@ -9,7 +10,6 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
-import { toast } from "react-toastify";
 import styles from "../styles/Paginate.module.css";
 
 export default function Wishlist() {
@@ -199,7 +199,9 @@ export default function Wishlist() {
                       })}
                     </>
                   ) : (
-                    <>KOSONG PLACEHOLDER</>
+                    <>
+                      <NotFoundWidget name="wishlist" />
+                    </>
                   )}
                 </div>
                 {items && (

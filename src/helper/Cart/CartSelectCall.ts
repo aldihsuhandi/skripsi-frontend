@@ -1,17 +1,14 @@
 import {
   CLIENT_ID,
   CLIENT_SECRET,
-  CartQueryRequest,
-  CartQueryResult,
+  CartSelectRequest,
+  CartSelectResult,
 } from "@/types";
 import { toast } from "react-toastify";
 import { PostCall } from "../PostCall";
 import { CheckExistSessionLocal } from "../SessionHelper";
 
-export const CartQuery = async ({
-  pageNumber,
-  numberOfItems,
-}: CartQueryRequest) => {
+export const CartSelect = async ({ itemIds, selected }: CartSelectRequest) => {
   const sessionString = CheckExistSessionLocal();
   if (sessionString) {
     const headers = {
@@ -26,12 +23,12 @@ export const CartQuery = async ({
       headers: headers,
     };
 
-    const result = await PostCall<CartQueryResult>({
-      url: "http://localhost:8080/cart/query",
+    const result = await PostCall<CartSelectResult>({
+      url: "http://localhost:8080/cart/select",
       config: config,
       body: {
-        pageNumber: pageNumber,
-        numberOfItem: numberOfItems,
+        itemIds,
+        selected,
       },
     });
 
@@ -49,7 +46,7 @@ export const CartQuery = async ({
       );
     }
   } else {
-    toast.error("You need to be logged in to query Cart!", {
+    toast.error("You need to be logged in to update Cart!", {
       position: "top-center",
       autoClose: 10000,
       hideProgressBar: false,

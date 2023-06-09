@@ -8,10 +8,11 @@ export interface CartQueryRequest {
 export interface CartSummary {
   quantity: number;
   itemSummary: ItemSummary;
+  selected: boolean;
 }
 
 export interface CartQueryResult extends APIResultTemplate {
   pagingContext: PagingContext;
   carts: CartSummary[];
-  price: number;
+  price: bigint;
 }
