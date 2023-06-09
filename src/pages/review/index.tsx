@@ -1,4 +1,9 @@
+import { ReviewCard } from "@/Components/ReviewsComponent/ReviewCard";
 import { ReviewPageNavigation } from "@/Components/ReviewsComponent/ReviewPageNavigation";
+import { parseNumberUndefined, urlFirstString } from "@/helper";
+import { QueryReviewCall } from "@/helper/ReviewsHelper";
+import { SessionValidate } from "@/helper/SessionHelper";
+import { QueryReviewResult } from "@/types/Reviews";
 import { UserSummary } from "@/types/User";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -6,8 +11,34 @@ import { useEffect, useState } from "react";
 
 export default function NeedReviews() {
   const router = useRouter();
-  const [userData, setUserData] = useState<UserSummary | undefined>(undefined);
+  // const [userData, setUserData] = useState<UserSummary | undefined>(undefined);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { page } = router.query;
+  const [currentPage, setCurrentPage] = useState(0);
+  const [needReviews, setNeedReviews] = useState<QueryReviewResult>();
+
+  // useEffect(() => {
+  //   const checkSession = async () => {
+  //     const isValidSession = await SessionValidate();
+  //     if (!isValidSession) {
+  //       router.push("/login");
+  //     }
+  //   };
+
+  //   const fetchQueriesPage = async () => {
+  //     const tempPage = parseNumberUndefined(urlFirstString(page)) ?? 0;
+  //     setCurrentPage(tempPage === 0 ? 0 : tempPage - 1);
+  //   };
+
+  //   if (router.isReady) {
+  //     checkSession();
+  //   }
+
+  //   const queryNeedReviews =async () => {
+  //     await fetchQueriesPage();
+
+  //   }
+  // });
 
   return (
     <>
@@ -22,6 +53,7 @@ export default function NeedReviews() {
           <div className="mx-auto flex min-h-screen min-w-fit max-w-4xl flex-col rounded-lg bg-white shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]">
             <ReviewPageNavigation />
             <h1>INI PAGE ISINYA BWT ITEM2 YG BLM DI REVIEW</h1>
+            <ReviewCard />
           </div>
         </div>
       </main>
