@@ -1,6 +1,7 @@
 import { CartSelect } from "@/helper";
 import { CartPrice } from "@/helper/Cart/CartPriceCall";
 import { CartUpdate } from "@/helper/Cart/CartUpdateCall";
+import { FormatCurrencyIdr } from "@/helper/GeneralHelper/CurrencyHelper";
 import { CLIENT_ID, CLIENT_SECRET, CartSummary } from "@/types";
 import axios from "axios";
 import classNames from "classnames";
@@ -109,7 +110,7 @@ export const CartItem = ({
               {cartItemData.itemSummary.merchantInfo.location?.city}
             </p>
             <p className="font-sans text-sm lg:text-base">
-              Rp. {cartItemData.itemSummary.itemPrice.toLocaleString()}
+              {FormatCurrencyIdr(cartItemData.itemSummary.itemPrice)}
             </p>
           </div>
         </div>

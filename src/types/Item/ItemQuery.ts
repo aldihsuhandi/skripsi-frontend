@@ -67,6 +67,21 @@ export interface ItemSummary {
   gmtModified: Date;
 }
 
+export interface HistoryItemSummary {
+  itemId: string;
+  itemName: string;
+  itemPrice: number;
+  itemDescription: string;
+  itemCategory: string;
+  hobby: string;
+  merchantInfo: UserSummary;
+  merchantLevel: string;
+  userLevel: string;
+  itemImages: string[];
+  gmtCreate: Date;
+  gmtModified: Date;
+}
+
 export interface ItemQueryResult extends APIResultTemplate {
   pagingContext: PagingContext;
   items: ItemSummary[];
