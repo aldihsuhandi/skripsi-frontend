@@ -11,7 +11,8 @@ import {
 export const QueryReviewCall = async (
   type: string,
   needReview: boolean,
-  pageNumber: number
+  pageNumber: number,
+  merchantName?: string
 ) => {
   const sessionString = CheckExistSessionLocal();
   if (sessionString) {
@@ -35,6 +36,7 @@ export const QueryReviewCall = async (
         needReview: needReview,
         numberOfItem: 10,
         pageNumber: pageNumber,
+        merchantName: merchantName,
       },
     });
 
