@@ -75,7 +75,7 @@ export const ReviewCard = ({ reviewData }: ReviewCardProps) => {
 
   return (
     <div className="p-2">
-      <div className="relative flex min-h-fit min-w-full flex-col rounded-md border p-2 shadow-md">
+      <div className="relative flex min-h-fit min-w-full flex-col rounded-md border p-2 shadow-md hover:border-normal-blue">
         <div className="flex flex-row">
           <div className="flex flex-col">
             <img

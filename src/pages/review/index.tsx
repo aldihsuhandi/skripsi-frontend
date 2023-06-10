@@ -1,19 +1,19 @@
 import { ReviewCard } from "@/Components/ReviewsComponent/ReviewCard";
-import { ReviewPageNavigation } from "@/Components/ReviewsComponent/ReviewPageNavigation";
+import { NotFoundWidget } from "@/Components/Widget";
 import { parseNumberUndefined, urlFirstString } from "@/helper";
 import { QueryReviewCall } from "@/helper/ReviewsHelper";
 import { SessionValidate } from "@/helper/SessionHelper";
 import { QueryReviewResult } from "@/types/Reviews";
-import { UserSummary } from "@/types/User";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
 
 export default function NeedReviews() {
   const router = useRouter();
   // const [userData, setUserData] = useState<UserSummary | undefined>(undefined);
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const { page } = router.query;
+  const { page, reviewed } = router.query;
   const [currentPage, setCurrentPage] = useState(0);
   const [review, setReview] = useState<QueryReviewResult>();
   const [needReview, setNeedReview] = useState<boolean>(true);
@@ -31,41 +31,60 @@ export default function NeedReviews() {
       setCurrentPage(tempPage === 0 ? 0 : tempPage - 1);
     };
 
-    if (router.isReady) {
-      checkSession();
-    }
+    const fetchReviewed = async () => {
+      const r = urlFirstString(reviewed) ?? "false";
+      setNeedReview(!(r === "true"));
+    };
 
     const queryNeedReviews = async () => {
       await fetchQueriesPage();
-      const result = await QueryReviewCall("USER", needReview, currentPage + 1);
-      if (result && result.resultContext.success) {
-        setReview(result);
+      await fetchReviewed();
+      if ((reviewed === "true") === !needReview) {
+        const result = await QueryReviewCall(
+          "USER",
+          needReview,
+          currentPage + 1
+        );
+        if (result && result.resultContext.success) {
+          setReview(result);
+        }
       }
     };
-    queryNeedReviews();
-  }, [router.isReady, page, needReview]);
 
-  const handlePageChange = (selectedPage: { selected: number }) => {
-    setCurrentPage(selectedPage.selected);
+    if (router.isReady) {
+      checkSession();
+      queryNeedReviews();
+    }
+  }, [router.isReady, page, reviewed, needReview]);
+
+  const changeNeedReview = (r: boolean) => {
     router.push({
       pathname: `/review`,
       query: {
-        ...router.query,
-        page: selectedPage.selected + 1,
+        reviewed: String(!r),
+        page: 1,
       },
     });
   };
 
   const ReviewWidget = () => {
     if (review && review.reviews && review.reviews.length != 0) {
-      return review.reviews.map((data) => <ReviewCard reviewData={data} />);
+      return review.reviews.map((data) => (
+        <ReviewCard key={data.reviewId} reviewData={data} />
+      ));
     }
-    return <>a</>;
+    return (
+      <>
+        <NotFoundWidget name="review" />
+      </>
+    );
   };
 
-  // const getSelected = (button: string) => {
-  //   return;
-  // };
+  const getSelected = (button: boolean) => {
+    return needReview === button
+      ? "bg-blue-200 border-blue-500 text-blue-500"
+      : "bg-white border-gray-200 text-gray-500 ";
+  };
 
   return (
     <>
@@ -76,11 +95,35 @@ export default function NeedReviews() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <div className="mx-auto p-4">
-          <div className="mx-auto flex min-h-screen min-w-fit max-w-4xl flex-col rounded-lg bg-white shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]">
-            <ReviewPageNavigation />
-            <h1>INI PAGE ISINYA BWT ITEM2 YG BLM DI REVIEW</h1>
-            {ReviewWidget()}
+        <div className="p-4">
+          <div className="mx-auto flex min-h-screen min-w-fit max-w-4xl flex-col rounded-lg bg-white py-3 px-2 shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]">
+            {/* <ReviewPageNavigation /> */}
+            <div className="flex w-full flex-row flex-wrap items-center pb-2 pl-1">
+              <button
+                className={`${getSelected(
+                  true
+                )} mx-1 my-1 rounded-lg border-2 border-solid py-1 px-2 md:my-0 `}
+                onClick={() => {
+                  changeNeedReview(true);
+                }}
+              >
+                Waiting to be reviewed
+              </button>
+              <button
+                className={`${getSelected(
+                  false
+                )} mx-1 my-1 rounded-lg border-2 border-solid py-1 px-2 md:my-0 `}
+                onClick={() => {
+                  changeNeedReview(false);
+                }}
+              >
+                See Reviews
+              </button>
+            </div>
+            {/* <h1>INI PAGE ISINYA BWT ITEM2 YG BLM DI REVIEW</h1> */}
+            <div className="m-2 rounded-md border-2 border-solid border-gray-200 p-3 shadow-md">
+              {ReviewWidget()}
+            </div>
           </div>
         </div>
       </main>
