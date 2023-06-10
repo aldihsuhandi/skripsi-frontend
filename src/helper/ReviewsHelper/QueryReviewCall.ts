@@ -4,12 +4,11 @@ import { PostCall } from "../PostCall";
 import { CheckExistSessionLocal } from "../SessionHelper";
 import { QueryReviewRequest, QueryReviewResult } from "@/types/Reviews";
 
-export const QueryReviewCall = async ({
-  type,
-  needReview,
-  numberOfItem,
-  pageNumber,
-}: QueryReviewRequest) => {
+export const QueryReviewCall = async (
+  type: string,
+  needReview: boolean,
+  pageNumber: number
+) => {
   const sessionString = CheckExistSessionLocal();
   if (sessionString) {
     const headers = {
@@ -30,7 +29,7 @@ export const QueryReviewCall = async ({
       body: {
         type: type,
         needReview: needReview,
-        numberOfItem: numberOfItem,
+        numberOfItem: 10,
         pageNumber: pageNumber,
       },
     });

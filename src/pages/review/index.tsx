@@ -12,33 +12,60 @@ import { useEffect, useState } from "react";
 export default function NeedReviews() {
   const router = useRouter();
   // const [userData, setUserData] = useState<UserSummary | undefined>(undefined);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { page } = router.query;
   const [currentPage, setCurrentPage] = useState(0);
-  const [needReviews, setNeedReviews] = useState<QueryReviewResult>();
+  const [review, setReview] = useState<QueryReviewResult>();
+  const [needReview, setNeedReview] = useState<boolean>(true);
 
-  // useEffect(() => {
-  //   const checkSession = async () => {
-  //     const isValidSession = await SessionValidate();
-  //     if (!isValidSession) {
-  //       router.push("/login");
-  //     }
-  //   };
+  useEffect(() => {
+    const checkSession = async () => {
+      const isValidSession = await SessionValidate();
+      if (!isValidSession) {
+        router.push("/login");
+      }
+    };
 
-  //   const fetchQueriesPage = async () => {
-  //     const tempPage = parseNumberUndefined(urlFirstString(page)) ?? 0;
-  //     setCurrentPage(tempPage === 0 ? 0 : tempPage - 1);
-  //   };
+    const fetchQueriesPage = async () => {
+      const tempPage = parseNumberUndefined(urlFirstString(page)) ?? 0;
+      setCurrentPage(tempPage === 0 ? 0 : tempPage - 1);
+    };
 
-  //   if (router.isReady) {
-  //     checkSession();
-  //   }
+    if (router.isReady) {
+      checkSession();
+    }
 
-  //   const queryNeedReviews =async () => {
-  //     await fetchQueriesPage();
+    const queryNeedReviews = async () => {
+      await fetchQueriesPage();
+      const result = await QueryReviewCall("USER", needReview, currentPage + 1);
+      if (result && result.resultContext.success) {
+        setReview(result);
+      }
+    };
+    queryNeedReviews();
+  }, [router.isReady, page, needReview]);
 
-  //   }
-  // });
+  const handlePageChange = (selectedPage: { selected: number }) => {
+    setCurrentPage(selectedPage.selected);
+    router.push({
+      pathname: `/review`,
+      query: {
+        ...router.query,
+        page: selectedPage.selected + 1,
+      },
+    });
+  };
+
+  const ReviewWidget = () => {
+    if (review && review.reviews && review.reviews.length != 0) {
+      return review.reviews.map((data) => <ReviewCard reviewData={data} />);
+    }
+    return <>a</>;
+  };
+
+  // const getSelected = (button: string) => {
+  //   return;
+  // };
 
   return (
     <>
@@ -53,7 +80,7 @@ export default function NeedReviews() {
           <div className="mx-auto flex min-h-screen min-w-fit max-w-4xl flex-col rounded-lg bg-white shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]">
             <ReviewPageNavigation />
             <h1>INI PAGE ISINYA BWT ITEM2 YG BLM DI REVIEW</h1>
-            <ReviewCard />
+            {ReviewWidget()}
           </div>
         </div>
       </main>
