@@ -1,4 +1,4 @@
-import { PagingContext } from "../Item";
+import { ItemSummary, PagingContext } from "../Item";
 import { APIResultTemplate } from "../ResultContext";
 // import { UserRole } from "../User";
 
@@ -35,4 +35,9 @@ export interface ReviewSummary {
 export interface QueryReviewResult extends APIResultTemplate {
   reviews: ReviewSummary[];
   pagingContext: PagingContext;
+}
+
+export interface ReviewDetailResult extends APIResultTemplate {
+  review: ReviewSummary;
+  item: ItemSummary;
 }
