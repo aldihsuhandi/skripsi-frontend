@@ -1,16 +1,26 @@
 import { ImagePreview } from "@/Components/ImagePreview";
 import { ReturnArrayImageIdFromArrayFile, urlFirstString } from "@/helper";
-import { CreateReviewCall } from "@/helper/ReviewsHelper";
+import { CreateReviewCall, DetailReviewCall } from "@/helper/ReviewsHelper";
 import { CreateReviewFormValues } from "@/types/Reviews";
 import { Field, FieldArray, Form, Formik } from "formik";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
-import { HiArrowLeftOnRectangle, HiXCircle } from "react-icons/hi2";
+import {
+  HiArrowLeftOnRectangle,
+  HiBuildingStorefront,
+  HiUserGroup,
+  HiXCircle,
+} from "react-icons/hi2";
 import * as Yup from "yup";
 import styles from "../../../styles/Form.module.css";
 import { HiFolderAdd } from "react-icons/hi";
 import { toast } from "react-toastify";
+import { CLIENT_ID, CLIENT_SECRET, ItemSummary } from "@/types";
+import { FormatCurrencyIdr } from "@/helper/GeneralHelper/CurrencyHelper";
+import image from "next/image";
+import axios from "axios";
+import { FilterDictionary } from "@/helper/FilterDictionary/FIlterDictionaryCall";
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
@@ -76,13 +86,125 @@ export default function CreateReview() {
   const { reviewId } = router.query;
   const [currentRevId, setCurrentRevId] = useState<string>("");
   const imgRef = useRef<HTMLInputElement>(null);
+  const [item, setItem] = useState<ItemSummary>();
+  const [itemImg, setItemImg] = useState<string>();
+  const [interestLvl, setInterestLvl] = useState<string[]>([]);
 
   useEffect(() => {
     const tempRevId = urlFirstString(reviewId);
     if (tempRevId) {
       setCurrentRevId(tempRevId);
     }
-  }, [router.isReady]);
+
+    async function downloadImage() {
+      if (!item) {
+        return;
+      }
+      console.log("download image: ");
+      const images = item.itemImages;
+      const response = await ProcessImage({
+        imageIdCom: images[0],
+      });
+
+      if (response?.status === 200 && response.data.byteLength !== 0) {
+        const byteArray = new Uint8Array(response.data);
+        const blobs = new Blob([byteArray], { type: "image/jpeg" });
+        const imgUrl = URL.createObjectURL(blobs);
+
+        setItemImg(imgUrl);
+      } else {
+        setItemImg(undefined);
+      }
+    }
+
+    async function getDictionaries() {
+      const inList = await FilterDictionary({
+        dictionaryKey: "INTEREST_LEVEL",
+      });
+
+      inList?.resultContext.success
+        ? setInterestLvl(inList.dictionaries)
+        : setInterestLvl([
+            "There was an error fetching this data, try refreshing or try again later.",
+          ]);
+    }
+
+    const itemQuery = async () => {
+      if (currentRevId) {
+        const result = await DetailReviewCall(currentRevId);
+        if (result && result.resultContext.success) {
+          setItem(result.item);
+          downloadImage();
+        } else if (result) {
+          let msg = "The System is busy, please try again later";
+          if (result.resultContext.resultCode === "USER_INVALID") {
+            msg = "You don't have permission to view this!";
+          }
+          toast.warning(msg, {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: true,
+            theme: "colored",
+          });
+        }
+      }
+    };
+    itemQuery();
+    getDictionaries();
+  }, [router.isReady, currentRevId]);
+
+  const ItemReviewWidget = () => {
+    if (!item) {
+      return <></>;
+    }
+    return (
+      <a
+        target="_blank"
+        href={`/merchant/${encodeURIComponent(
+          item.merchantInfo.username
+        )}/item/${item.itemId}`}
+        className="flex h-auto w-full flex-row justify-center p-4"
+      >
+        <img
+          className="h-28 w-28 rounded border-2 border-solid p-3"
+          src={
+            itemImg ??
+            "https://i1.sndcdn.com/artworks-dCikqEVyCfTCgdq0-0hSQRQ-t500x500.jpg"
+          }
+          alt=""
+        />
+        <div className="flex h-full w-full flex-col items-start justify-start p-3">
+          <div className="font-semibold">{item.itemName}</div>
+          <div className="text-sm">{FormatCurrencyIdr(item.itemPrice)}</div>
+
+          <div>
+            <p className="flex font-sans text-sm lg:text-base">
+              <HiBuildingStorefront
+                style={{
+                  height: "1.5em",
+                  width: "1.5em",
+                  color: "#581C87",
+                  paddingRight: "2px",
+                }}
+              />
+              {item.merchantLevel}
+            </p>
+            <p className="flex font-sans text-sm lg:text-base">
+              <HiUserGroup
+                style={{
+                  height: "1.5em",
+                  width: "1.5em",
+                  color: "#581C87",
+                  paddingRight: "2px",
+                }}
+              />
+              {item.userLevel == "" ? "No Review" : item.userLevel}
+            </p>
+          </div>
+        </div>
+      </a>
+    );
+  };
 
   return (
     <>
@@ -95,20 +217,27 @@ export default function CreateReview() {
       </Head>
       <main>
         <div className="mx-auto p-4">
-          <div className="mx-auto flex min-h-screen min-w-fit max-w-4xl flex-col rounded-lg bg-white shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]">
+          <div className="mx-auto flex min-h-fit min-w-fit max-w-4xl flex-col rounded-lg bg-white shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]">
             <div className="sticky top-0 flex h-[41.6px] w-full flex-col items-center rounded-t-lg border-b-2 border-b-normal-blue shadow-md">
               <h1 className="pt-2">CREATE YOUR REVIEW FOR THIS PRODUCT</h1>
             </div>
             <div className="flex p-2">
-              <button className="rounded-md border-normal-blue bg-normal-blue p-2 hover:border-bright-blue hover:bg-bright-blue">
+              <a
+                className="rounded-md border-normal-blue bg-normal-blue p-2 hover:border-bright-blue hover:bg-bright-blue"
+                href="/review"
+              >
                 <span className="flex flex-row items-center">
                   <HiArrowLeftOnRectangle size={20} className="fill-white" />
                   <p className="pl-1 text-white">Go Back</p>
                 </span>
-              </button>
+              </a>
             </div>
-            <div className="px-2 pb-2">
-              <div className="flex h-full flex-col rounded-md border shadow-md">
+            <div className="m-2 rounded-md border shadow-md">
+              {ItemReviewWidget()}
+            </div>
+            <div className="px-2 pb-2 pt-3">
+              <h1>Your Review</h1>
+              <div className="flex h-full flex-col pt-2">
                 <Formik
                   initialValues={initialValues}
                   validationSchema={CreateReviewSchema}
@@ -129,6 +258,14 @@ export default function CreateReview() {
                         description: values.description,
                         images: imageIds,
                       });
+                      if (
+                        resultFromCreate &&
+                        resultFromCreate.resultContext.success
+                      ) {
+                        router.push({
+                          pathname: `/review`,
+                        });
+                      }
                     }
                   }}
                 >
@@ -168,7 +305,7 @@ export default function CreateReview() {
                       </FieldArray>
 
                       <div
-                        className="flex cursor-pointer flex-row"
+                        className="flex cursor-pointer flex-row pb-2"
                         onClick={() => {
                           if (imgRef.current) {
                             imgRef.current.click();
@@ -207,6 +344,80 @@ export default function CreateReview() {
                           }}
                         />
                       </div>
+
+                      <label
+                        htmlFor="review"
+                        className="mb-1 block text-sm font-medium"
+                      >
+                        Rate The Product
+                      </label>
+
+                      <div className={styles.input_group_create_item}>
+                        <Field
+                          as="select"
+                          name="review"
+                          id="review"
+                          placeholder="Review"
+                          onChange={(
+                            event: React.ChangeEvent<HTMLSelectElement>
+                          ) => {
+                            setFieldValue("review", event.target.value);
+                          }}
+                          className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                        >
+                          <option value="" disabled>
+                            Choose
+                          </option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                        </Field>
+                      </div>
+
+                      <label
+                        htmlFor="interestLevel"
+                        className="mb-1 block text-sm font-medium"
+                      >
+                        Interest Level
+                      </label>
+
+                      <div className={styles.input_group_create_item}>
+                        <Field
+                          as="select"
+                          name="interestLevel"
+                          id="interestLevel"
+                          onChange={(
+                            event: React.ChangeEvent<HTMLSelectElement>
+                          ) => {
+                            setFieldValue("interestLevel", event.target.value);
+                          }}
+                          className="block w-full rounded-lg border border-gray-300 bg-white p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                        >
+                          <option value="" disabled>
+                            Choose
+                          </option>
+                          {interestLvl.map((value) => (
+                            <option value={value}>{value}</option>
+                          ))}
+                        </Field>
+                      </div>
+
+                      <div className="">
+                        <Field
+                          as="textarea"
+                          name="description"
+                          placeholder="Description"
+                          rows={10}
+                          className={styles.input_desc}
+                        />
+                      </div>
+                      <div className="input-button">
+                        <button type="submit" className={styles.button}>
+                          Submit Review
+                        </button>
+                      </div>
                     </Form>
                   )}
                 </Formik>
@@ -218,3 +429,27 @@ export default function CreateReview() {
     </>
   );
 }
+
+const ProcessImage = async ({ imageIdCom }: { imageIdCom: string }) => {
+  const POST_BODY = {
+    imageId: imageIdCom,
+  };
+
+  try {
+    const response = await axios.post(
+      "http://localhost:8080/image/download",
+      POST_BODY,
+      {
+        headers: {
+          clientId: CLIENT_ID,
+          clientSecret: CLIENT_SECRET,
+          "Accept-Type": "image/jpeg",
+        },
+        responseType: "arraybuffer",
+      }
+    );
+    return response;
+  } catch (error) {
+    return null;
+  }
+};

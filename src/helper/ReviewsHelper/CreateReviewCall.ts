@@ -17,6 +17,8 @@ export const CreateReviewCall = async (
       "Accept-Type": "application/json",
     };
 
+    // console.log(createReviewData);
+
     const config = {
       headers: headers,
     };
@@ -24,7 +26,7 @@ export const CreateReviewCall = async (
     const result = await PostCall<CreateReviewResult>({
       url: "http://localhost:8080/review/create",
       config: config,
-      body: { createReviewData },
+      body: createReviewData,
     });
 
     if (result) {
