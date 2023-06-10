@@ -7,7 +7,8 @@ import { QueryReviewResult } from "@/types/Reviews";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
+import ReactPaginate from "react-paginate";
+import styles from "../../styles/Paginate.module.css";
 
 export default function NeedReviews() {
   const router = useRouter();
@@ -80,6 +81,17 @@ export default function NeedReviews() {
     );
   };
 
+  const handlePageChange = (selectedPage: { selected: number }) => {
+    setCurrentPage(selectedPage.selected);
+    router.push({
+      pathname: `/review`,
+      query: {
+        ...router.query,
+        page: selectedPage.selected + 1,
+      },
+    });
+  };
+
   const getSelected = (button: boolean) => {
     return needReview === button
       ? "bg-blue-200 border-blue-500 text-blue-500"
@@ -96,7 +108,7 @@ export default function NeedReviews() {
       </Head>
       <main>
         <div className="p-4">
-          <div className="mx-auto flex min-h-screen min-w-fit max-w-4xl flex-col rounded-lg bg-white py-3 px-2 shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]">
+          <div className="mx-auto flex min-h-screen min-w-fit max-w-4xl flex-col rounded-lg bg-white py-3 px-2 ">
             {/* <ReviewPageNavigation /> */}
             <div className="flex w-full flex-row flex-wrap items-center pb-2 pl-1">
               <button
@@ -123,6 +135,30 @@ export default function NeedReviews() {
             {/* <h1>INI PAGE ISINYA BWT ITEM2 YG BLM DI REVIEW</h1> */}
             <div className="m-2 rounded-md border-2 border-solid border-gray-200 p-3 shadow-md">
               {ReviewWidget()}
+            </div>
+            <div>
+              {review && (
+                <ReactPaginate
+                  pageCount={review.pagingContext.totalPage}
+                  onPageChange={handlePageChange}
+                  // initialPage={currentPage}
+                  forcePage={currentPage}
+                  nextLabel=">"
+                  previousLabel="<"
+                  breakLabel="..."
+                  // disableInitialCallback
+                  // Stylings
+                  containerClassName={styles.pagination}
+                  pageLinkClassName={styles.pagelink}
+                  activeClassName={styles.active}
+                  activeLinkClassName={styles.active}
+                  breakClassName={styles.pagelink}
+                  previousLinkClassName={styles.pagelink}
+                  nextLinkClassName={styles.pagelink}
+                  disabledLinkClassName={styles.disabled}
+                  renderOnZeroPageCount={null}
+                />
+              )}
             </div>
           </div>
         </div>

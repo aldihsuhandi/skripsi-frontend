@@ -8,6 +8,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { HTMLAttributes, useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import { MultipleReviewImages } from "./MultipleReviewImages";
+import { HiStar } from "react-icons/hi";
 
 export interface ReviewCardProps extends HTMLAttributes<HTMLDivElement> {
   reviewData: ReviewSummary;
@@ -17,6 +19,7 @@ export const ReviewCard = ({ reviewData }: ReviewCardProps) => {
   const router = useRouter();
   const [isReviewed, setIsReviewed] = useState<boolean>(!reviewData.needReview);
   const [itemImage, setItemImage] = useState<string | undefined>();
+  // const [reviewImgs, setReviewImgs] = useState<>
   const [item, setItem] = useState<ItemSummary | undefined>();
   // const [itemInReview, setItemInReview] = useState<ItemSummary[]>([]);
 
@@ -78,13 +81,24 @@ export const ReviewCard = ({ reviewData }: ReviewCardProps) => {
     getItemInfo();
   }, [reviewData]);
 
+  const RenderImages = () => {
+    if (!reviewData.images || reviewData.images.length == 0) {
+      return <></>;
+    }
+    return (
+      <>
+        <MultipleReviewImages imageIds={reviewData.images} />
+      </>
+    );
+  };
+
   return (
     <div className="p-2">
       <div className="relative flex min-h-fit min-w-full flex-col rounded-md border p-2 shadow-md hover:border-normal-blue">
         <div className="flex flex-row">
           <div className="flex flex-col">
             <img
-              className="h-28 w-28 rounded border-2 border-solid p-3"
+              className="h-48 w-48 rounded border-2 border-solid p-3"
               src={
                 itemImage ??
                 "https://i1.sndcdn.com/artworks-dCikqEVyCfTCgdq0-0hSQRQ-t500x500.jpg"
@@ -98,6 +112,22 @@ export const ReviewCard = ({ reviewData }: ReviewCardProps) => {
               <p className="text-sm text-gray-400">
                 {item ? item.merchantInfo.username : ""}
               </p>
+              <p className="flex flex-row text-base">
+                {reviewData.interestLevel}{" "}
+                {reviewData.needReview ? (
+                  <></>
+                ) : (
+                  <>
+                    {" "}
+                    <span className="flex flex-row items-center pl-3">
+                      {reviewData.review}
+                      <HiStar size={15} className="fill-yellow-500" />
+                    </span>{" "}
+                  </>
+                )}
+              </p>
+              <p className="text-base font-light">{reviewData.description}</p>
+              {RenderImages()}
             </div>
           </div>
         </div>

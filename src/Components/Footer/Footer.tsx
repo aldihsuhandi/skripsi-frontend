@@ -2,7 +2,7 @@ import React from "react";
 
 export const Footer = () => {
   return (
-    <div className="border-t-2 border-solid border-normal-white">
+    <div className="bottom-0 border-t-2 border-solid border-normal-white">
       <div className="m-0 lg:mx-auto lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
         <div className="flex items-center p-0 lg:px-4 lg:py-8">
           {/* © SHUMISHUMI Application <br /> Contents nanti, ni muncul tiap page */}
