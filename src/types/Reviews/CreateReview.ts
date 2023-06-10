@@ -3,7 +3,7 @@ import { APIResultTemplate } from "../ResultContext";
 //Form Values
 export interface CreateReviewFormValues {
   review: number;
-  images?: File[];
+  images: File[];
   description?: string;
   interestLevel: string;
 }

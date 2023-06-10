@@ -28,7 +28,12 @@ export const ReviewCard = ({ reviewData }: ReviewCardProps) => {
     if (!isReviewed) {
       return (
         <>
-          <button onClick={() => {}}>Click to Review</button>
+          <a
+            href={`/review/create/${reviewData.reviewId}`}
+            className="m-1 justify-center rounded-md border-2 border-blue-500 p-1.5 text-sm font-semibold text-blue-500"
+          >
+            Click to Review
+          </a>
         </>
       );
     }
@@ -88,17 +93,16 @@ export const ReviewCard = ({ reviewData }: ReviewCardProps) => {
             />
           </div>
           <div className="flex flex-col px-2">
-            <p className="pb-4 text-lg font-medium">
-              {item ? item.itemName : ""}
-            </p>
-            {/* <p className="text-base font-normal"></p> */}
+            <div className="pb-4 text-lg font-medium">
+              <p>{item ? item.itemName : ""}</p>
+              <p className="text-sm text-gray-400">
+                {item ? item.merchantInfo.username : ""}
+              </p>
+            </div>
           </div>
         </div>
         <div className="absolute bottom-2 right-2">
           <CheckReview></CheckReview>
-          {/* <button className="rounded-md border border-normal-blue bg-normal-blue p-1 text-white hover:border-bright-blue hover:bg-bright-blue">
-            Click to Review
-          </button> */}
         </div>
       </div>
     </div>
