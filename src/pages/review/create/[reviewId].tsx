@@ -1,26 +1,25 @@
 import { ImagePreview } from "@/Components/ImagePreview";
 import { ReturnArrayImageIdFromArrayFile, urlFirstString } from "@/helper";
+import { FilterDictionary } from "@/helper/FilterDictionary/FIlterDictionaryCall";
+import { FormatCurrencyIdr } from "@/helper/GeneralHelper/CurrencyHelper";
 import { CreateReviewCall, DetailReviewCall } from "@/helper/ReviewsHelper";
+import { CLIENT_ID, CLIENT_SECRET, ItemSummary } from "@/types";
 import { CreateReviewFormValues } from "@/types/Reviews";
+import axios from "axios";
 import { Field, FieldArray, Form, Formik } from "formik";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
+import { HiFolderAdd } from "react-icons/hi";
 import {
   HiArrowLeftOnRectangle,
   HiBuildingStorefront,
   HiUserGroup,
   HiXCircle,
 } from "react-icons/hi2";
+import { toast } from "react-toastify";
 import * as Yup from "yup";
 import styles from "../../../styles/Form.module.css";
-import { HiFolderAdd } from "react-icons/hi";
-import { toast } from "react-toastify";
-import { CLIENT_ID, CLIENT_SECRET, ItemSummary } from "@/types";
-import { FormatCurrencyIdr } from "@/helper/GeneralHelper/CurrencyHelper";
-import image from "next/image";
-import axios from "axios";
-import { FilterDictionary } from "@/helper/FilterDictionary/FIlterDictionaryCall";
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
@@ -151,7 +150,7 @@ export default function CreateReview() {
     };
     itemQuery();
     getDictionaries();
-  }, [router.isReady, currentRevId]);
+  }, [router.isReady, currentRevId, item]);
 
   const ItemReviewWidget = () => {
     if (!item) {
