@@ -2,7 +2,11 @@ import { CLIENT_ID, CLIENT_SECRET } from "@/types";
 import { toast } from "react-toastify";
 import { PostCall } from "../PostCall";
 import { CheckExistSessionLocal } from "../SessionHelper";
-import { QueryReviewRequest, QueryReviewResult } from "@/types/Reviews";
+import {
+  QueryReviewRequest,
+  QueryReviewResult,
+  ReviewDetailResult,
+} from "@/types/Reviews";
 
 export const QueryReviewCall = async (
   type: string,
@@ -57,5 +61,43 @@ export const QueryReviewCall = async (
       theme: "colored",
     });
     return undefined;
+  }
+};
+
+export const DetailReviewCall = async (id: string) => {
+  const session = CheckExistSessionLocal();
+  if (!session) {
+    return;
+  }
+
+  const headers = {
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    sessionId: session,
+    "Content-Type": "application/json",
+    "Accept-Type": "application/json",
+  };
+
+  const config = {
+    headers: headers,
+  };
+
+  const result = await PostCall<ReviewDetailResult>({
+    url: "http://localhost:8080/review/detail",
+    config: config,
+    body: {
+      reviewId: id,
+    },
+  });
+
+  if (result && result.resultContext.success) {
+    return result;
+  } else if (result) {
+    toast.error(result.resultContext.resultMsg, {
+      position: "top-center",
+      autoClose: 10000,
+      hideProgressBar: false,
+      theme: "colored",
+    });
   }
 };
