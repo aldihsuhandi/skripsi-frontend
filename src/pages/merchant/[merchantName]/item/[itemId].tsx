@@ -14,7 +14,10 @@ import {
   capitalizeFirstLetter,
   urlFirstString,
 } from "@/helper";
-import { FormatCurrencyIdr, FormatCurrencyIdrBigInt } from "@/helper/GeneralHelper/CurrencyHelper";
+import {
+  FormatCurrencyIdr,
+  FormatCurrencyIdrBigInt,
+} from "@/helper/GeneralHelper/CurrencyHelper";
 import { ItemDetail } from "@/helper/ItemDetail";
 import { ItemDetailResult, Session_Local_Key } from "@/types";
 import { UserSummary } from "@/types/User";
@@ -73,8 +76,8 @@ export default function MerchantItem() {
             if (itemDataFetch.item) {
               setPageTitle(
                 itemDataFetch.item.itemName +
-                " from" +
-                itemDataFetch.item.merchantInfo.username
+                  " from" +
+                  itemDataFetch.item.merchantInfo.username
               );
             }
             setIsLoading(false);
@@ -273,7 +276,10 @@ export default function MerchantItem() {
                 </div>
                 {/* Total Price */}
                 <span className="self-center text-lg font-bold">
-                  Total: {FormatCurrencyIdrBigInt(BigInt(quantityToCart * itemData.item.itemPrice))}
+                  Total:{" "}
+                  {FormatCurrencyIdrBigInt(
+                    BigInt(quantityToCart * itemData.item.itemPrice)
+                  )}
                 </span>
                 {/* Add to Cart Button */}
                 <div className="px-4 pt-2 pb-1">
@@ -411,10 +417,8 @@ export default function MerchantItem() {
             </div>
             <CommentSection postId={itemData.item.postId} userData={userData} />
           </div>
-        ) : itemData?.item ? (
-          <>Loading</>
         ) : (
-          <>Item Not Found</>
+          <>Loading...</>
         )}
       </main>
     </>

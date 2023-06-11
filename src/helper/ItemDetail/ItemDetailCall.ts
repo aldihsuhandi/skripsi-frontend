@@ -33,6 +33,13 @@ export const ItemDetail = async (itemId: ItemDetailRequest) => {
 
   if (result?.resultContext.success) {
     return result;
+  } else if (result?.resultContext.resultCode === "ITEM_NOT_FOUND") {
+    toast.error("The Item does not exist!", {
+      position: "top-center",
+      autoClose: 10000,
+      hideProgressBar: false,
+      theme: "colored",
+    });
   } else {
     toast.error(
       "An Error Occured when fetching this item's data, please try again.",
