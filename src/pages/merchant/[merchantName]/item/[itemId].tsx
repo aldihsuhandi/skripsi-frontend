@@ -106,6 +106,50 @@ export default function MerchantItem() {
     itemId && fetchUserData();
   }, [itemId]);
 
+  function handleKeyDownPreventWords(
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) {
+    // Allow: backspace, delete, tab, escape, enter, and decimal point
+    // TODO: Test lagi yang bener2 perlu di allow dan di ban apa di field number/max-min-price
+    if (
+      event.key === "Backspace" ||
+      event.key === "Delete" ||
+      event.key === "Tab" ||
+      event.key === "Escape" ||
+      event.key === "Enter" ||
+      event.key === "."
+    ) {
+      // Allow input
+      return;
+    }
+
+    if (event.key === " ") {
+      event.preventDefault();
+    }
+
+    // Ensure that it is a number and stop the keypress
+    if (isNaN(Number(event.key))) {
+      event.preventDefault();
+    }
+  }
+
+  function handleQuantityChange(event: React.ChangeEvent<HTMLInputElement>) {
+    let newQuantity = Number(event.target.value);
+
+    if (itemData && itemData.item.itemQuantity) {
+      const quantity_of_item = itemData.item.itemQuantity;
+      if (newQuantity > quantity_of_item) {
+        newQuantity = quantity_of_item;
+      } else if (newQuantity < 1) {
+        newQuantity = 0;
+      }
+    } else {
+      newQuantity = 1;
+    }
+
+    setQuantityToCart(newQuantity);
+  }
+
   const InterestLevelComponent = ({
     logo,
     level,
@@ -252,9 +296,12 @@ export default function MerchantItem() {
                         }
                       }}
                     />
-                    <div className="mx-2 rounded-lg border border-black px-4">
-                      {quantityToCart}
-                    </div>
+                    <input
+                      value={quantityToCart}
+                      onKeyDown={handleKeyDownPreventWords}
+                      onChange={handleQuantityChange}
+                      className="block min-w-[64px] max-w-[64px] rounded-lg border border-gray-300 bg-white p-1 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                    />
                     <HiPlusCircle
                       className={classNames("text-normal-blue", {
                         "cursor-pointer":
@@ -284,7 +331,8 @@ export default function MerchantItem() {
                 {/* Add to Cart Button */}
                 <div className="px-4 pt-2 pb-1">
                   <button
-                    className="w-full rounded bg-normal-blue py-2 px-4 font-bold text-white hover:bg-blue-700"
+                    className="w-full rounded bg-normal-blue py-2 px-4 font-bold text-white hover:bg-blue-700 disabled:bg-gray-500 "
+                    disabled={quantityToCart === 0}
                     onClick={async (e) => {
                       e.preventDefault();
                       if (itemIdValid) {

@@ -6,7 +6,6 @@ import { BE_URL, CLIENT_ID, CLIENT_SECRET, CartSummary } from "@/types";
 import axios from "axios";
 import classNames from "classnames";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { HTMLAttributes, useEffect, useState } from "react";
 import { HiMinusCircle, HiPlusCircle, HiTrash } from "react-icons/hi2";
 
@@ -51,6 +50,64 @@ export const CartItem = ({
       };
     }
   }, [cartItemData]);
+
+  function handleKeyDownPreventWords(
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) {
+    // Allow: backspace, delete, tab, escape, enter, and decimal point
+    // TODO: Test lagi yang bener2 perlu di allow dan di ban apa di field number/max-min-price
+    if (
+      event.key === "Backspace" ||
+      event.key === "Delete" ||
+      event.key === "Tab" ||
+      event.key === "Escape" ||
+      event.key === "Enter" ||
+      event.key === "."
+    ) {
+      // Allow input
+      return;
+    }
+
+    if (event.key === " ") {
+      event.preventDefault();
+    }
+
+    // Ensure that it is a number and stop the keypress
+    if (isNaN(Number(event.key))) {
+      event.preventDefault();
+    }
+  }
+
+  async function handleQuantityChange(
+    event: React.ChangeEvent<HTMLInputElement>
+  ) {
+    let newQuantity = Number(event.target.value);
+
+    if (cartItemData && cartItemData.itemSummary.itemQuantity) {
+      const quantity_of_item = cartItemData.itemSummary.itemQuantity;
+      if (newQuantity > quantity_of_item) {
+        newQuantity = quantity_of_item;
+      } else if (newQuantity < 1) {
+        newQuantity = 0;
+      }
+    } else {
+      newQuantity = 1;
+    }
+
+    setQuantity(newQuantity);
+    if (newQuantity !== 0) {
+      const updateStatus = await CartUpdate({
+        itemId: cartItemData.itemSummary.itemId,
+        quantity: newQuantity,
+      });
+      if (updateStatus?.resultContext.success) {
+        const calPrice = await CartPrice();
+        if (calPrice?.resultContext.success) {
+          setUpdateCartPrice(calPrice.price);
+        }
+      }
+    }
+  }
 
   return (
     <div
@@ -117,80 +174,79 @@ export const CartItem = ({
 
         {/* Quantity */}
         <div className="self-end px-2 pb-2">
-          {quantity ? (
-            <div className="item-center flex flex-row">
-              <button
-                className="mr-8"
-                onClick={async () => {
-                  const deleteResponse = await CartUpdate({
+          <div className="item-center flex flex-row">
+            <button
+              className="mr-8"
+              onClick={async () => {
+                const deleteResponse = await CartUpdate({
+                  itemId: cartItemData.itemSummary.itemId,
+                  quantity: 0,
+                });
+                const priceResponse =
+                  deleteResponse && deleteResponse.resultContext.success
+                    ? await CartPrice()
+                    : undefined;
+                if (priceResponse && priceResponse.resultContext) {
+                  setUpdateCartPrice(priceResponse.price);
+                  onDelete(cartItemData.itemSummary.itemId);
+                }
+              }}
+            >
+              <HiTrash size={20} className=" fill-gray-500" />
+            </button>
+            <HiMinusCircle
+              className={classNames("text-normal-blue", {
+                "cursor-pointer": quantity > 1,
+                "cursor-not-allowed": quantity === 1,
+              })}
+              style={{ height: "1.5em", width: "1.5em" }}
+              onClick={async () => {
+                if (quantity > 1) {
+                  const updateStatus = await CartUpdate({
                     itemId: cartItemData.itemSummary.itemId,
-                    quantity: 0,
+                    quantity: quantity - 1,
                   });
-                  const priceResponse =
-                    deleteResponse && deleteResponse.resultContext.success
-                      ? await CartPrice()
-                      : undefined;
-                  if (priceResponse && priceResponse.resultContext) {
-                    setUpdateCartPrice(priceResponse.price);
-                    onDelete(cartItemData.itemSummary.itemId);
-                  }
-                }}
-              >
-                <HiTrash size={20} className=" fill-gray-500" />
-              </button>
-              <HiMinusCircle
-                className={classNames("text-normal-blue", {
-                  "cursor-pointer": quantity > 1,
-                  "cursor-not-allowed": quantity === 1,
-                })}
-                style={{ height: "1.5em", width: "1.5em" }}
-                onClick={async () => {
-                  if (quantity > 1) {
-                    const updateStatus = await CartUpdate({
-                      itemId: cartItemData.itemSummary.itemId,
-                      quantity: quantity - 1,
-                    });
-                    if (updateStatus?.resultContext.success) {
-                      const calPrice = await CartPrice();
-                      if (calPrice?.resultContext.success) {
-                        setUpdateCartPrice(calPrice.price);
-                      }
+                  if (updateStatus?.resultContext.success) {
+                    const calPrice = await CartPrice();
+                    if (calPrice?.resultContext.success) {
+                      setUpdateCartPrice(calPrice.price);
                     }
-                    setQuantity(quantity - 1);
                   }
-                }}
-              />
-              <div className="mx-2 min-w-[56px] rounded-lg border border-black px-4 text-center">
-                {quantity}
-              </div>
-              <HiPlusCircle
-                className={classNames("text-normal-blue", {
-                  "cursor-pointer":
-                    quantity < cartItemData.itemSummary.itemQuantity,
-                  "cursor-not-allowed":
-                    quantity === cartItemData.itemSummary.itemQuantity,
-                })}
-                style={{ height: "1.5em", width: "1.5em" }}
-                onClick={async () => {
-                  if (quantity < cartItemData.itemSummary.itemQuantity) {
-                    const updateStatus = await CartUpdate({
-                      itemId: cartItemData.itemSummary.itemId,
-                      quantity: quantity + 1,
-                    });
-                    if (updateStatus?.resultContext.success) {
-                      const calPrice = await CartPrice();
-                      if (calPrice?.resultContext.success) {
-                        setUpdateCartPrice(calPrice.price);
-                      }
+                  setQuantity(quantity - 1);
+                }
+              }}
+            />
+            <input
+              value={quantity}
+              onKeyDown={handleKeyDownPreventWords}
+              onChange={handleQuantityChange}
+              className="block min-w-[64px] max-w-[64px] rounded-lg border border-gray-300 bg-white p-1 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+            />
+            <HiPlusCircle
+              className={classNames("text-normal-blue", {
+                "cursor-pointer":
+                  quantity < cartItemData.itemSummary.itemQuantity,
+                "cursor-not-allowed":
+                  quantity === cartItemData.itemSummary.itemQuantity,
+              })}
+              style={{ height: "1.5em", width: "1.5em" }}
+              onClick={async () => {
+                if (quantity < cartItemData.itemSummary.itemQuantity) {
+                  const updateStatus = await CartUpdate({
+                    itemId: cartItemData.itemSummary.itemId,
+                    quantity: quantity + 1,
+                  });
+                  if (updateStatus?.resultContext.success) {
+                    const calPrice = await CartPrice();
+                    if (calPrice?.resultContext.success) {
+                      setUpdateCartPrice(calPrice.price);
                     }
-                    setQuantity(quantity + 1);
                   }
-                }}
-              />
-            </div>
-          ) : (
-            <>Loading...</>
-          )}
+                  setQuantity(quantity + 1);
+                }
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>
