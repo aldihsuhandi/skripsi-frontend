@@ -25,7 +25,7 @@ const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
 
 const initialValues: CreateReviewFormValues = {
-  review: 0,
+  review: 1,
   interestLevel: "",
   description: "",
   images: [],
@@ -91,7 +91,7 @@ export default function CreateReview() {
 
   useEffect(() => {
     const tempRevId = urlFirstString(reviewId);
-    if (tempRevId) {
+    if (tempRevId && !currentRevId) {
       setCurrentRevId(tempRevId);
     }
 
@@ -129,11 +129,10 @@ export default function CreateReview() {
     }
 
     const itemQuery = async () => {
-      if (currentRevId) {
+      if (currentRevId && !item) {
         const result = await DetailReviewCall(currentRevId);
         if (result && result.resultContext.success) {
           setItem(result.item);
-          downloadImage();
         } else if (result) {
           let msg = "The System is busy, please try again later";
           if (result.resultContext.resultCode === "USER_INVALID") {
@@ -150,6 +149,9 @@ export default function CreateReview() {
     };
     itemQuery();
     getDictionaries();
+    if (item) {
+      downloadImage();
+    }
   }, [router.isReady, currentRevId, item]);
 
   const ItemReviewWidget = () => {
