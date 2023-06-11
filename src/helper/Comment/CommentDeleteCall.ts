@@ -1,4 +1,4 @@
-import { CLIENT_ID, CLIENT_SECRET } from "@/types";
+import { BE_URL, CLIENT_ID, CLIENT_SECRET } from "@/types";
 import { CommentDeleteRequest, CommentDeleteResult } from "@/types/Comment";
 import { toast } from "react-toastify";
 import { PostCall } from "../PostCall";
@@ -20,7 +20,7 @@ export const CommentDelete = async ({ commentId }: CommentDeleteRequest) => {
     };
 
     const result = await PostCall<CommentDeleteResult>({
-      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/comment/delete",
+      url: BE_URL + "/comment/delete",
       config: config,
       body: {
         commentId: commentId,

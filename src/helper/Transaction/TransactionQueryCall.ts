@@ -1,4 +1,4 @@
-import { CLIENT_ID, CLIENT_SECRET } from "@/types";
+import { BE_URL, CLIENT_ID, CLIENT_SECRET } from "@/types";
 import { CheckExistSessionLocal } from "../SessionHelper";
 import { PostCall } from "../PostCall";
 import {
@@ -25,7 +25,7 @@ export const TransactionQuery = async (status: string, page: number) => {
   };
 
   const result = await PostCall<TransactionQueryResult>({
-    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/transaction/query",
+    url: BE_URL + "/transaction/query",
     config: config,
     body: {
       status: status,
@@ -59,7 +59,7 @@ export const TransactionDetail = async (id: string) => {
   };
 
   const result = await PostCall<TransactionDetailResult>({
-    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/transaction/detail",
+    url: BE_URL + "/transaction/detail",
     config: config,
     body: {
       transactionId: id,

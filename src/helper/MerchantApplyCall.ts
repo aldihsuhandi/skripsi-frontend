@@ -1,4 +1,4 @@
-import { CLIENT_ID, CLIENT_SECRET } from "@/types";
+import { BE_URL, CLIENT_ID, CLIENT_SECRET } from "@/types";
 import { MerchantApplyResult } from "@/types/User";
 import { toast } from "react-toastify";
 import { PostCall } from "./PostCall";
@@ -20,7 +20,7 @@ export const MerchantApplyCall = async () => {
     };
 
     const result = await PostCall<MerchantApplyResult>({
-      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/user/merchant/apply",
+      url: BE_URL + "/user/merchant/apply",
       config: config,
       body: {},
     });

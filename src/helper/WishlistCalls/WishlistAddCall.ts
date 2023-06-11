@@ -1,4 +1,4 @@
-import { CLIENT_ID, CLIENT_SECRET, WishlistAddResult } from "@/types";
+import { BE_URL, CLIENT_ID, CLIENT_SECRET, WishlistAddResult } from "@/types";
 import { toast } from "react-toastify";
 import { PostCall } from "../PostCall";
 import { CheckExistSessionLocal } from "../SessionHelper";
@@ -19,7 +19,7 @@ export const WishlistAdd = async ({ itemId }: { itemId: string }) => {
     };
 
     const result = await PostCall<WishlistAddResult>({
-      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/item/wishlist/add",
+      url: BE_URL + "/item/wishlist/add",
       config: config,
       body: {
         itemId,

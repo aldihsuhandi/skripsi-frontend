@@ -1,4 +1,4 @@
-import { CLIENT_ID, CLIENT_SECRET, Session_Local_Key } from "@/types";
+import { BE_URL, CLIENT_ID, CLIENT_SECRET, Session_Local_Key } from "@/types";
 import {
   EncryptEmailRequestBody,
   EncryptEmailResult,
@@ -19,7 +19,7 @@ export const EncryptEmail = async (email: EncryptEmailRequestBody) => {
   };
 
   const result = await PostCall<EncryptEmailResult>({
-    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/user/email/encrypt",
+    url: BE_URL + "/user/email/encrypt",
     config: config,
     body: email,
   });

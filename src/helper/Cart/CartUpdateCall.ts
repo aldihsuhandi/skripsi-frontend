@@ -1,4 +1,5 @@
 import {
+  BE_URL,
   CLIENT_ID,
   CLIENT_SECRET,
   CartUpdateRequest,
@@ -24,7 +25,7 @@ export const CartUpdate = async ({ itemId, quantity }: CartUpdateRequest) => {
     };
 
     const result = await PostCall<CartUpdateResult>({
-      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/cart/update",
+      url: BE_URL + "/cart/update",
       config: config,
       body: {
         itemId,

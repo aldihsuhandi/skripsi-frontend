@@ -1,4 +1,4 @@
-import { CLIENT_ID, CLIENT_SECRET, Session_Local_Key } from "@/types";
+import { BE_URL, CLIENT_ID, CLIENT_SECRET, Session_Local_Key } from "@/types";
 import { CommentCreateRequest, CommentCreateResult } from "@/types/Comment";
 import { toast } from "react-toastify";
 import { PostCall } from "../PostCall";
@@ -24,7 +24,7 @@ export const CommentCreate = async ({
     };
 
     const result = await PostCall<CommentCreateResult>({
-      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/comment/create",
+      url: BE_URL + "/comment/create",
       config: config,
       body: {
         content: content,

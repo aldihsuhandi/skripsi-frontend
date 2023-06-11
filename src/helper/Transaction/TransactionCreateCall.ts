@@ -1,4 +1,4 @@
-import { CLIENT_ID, CLIENT_SECRET } from "@/types";
+import { BE_URL, CLIENT_ID, CLIENT_SECRET } from "@/types";
 import { TransactionCreateResult } from "@/types/Transaction";
 import { PostCall } from "../PostCall";
 import { CheckExistSessionLocal } from "../SessionHelper";
@@ -22,7 +22,7 @@ export const TransactionCreate = async () => {
   };
 
   const result = await PostCall<TransactionCreateResult>({
-    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/transaction/create",
+    url: BE_URL + "/transaction/create",
     config: config,
     body: {
       fromCart: true,

@@ -1,4 +1,4 @@
-import { CLIENT_ID, CLIENT_SECRET } from "@/types";
+import { BE_URL, CLIENT_ID, CLIENT_SECRET } from "@/types";
 import { toast } from "react-toastify";
 import { PostCall } from "../PostCall";
 import { CheckExistSessionLocal } from "../SessionHelper";
@@ -29,7 +29,7 @@ export const QueryReviewCall = async (
     };
 
     const result = await PostCall<QueryReviewResult>({
-      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/review/query",
+      url: BE_URL + "/review/query",
       config: config,
       body: {
         type: type,
@@ -85,7 +85,7 @@ export const DetailReviewCall = async (id: string) => {
   };
 
   const result = await PostCall<ReviewDetailResult>({
-    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/review/detail",
+    url: BE_URL + "/review/detail",
     config: config,
     body: {
       reviewId: id,

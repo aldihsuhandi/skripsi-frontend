@@ -1,12 +1,12 @@
 import axios from "axios";
 import { ResetPassQueryRequest, ResetPassQueryResult } from "@/types/User";
-import { CLIENT_ID, CLIENT_SECRET } from "@/types";
+import { BE_URL, CLIENT_ID, CLIENT_SECRET } from "@/types";
 import { toast } from "react-toastify";
 
 export const ResetPassQuery = async ({ uuid }: ResetPassQueryRequest) => {
   try {
     const { data } = await axios.post<ResetPassQueryResult>(
-      "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/user/forgot_password/query",
+      BE_URL + "/user/forgot_password/query",
       {
         uuid,
       },

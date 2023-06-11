@@ -1,12 +1,12 @@
 import axios from "axios";
 import { ForgotPassRequest, ForgotPassResult } from "@/types/User";
-import { CLIENT_ID, CLIENT_SECRET } from "@/types";
+import { BE_URL, CLIENT_ID, CLIENT_SECRET } from "@/types";
 import { toast } from "react-toastify";
 
 export const ForgotPassCall = async (formDataForgotPass: ForgotPassRequest) => {
   try {
     const { data } = await axios.post<ForgotPassResult>(
-      "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/user/reset_password",
+      BE_URL + "/user/reset_password",
       formDataForgotPass,
       {
         headers: {

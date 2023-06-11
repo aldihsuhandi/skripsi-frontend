@@ -1,4 +1,5 @@
 import {
+  BE_URL,
   CLIENT_ID,
   CLIENT_SECRET,
   ItemQueryResult,
@@ -38,7 +39,7 @@ export const ItemFilterQuery = async ({
   };
 
   const result = await PostCall<ItemQueryResult>({
-    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/item/query",
+    url: BE_URL + "/item/query",
     config: config,
     body: {
       sorting: sorting ? sorting : undefined,

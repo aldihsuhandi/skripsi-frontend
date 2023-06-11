@@ -1,4 +1,4 @@
-import { CLIENT_ID, CLIENT_SECRET, WishlistSummary } from "@/types";
+import { BE_URL, CLIENT_ID, CLIENT_SECRET, WishlistSummary } from "@/types";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -158,18 +158,14 @@ const ProcessImage = async ({ imageIdCom }: { imageIdCom: string }) => {
   };
 
   try {
-    const response = await axios.post(
-      "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/image/download",
-      POST_BODY,
-      {
-        headers: {
-          clientId: CLIENT_ID,
-          clientSecret: CLIENT_SECRET,
-          "Accept-Type": "image/jpeg",
-        },
-        responseType: "arraybuffer",
-      }
-    );
+    const response = await axios.post(BE_URL + "/image/download", POST_BODY, {
+      headers: {
+        clientId: CLIENT_ID,
+        clientSecret: CLIENT_SECRET,
+        "Accept-Type": "image/jpeg",
+      },
+      responseType: "arraybuffer",
+    });
     return response;
   } catch (error) {
     return null;

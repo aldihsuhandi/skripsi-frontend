@@ -1,4 +1,4 @@
-import { CLIENT_ID, CLIENT_SECRET } from "@/types";
+import { BE_URL, CLIENT_ID, CLIENT_SECRET } from "@/types";
 import { CommentEditRequest, CommentEditResult } from "@/types/Comment";
 import { toast } from "react-toastify";
 import { PostCall } from "../PostCall";
@@ -23,7 +23,7 @@ export const CommentEdit = async ({
     };
 
     const result = await PostCall<CommentEditResult>({
-      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/comment/edit",
+      url: BE_URL + "/comment/edit",
       config: config,
       body: {
         commentId: commentId,

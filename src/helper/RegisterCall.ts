@@ -1,4 +1,4 @@
-import { CLIENT_ID, CLIENT_SECRET } from "@/types";
+import { BE_URL, CLIENT_ID, CLIENT_SECRET } from "@/types";
 import { RegisterRequest, RegisterResult } from "@/types/User";
 import { PostCall } from "./PostCall";
 
@@ -15,7 +15,7 @@ export const RegisterPOST = async (formDataSubmitted: RegisterRequest) => {
   };
 
   const result = await PostCall<RegisterResult>({
-    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/user/register",
+    url: BE_URL + "/user/register",
     config: config,
     body: formDataSubmitted,
   });

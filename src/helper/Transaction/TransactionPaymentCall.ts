@@ -1,4 +1,4 @@
-import { CLIENT_ID, CLIENT_SECRET } from "@/types";
+import { BE_URL, CLIENT_ID, CLIENT_SECRET } from "@/types";
 import {
   TransactionPaymentRequest,
   TransactionPaymentResult,
@@ -28,7 +28,7 @@ export const TransactionPayment = async ({
   };
 
   const result = await PostCall<TransactionPaymentResult>({
-    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/transaction/payment",
+    url: BE_URL + "/transaction/payment",
     config: config,
     body: {
       transactionId: transactionId,

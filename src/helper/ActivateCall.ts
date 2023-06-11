@@ -1,4 +1,4 @@
-import { CLIENT_ID, CLIENT_SECRET } from "@/types";
+import { BE_URL, CLIENT_ID, CLIENT_SECRET } from "@/types";
 import { ActivateRequest, ActivateResult } from "@/types/User";
 import { PostCall } from "./PostCall";
 
@@ -15,7 +15,7 @@ export const ActivateCall = async (data_Activate: ActivateRequest) => {
   };
 
   const result = await PostCall<ActivateResult>({
-    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/user/activate",
+    url: BE_URL + "/user/activate",
     config: config,
     body: data_Activate,
   });

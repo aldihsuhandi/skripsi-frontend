@@ -1,6 +1,11 @@
 import axios from "axios";
 
-import { ItemFilterContext, ItemQueryResult, Session_Local_Key } from "@/types";
+import {
+  BE_URL,
+  ItemFilterContext,
+  ItemQueryResult,
+  Session_Local_Key,
+} from "@/types";
 import { CLIENT_ID, CLIENT_SECRET } from "@/types";
 import { PostCall } from "./PostCall";
 
@@ -22,7 +27,7 @@ export const ItemQuery = async (itemFilterContext: ItemFilterContext) => {
   };
 
   const result = await PostCall<ItemQueryResult>({
-    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/item/query",
+    url: BE_URL + "/item/query",
     config: config,
     body: { itemFilterContext },
   });

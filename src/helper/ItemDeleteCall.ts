@@ -1,4 +1,5 @@
 import {
+  BE_URL,
   CLIENT_ID,
   CLIENT_SECRET,
   ItemDeleteRequest,
@@ -24,7 +25,7 @@ export const ItemDelete = async (itemId: ItemDeleteRequest) => {
     };
 
     const result = await PostCall<ItemDeleteResult>({
-      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/item/delete",
+      url: BE_URL + "/item/delete",
       config: config,
       body: itemId,
     });

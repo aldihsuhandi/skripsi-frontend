@@ -1,4 +1,4 @@
-import { CLIENT_ID, CLIENT_SECRET, Session_Local_Key } from "@/types";
+import { BE_URL, CLIENT_ID, CLIENT_SECRET, Session_Local_Key } from "@/types";
 import { LogoutRequest, LogoutResult } from "@/types/User";
 import { PostCall } from "./PostCall";
 
@@ -16,7 +16,7 @@ export const LogoutCall = async (session: LogoutRequest) => {
   };
 
   const result = await PostCall<LogoutResult>({
-    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/session/logout",
+    url: BE_URL + "/session/logout",
     config: config,
     body: session,
   });

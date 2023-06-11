@@ -1,4 +1,4 @@
-import { CLIENT_ID, CLIENT_SECRET, Session_Local_Key } from "@/types";
+import { BE_URL, CLIENT_ID, CLIENT_SECRET, Session_Local_Key } from "@/types";
 import {
   FilterDictionaryRequestBody,
   FilterDictionaryResult,
@@ -21,7 +21,7 @@ export const FilterDictionary = async (
   };
 
   const result = await PostCall<FilterDictionaryResult>({
-    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/dictionary/query",
+    url: BE_URL + "/dictionary/query",
     config: config,
     body: dictionaryKey,
   });

@@ -1,4 +1,4 @@
-import { CLIENT_ID, CLIENT_SECRET, Session_Local_Key } from "@/types";
+import { BE_URL, CLIENT_ID, CLIENT_SECRET, Session_Local_Key } from "@/types";
 import { CheckExistSessionLocal } from "./SessionHelper";
 import { UpdateProfileRequest, UpdateProfileResult } from "@/types/User";
 import { toast } from "react-toastify";
@@ -22,7 +22,7 @@ export const UpdateProfileCall = async (
     };
 
     const result = await PostCall<UpdateProfileResult>({
-      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/user/update",
+      url: BE_URL + "/user/update",
       config: config,
       body: formDataUpdate,
     });

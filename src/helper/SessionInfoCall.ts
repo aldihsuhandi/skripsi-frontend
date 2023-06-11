@@ -1,4 +1,4 @@
-import { CLIENT_ID, CLIENT_SECRET, Session_Local_Key } from "@/types";
+import { BE_URL, CLIENT_ID, CLIENT_SECRET, Session_Local_Key } from "@/types";
 import { SessionInfoRequest, SessionInfoResult } from "@/types/User";
 import { PostCall } from "./PostCall";
 
@@ -16,7 +16,7 @@ export const SessionInfoCall = async (sessionIdData: SessionInfoRequest) => {
   };
 
   const result = await PostCall<SessionInfoResult>({
-    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/session/info",
+    url: BE_URL + "/session/info",
     config: config,
     body: sessionIdData,
   });

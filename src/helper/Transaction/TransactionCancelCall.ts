@@ -1,4 +1,5 @@
 import {
+  BE_URL,
   CLIENT_ID,
   CLIENT_SECRET,
   TransactionCancelResult,
@@ -26,7 +27,7 @@ export const TransactionCancel = async (id: string) => {
   };
 
   const result = await PostCall<TransactionCancelResult>({
-    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/transaction/cancel",
+    url: BE_URL + "/transaction/cancel",
     config: config,
     body: {
       transactionId: id,

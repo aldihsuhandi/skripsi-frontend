@@ -1,4 +1,5 @@
 import {
+  BE_URL,
   CLIENT_ID,
   CLIENT_SECRET,
   ItemCreateRequest,
@@ -33,7 +34,7 @@ export const ItemCreate = async ({
     };
 
     const result = await PostCall<ItemCreateResult>({
-      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/item/create",
+      url: BE_URL + "/item/create",
       config: config,
       body: {
         itemName: itemName,

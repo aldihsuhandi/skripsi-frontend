@@ -1,4 +1,4 @@
-import { CLIENT_ID, CLIENT_SECRET } from "@/types";
+import { BE_URL, CLIENT_ID, CLIENT_SECRET } from "@/types";
 import {
   DecryptEmailRequestBody,
   DecryptEmailResult,
@@ -19,7 +19,7 @@ export const DecryptEmail = async (uuid: DecryptEmailRequestBody) => {
   };
 
   const result = await PostCall<DecryptEmailResult>({
-    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/user/email/decrypt",
+    url: BE_URL + "/user/email/decrypt",
     config: config,
     body: uuid,
   });

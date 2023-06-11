@@ -1,4 +1,4 @@
-import { CLIENT_ID, CLIENT_SECRET } from "@/types";
+import { BE_URL, CLIENT_ID, CLIENT_SECRET } from "@/types";
 import { UserQueryRequest, UserQueryResult } from "@/types/User";
 import { toast } from "react-toastify";
 import { PostCall } from "./PostCall";
@@ -16,7 +16,7 @@ export const UserQuery = async (userEmail: UserQueryRequest) => {
   };
 
   const result = await PostCall<UserQueryResult>({
-    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/user/info",
+    url: BE_URL + "/user/info",
     config: config,
     body: userEmail,
   });

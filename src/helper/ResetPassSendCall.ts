@@ -1,12 +1,12 @@
 import axios from "axios";
 import { ResetPassSendRequest, ResetPassSendResult } from "@/types/User";
-import { CLIENT_ID, CLIENT_SECRET } from "@/types";
+import { BE_URL, CLIENT_ID, CLIENT_SECRET } from "@/types";
 import { toast } from "react-toastify";
 
 export const ResetPassSend = async ({ email }: ResetPassSendRequest) => {
   try {
     const { data } = await axios.post<ResetPassSendResult>(
-      "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/user/forgot_password/send",
+      BE_URL + "/user/forgot_password/send",
       {
         email,
       },

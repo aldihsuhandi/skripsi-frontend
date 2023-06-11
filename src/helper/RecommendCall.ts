@@ -1,4 +1,4 @@
-import { CLIENT_ID, CLIENT_SECRET } from "@/types";
+import { BE_URL, CLIENT_ID, CLIENT_SECRET } from "@/types";
 import { ItemRecommendationResult } from "@/types/Item/ItemRecommendation";
 import { PostCall } from "./PostCall";
 import { CheckExistSessionLocal, CheckSessionValid } from "./SessionHelper";
@@ -19,7 +19,7 @@ export const RecommendCall = async () => {
     };
 
     const result = await PostCall<ItemRecommendationResult>({
-      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/item/recommend",
+      url: BE_URL + "/item/recommend",
       config: config,
       body: {},
     });

@@ -1,4 +1,4 @@
-import { CLIENT_ID, CLIENT_SECRET } from "@/types";
+import { BE_URL, CLIENT_ID, CLIENT_SECRET } from "@/types";
 import { ImageUploadRequest, ImageUploadResult } from "@/types/Image";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 export const ImageUpload = async (image: ImageUploadRequest) => {
   try {
     const response = await axios.post<ImageUploadResult>(
-      "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/image/upload",
+      BE_URL + "/image/upload",
       image,
       {
         headers: {

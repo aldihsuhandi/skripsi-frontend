@@ -1,4 +1,4 @@
-import { CLIENT_ID, CLIENT_SECRET, CartPriceResult } from "@/types";
+import { BE_URL, CLIENT_ID, CLIENT_SECRET, CartPriceResult } from "@/types";
 import { toast } from "react-toastify";
 import { PostCall } from "../PostCall";
 import { CheckExistSessionLocal } from "../SessionHelper";
@@ -19,7 +19,7 @@ export const CartPrice = async () => {
     };
 
     const result = await PostCall<CartPriceResult>({
-      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/cart/price",
+      url: BE_URL + "/cart/price",
       config: config,
       body: {},
     });

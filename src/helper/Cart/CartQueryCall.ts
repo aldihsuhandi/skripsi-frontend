@@ -1,4 +1,5 @@
 import {
+  BE_URL,
   CLIENT_ID,
   CLIENT_SECRET,
   CartQueryRequest,
@@ -27,7 +28,7 @@ export const CartQuery = async ({
     };
 
     const result = await PostCall<CartQueryResult>({
-      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/cart/query",
+      url: BE_URL + "/cart/query",
       config: config,
       body: {
         pageNumber: pageNumber,

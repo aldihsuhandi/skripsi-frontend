@@ -3,6 +3,7 @@ import { sanitize } from "dompurify";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 
 import {
+  BE_URL,
   CLIENT_ID,
   CLIENT_SECRET,
   ItemAutoCompleteRequest,
@@ -94,7 +95,7 @@ export const AutoComplete = ({
       }
 
       const { data } = await axios.post<ItemAutoCompleteResult>(
-        "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/item/autocomplete",
+        BE_URL + "/item/autocomplete",
         JSON.stringify(PostBody),
         {
           headers,

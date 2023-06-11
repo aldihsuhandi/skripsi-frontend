@@ -1,4 +1,5 @@
 import {
+  BE_URL,
   CLIENT_ID,
   CLIENT_SECRET,
   CartAddRequest,
@@ -24,7 +25,7 @@ export const CartAdd = async ({ itemId, quantity }: CartAddRequest) => {
     };
 
     const result = await PostCall<CartAddResult>({
-      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/cart/add",
+      url: BE_URL + "/cart/add",
       config: config,
       body: {
         itemId,

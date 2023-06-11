@@ -1,4 +1,4 @@
-import { CLIENT_ID, CLIENT_SECRET, WishlistQueryResult } from "@/types";
+import { BE_URL, CLIENT_ID, CLIENT_SECRET, WishlistQueryResult } from "@/types";
 import { ItemFilterValues } from "@/types/ItemFilter";
 import { toast } from "react-toastify";
 import { PostCall } from "../PostCall";
@@ -28,7 +28,7 @@ export const WishlistQuery = async ({
     };
 
     const result = await PostCall<WishlistQueryResult>({
-      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/item/wishlist/query",
+      url: BE_URL + "/item/wishlist/query",
       config: config,
       body: {
         pageNumber: pageNumber,

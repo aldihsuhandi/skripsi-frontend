@@ -1,4 +1,4 @@
-import { CLIENT_ID, CLIENT_SECRET } from "@/types";
+import { BE_URL, CLIENT_ID, CLIENT_SECRET } from "@/types";
 import { OtpSendProps, OtpSendResult } from "@/types/Otp";
 import { toast } from "react-toastify";
 import { PostCall } from "./PostCall";
@@ -16,7 +16,7 @@ export const OtpSend = async ({ email, otpType }: OtpSendProps) => {
   };
 
   const result = await PostCall<OtpSendResult>({
-    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/otp/send",
+    url: BE_URL + "/otp/send",
     config: config,
     body: {
       email,

@@ -1,4 +1,5 @@
 import {
+  BE_URL,
   CLIENT_ID,
   CLIENT_SECRET,
   ItemDetailRequest,
@@ -26,7 +27,7 @@ export const ItemDetail = async (itemId: ItemDetailRequest) => {
   };
 
   const result = await PostCall<ItemDetailResult>({
-    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/item/query/detail",
+    url: BE_URL + "/item/query/detail",
     config: config,
     body: itemId,
   });
