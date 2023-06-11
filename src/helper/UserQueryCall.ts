@@ -16,7 +16,7 @@ export const UserQuery = async (userEmail: UserQueryRequest) => {
   };
 
   const result = await PostCall<UserQueryResult>({
-    url: "http://localhost:8080/user/info",
+    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/user/info",
     config: config,
     body: userEmail,
   });

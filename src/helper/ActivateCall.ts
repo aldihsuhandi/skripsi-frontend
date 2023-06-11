@@ -15,7 +15,7 @@ export const ActivateCall = async (data_Activate: ActivateRequest) => {
   };
 
   const result = await PostCall<ActivateResult>({
-    url: "http://localhost:8080/user/activate",
+    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/user/activate",
     config: config,
     body: data_Activate,
   });

@@ -204,7 +204,7 @@ const ProcessImage = async ({ imageIdCom }: { imageIdCom: string }) => {
 
   try {
     const response = await axios.post(
-      "http://localhost:8080/image/download",
+      "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/image/download",
       POST_BODY,
       {
         headers: {

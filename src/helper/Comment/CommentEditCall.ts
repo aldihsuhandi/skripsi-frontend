@@ -23,7 +23,7 @@ export const CommentEdit = async ({
     };
 
     const result = await PostCall<CommentEditResult>({
-      url: "http://localhost:8080/comment/edit",
+      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/comment/edit",
       config: config,
       body: {
         commentId: commentId,

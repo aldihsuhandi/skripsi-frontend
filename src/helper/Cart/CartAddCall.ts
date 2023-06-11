@@ -24,7 +24,7 @@ export const CartAdd = async ({ itemId, quantity }: CartAddRequest) => {
     };
 
     const result = await PostCall<CartAddResult>({
-      url: "http://localhost:8080/cart/add",
+      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/cart/add",
       config: config,
       body: {
         itemId,

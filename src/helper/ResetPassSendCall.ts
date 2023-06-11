@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 export const ResetPassSend = async ({ email }: ResetPassSendRequest) => {
   try {
     const { data } = await axios.post<ResetPassSendResult>(
-      "http://localhost:8080/user/forgot_password/send",
+      "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/user/forgot_password/send",
       {
         email,
       },

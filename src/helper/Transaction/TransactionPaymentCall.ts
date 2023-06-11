@@ -28,7 +28,7 @@ export const TransactionPayment = async ({
   };
 
   const result = await PostCall<TransactionPaymentResult>({
-    url: "http://localhost:8080/transaction/payment",
+    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/transaction/payment",
     config: config,
     body: {
       transactionId: transactionId,

@@ -92,7 +92,7 @@ export default function MerchantItems() {
     if (urlFirstString(qMerchant) === qMerchantString && merchantData) {
       const itemQueried = await ItemFilterQuery({
         pageNumber: currentPage + 1,
-        numberOfItem: 10, // bisa di ganti2 ntar tpi later
+        numberOfItem: 5, // bisa di ganti2 ntar tpi later
         filters: {
           itemName: qMerchantString || "",
           pMin: pMinNumber,

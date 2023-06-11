@@ -22,7 +22,7 @@ export const TransactionFinish = async (id: string) => {
   };
 
   const result = await PostCall<TransactionFinishResult>({
-    url: "http://localhost:8080/transaction/finish",
+    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/transaction/finish",
     config: config,
     body: {
       transactionId: id,

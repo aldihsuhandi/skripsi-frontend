@@ -111,7 +111,7 @@ export default function Search() {
 
     const infiniteItemFetchMore = await ItemFilterQuery({
       pageNumber: curPage,
-      numberOfItem: 10,
+      numberOfItem: 5,
       sorting: urlFirstString(itemSort),
       sortingType: urlFirstString(sortType),
       filters: {

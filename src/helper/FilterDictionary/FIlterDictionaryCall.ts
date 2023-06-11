@@ -21,7 +21,7 @@ export const FilterDictionary = async (
   };
 
   const result = await PostCall<FilterDictionaryResult>({
-    url: "http://localhost:8080/dictionary/query",
+    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/dictionary/query",
     config: config,
     body: dictionaryKey,
   });

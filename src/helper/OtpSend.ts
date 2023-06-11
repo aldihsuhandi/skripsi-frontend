@@ -16,7 +16,7 @@ export const OtpSend = async ({ email, otpType }: OtpSendProps) => {
   };
 
   const result = await PostCall<OtpSendResult>({
-    url: "http://localhost:8080/otp/send",
+    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/otp/send",
     config: config,
     body: {
       email,

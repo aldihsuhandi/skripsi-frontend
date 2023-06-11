@@ -27,7 +27,7 @@ export const ItemUpdate = async ({
     };
 
     const result = await PostCall<ItemUpdateResult>({
-      url: "http://localhost:8080/item/update",
+      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/item/update",
       config: config,
       body: {
         itemId: itemId,

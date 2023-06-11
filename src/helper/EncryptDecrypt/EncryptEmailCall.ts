@@ -19,7 +19,7 @@ export const EncryptEmail = async (email: EncryptEmailRequestBody) => {
   };
 
   const result = await PostCall<EncryptEmailResult>({
-    url: "http://localhost:8080/user/email/encrypt",
+    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/user/email/encrypt",
     config: config,
     body: email,
   });

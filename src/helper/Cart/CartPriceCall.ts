@@ -19,7 +19,7 @@ export const CartPrice = async () => {
     };
 
     const result = await PostCall<CartPriceResult>({
-      url: "http://localhost:8080/cart/price",
+      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/cart/price",
       config: config,
       body: {},
     });

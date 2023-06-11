@@ -29,12 +29,12 @@ export const QueryReviewCall = async (
     };
 
     const result = await PostCall<QueryReviewResult>({
-      url: "http://localhost:8080/review/query",
+      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/review/query",
       config: config,
       body: {
         type: type,
         needReview: needReview,
-        numberOfItem: 10,
+        numberOfItem: 5,
         pageNumber: pageNumber,
         merchantName: merchantName,
       },
@@ -85,7 +85,7 @@ export const DetailReviewCall = async (id: string) => {
   };
 
   const result = await PostCall<ReviewDetailResult>({
-    url: "http://localhost:8080/review/detail",
+    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/review/detail",
     config: config,
     body: {
       reviewId: id,

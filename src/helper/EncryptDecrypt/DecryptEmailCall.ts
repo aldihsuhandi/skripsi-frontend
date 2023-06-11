@@ -19,7 +19,7 @@ export const DecryptEmail = async (uuid: DecryptEmailRequestBody) => {
   };
 
   const result = await PostCall<DecryptEmailResult>({
-    url: "http://localhost:8080/user/email/decrypt",
+    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/user/email/decrypt",
     config: config,
     body: uuid,
   });

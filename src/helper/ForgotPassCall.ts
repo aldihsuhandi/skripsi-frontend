@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 export const ForgotPassCall = async (formDataForgotPass: ForgotPassRequest) => {
   try {
     const { data } = await axios.post<ForgotPassResult>(
-      "http://localhost:8080/user/reset_password",
+      "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/user/reset_password",
       formDataForgotPass,
       {
         headers: {

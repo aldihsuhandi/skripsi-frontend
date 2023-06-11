@@ -15,7 +15,7 @@ export const RegisterPOST = async (formDataSubmitted: RegisterRequest) => {
   };
 
   const result = await PostCall<RegisterResult>({
-    url: "http://localhost:8080/user/register",
+    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/user/register",
     config: config,
     body: formDataSubmitted,
   });

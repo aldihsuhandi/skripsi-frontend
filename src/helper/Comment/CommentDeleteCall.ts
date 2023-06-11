@@ -20,7 +20,7 @@ export const CommentDelete = async ({ commentId }: CommentDeleteRequest) => {
     };
 
     const result = await PostCall<CommentDeleteResult>({
-      url: "http://localhost:8080/comment/delete",
+      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/comment/delete",
       config: config,
       body: {
         commentId: commentId,

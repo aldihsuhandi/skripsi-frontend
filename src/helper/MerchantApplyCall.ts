@@ -20,7 +20,7 @@ export const MerchantApplyCall = async () => {
     };
 
     const result = await PostCall<MerchantApplyResult>({
-      url: "http://localhost:8080/user/merchant/apply",
+      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/user/merchant/apply",
       config: config,
       body: {},
     });

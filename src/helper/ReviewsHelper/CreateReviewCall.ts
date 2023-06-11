@@ -24,7 +24,7 @@ export const CreateReviewCall = async (
     };
 
     const result = await PostCall<CreateReviewResult>({
-      url: "http://localhost:8080/review/create",
+      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/review/create",
       config: config,
       body: createReviewData,
     });

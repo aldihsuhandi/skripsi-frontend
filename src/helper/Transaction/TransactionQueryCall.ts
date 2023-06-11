@@ -25,7 +25,7 @@ export const TransactionQuery = async (status: string, page: number) => {
   };
 
   const result = await PostCall<TransactionQueryResult>({
-    url: "http://localhost:8080/transaction/query",
+    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/transaction/query",
     config: config,
     body: {
       status: status,
@@ -59,7 +59,7 @@ export const TransactionDetail = async (id: string) => {
   };
 
   const result = await PostCall<TransactionDetailResult>({
-    url: "http://localhost:8080/transaction/detail",
+    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/transaction/detail",
     config: config,
     body: {
       transactionId: id,

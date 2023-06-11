@@ -19,7 +19,7 @@ export const WishlistAdd = async ({ itemId }: { itemId: string }) => {
     };
 
     const result = await PostCall<WishlistAddResult>({
-      url: "http://localhost:8080/item/wishlist/add",
+      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/item/wishlist/add",
       config: config,
       body: {
         itemId,

@@ -22,7 +22,7 @@ export const TransactionCreate = async () => {
   };
 
   const result = await PostCall<TransactionCreateResult>({
-    url: "http://localhost:8080/transaction/create",
+    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/transaction/create",
     config: config,
     body: {
       fromCart: true,

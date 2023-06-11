@@ -38,7 +38,7 @@ export const ItemFilterQuery = async ({
   };
 
   const result = await PostCall<ItemQueryResult>({
-    url: "http://localhost:8080/item/query",
+    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/item/query",
     config: config,
     body: {
       sorting: sorting ? sorting : undefined,

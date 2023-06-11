@@ -28,7 +28,7 @@ export const WishlistQuery = async ({
     };
 
     const result = await PostCall<WishlistQueryResult>({
-      url: "http://localhost:8080/item/wishlist/query",
+      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/item/wishlist/query",
       config: config,
       body: {
         pageNumber: pageNumber,

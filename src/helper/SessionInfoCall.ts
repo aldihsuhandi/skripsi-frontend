@@ -16,7 +16,7 @@ export const SessionInfoCall = async (sessionIdData: SessionInfoRequest) => {
   };
 
   const result = await PostCall<SessionInfoResult>({
-    url: "http://localhost:8080/session/info",
+    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/session/info",
     config: config,
     body: sessionIdData,
   });

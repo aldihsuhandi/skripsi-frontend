@@ -19,7 +19,7 @@ export const WishlistRemove = async ({ itemId }: { itemId: string }) => {
     };
 
     const result = await PostCall<WishlistAddResult>({
-      url: "http://localhost:8080/item/wishlist/remove",
+      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/item/wishlist/remove",
       config: config,
       body: { itemId },
     });

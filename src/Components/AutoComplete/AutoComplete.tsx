@@ -94,7 +94,7 @@ export const AutoComplete = ({
       }
 
       const { data } = await axios.post<ItemAutoCompleteResult>(
-        "http://localhost:8080/item/autocomplete",
+        "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/item/autocomplete",
         JSON.stringify(PostBody),
         {
           headers,

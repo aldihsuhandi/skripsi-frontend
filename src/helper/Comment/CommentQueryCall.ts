@@ -26,7 +26,7 @@ export const CommentQuery = async ({
   };
 
   const result = await PostCall<CommentQueryResult>({
-    url: "http://localhost:8080/comment/query",
+    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/comment/query",
     config: config,
     body: {
       replyTo: replyTo,

@@ -36,7 +36,7 @@ export default function MerchantPage() {
         if (merchantInfo?.resultContext.success) {
           setMerchantData(merchantInfo.userInfo);
           const newestItems = await ItemFilterQuery({
-            numberOfItem: 10,
+            numberOfItem: 5,
             filters: {
               itemName: "",
               merchantEmail: merchantInfo?.userInfo.email,

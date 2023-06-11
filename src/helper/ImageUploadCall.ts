@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 export const ImageUpload = async (image: ImageUploadRequest) => {
   try {
     const response = await axios.post<ImageUploadResult>(
-      "http://localhost:8080/image/upload",
+      "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/image/upload",
       image,
       {
         headers: {

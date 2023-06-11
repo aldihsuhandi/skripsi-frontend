@@ -33,7 +33,7 @@ export const ItemCreate = async ({
     };
 
     const result = await PostCall<ItemCreateResult>({
-      url: "http://localhost:8080/item/create",
+      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/item/create",
       config: config,
       body: {
         itemName: itemName,

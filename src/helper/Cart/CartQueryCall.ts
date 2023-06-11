@@ -27,7 +27,7 @@ export const CartQuery = async ({
     };
 
     const result = await PostCall<CartQueryResult>({
-      url: "http://localhost:8080/cart/query",
+      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/cart/query",
       config: config,
       body: {
         pageNumber: pageNumber,

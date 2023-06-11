@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 export const ResetPassQuery = async ({ uuid }: ResetPassQueryRequest) => {
   try {
     const { data } = await axios.post<ResetPassQueryResult>(
-      "http://localhost:8080/user/forgot_password/query",
+      "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/user/forgot_password/query",
       {
         uuid,
       },

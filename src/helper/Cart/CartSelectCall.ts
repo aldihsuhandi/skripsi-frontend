@@ -24,7 +24,7 @@ export const CartSelect = async ({ itemIds, selected }: CartSelectRequest) => {
     };
 
     const result = await PostCall<CartSelectResult>({
-      url: "http://localhost:8080/cart/select",
+      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/cart/select",
       config: config,
       body: {
         itemIds,

@@ -24,7 +24,7 @@ export const CommentCreate = async ({
     };
 
     const result = await PostCall<CommentCreateResult>({
-      url: "http://localhost:8080/comment/create",
+      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/comment/create",
       config: config,
       body: {
         content: content,

@@ -22,7 +22,7 @@ export const UpdateProfileCall = async (
     };
 
     const result = await PostCall<UpdateProfileResult>({
-      url: "http://localhost:8080/user/update",
+      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/user/update",
       config: config,
       body: formDataUpdate,
     });

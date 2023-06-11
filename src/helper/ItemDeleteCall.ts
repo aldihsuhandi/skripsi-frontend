@@ -24,7 +24,7 @@ export const ItemDelete = async (itemId: ItemDeleteRequest) => {
     };
 
     const result = await PostCall<ItemDeleteResult>({
-      url: "http://localhost:8080/item/delete",
+      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/item/delete",
       config: config,
       body: itemId,
     });

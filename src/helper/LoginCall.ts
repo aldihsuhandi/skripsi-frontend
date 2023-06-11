@@ -15,7 +15,7 @@ export const LoginCall = async (formDataSubmitted: LoginRequest) => {
   };
 
   const result = await PostCall<LoginResult>({
-    url: "http://localhost:8080/user/login",
+    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/user/login",
     config: config,
     body: formDataSubmitted,
   });

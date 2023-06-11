@@ -26,7 +26,7 @@ export const CommentReplySection = ({
       replyTo: "COMMENT",
       replyId: commentId,
       pageNumber: 1,
-      numberOfItem: 100,
+      numberOfItem: 25,
     });
 
     if (commentReplies && commentReplies.resultContext.success) {
@@ -46,7 +46,7 @@ export const CommentReplySection = ({
       replyTo: "COMMENT",
       replyId: commentId,
       pageNumber: 1,
-      numberOfItem: 100,
+      numberOfItem: 25,
     });
 
     if (commentRepliesReFetch && commentRepliesReFetch.resultContext.success) {

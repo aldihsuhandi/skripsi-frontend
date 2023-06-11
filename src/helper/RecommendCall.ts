@@ -19,7 +19,7 @@ export const RecommendCall = async () => {
     };
 
     const result = await PostCall<ItemRecommendationResult>({
-      url: "http://localhost:8080/item/recommend",
+      url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/item/recommend",
       config: config,
       body: {},
     });

@@ -1,12 +1,17 @@
-import { CLIENT_ID, CLIENT_SECRET, TransactionCancelResult, TransactionFinishResult } from "@/types";
+import {
+  CLIENT_ID,
+  CLIENT_SECRET,
+  TransactionCancelResult,
+  TransactionFinishResult,
+} from "@/types";
 import { PostCall } from "../PostCall";
-import { CheckExistSessionLocal } from "../SessionHelper"
+import { CheckExistSessionLocal } from "../SessionHelper";
 
 export const TransactionCancel = async (id: string) => {
-    const session = CheckExistSessionLocal();
-    if(!session) {
-        return;
-    }
+  const session = CheckExistSessionLocal();
+  if (!session) {
+    return;
+  }
 
   const headers = {
     clientId: CLIENT_ID,
@@ -21,7 +26,7 @@ export const TransactionCancel = async (id: string) => {
   };
 
   const result = await PostCall<TransactionCancelResult>({
-    url: "http://localhost:8080/transaction/cancel",
+    url: "https://shumishumi-be-dot-moonlit-helper-388513.et.r.appspot.com/transaction/cancel",
     config: config,
     body: {
       transactionId: id,
@@ -31,4 +36,4 @@ export const TransactionCancel = async (id: string) => {
   if (result && result.resultContext.success) {
     return result;
   }
-}
+};
