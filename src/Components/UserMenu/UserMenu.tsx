@@ -14,7 +14,7 @@ import {
   HiHeart,
 } from "react-icons/hi2";
 
-import { HiMail } from "react-icons/hi";
+import { HiMail, HiClipboardList } from "react-icons/hi";
 import { MerchantApplyCall } from "@/helper/MerchantApplyCall";
 import { useRouter } from "next/router";
 
@@ -145,9 +145,9 @@ export const UserMenu = ({
                 </Link>
               </DropdownMenu.Item>
               <DropdownMenu.Item className="rounded-md p-2 hover:border hover:shadow-md">
-                <Link href="#" className="flex flex-row items-center">
-                  <HiCog8Tooth size={15} />
-                  <span className="px-2">Settings</span>
+                <Link href="/review" className="flex flex-row items-center">
+                  <HiClipboardList size={15} />
+                  <span className="px-2">Review</span>
                 </Link>
               </DropdownMenu.Item>
               <DropdownMenu.Item className="group rounded-md p-2 hover:bg-red-500">
