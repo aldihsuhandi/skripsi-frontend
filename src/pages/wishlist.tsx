@@ -52,7 +52,7 @@ export default function Wishlist() {
     ) {
       const itemQueried = await WishlistQuery({
         pageNumber: currentPage + 1,
-        numberOfItem: 5, // bisa di ganti2 ntar tpi later
+        numberOfItem: 10, // bisa di ganti2 ntar tpi later
         filters: {
           itemName: qWishString || "",
           pMin: pMinNumber,

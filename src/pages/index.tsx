@@ -28,7 +28,7 @@ export default function Home() {
 
     const items = await ItemFilterQuery({
       pageNumber: curPage,
-      numberOfItem: 5,
+      numberOfItem: 10,
       filters: {
         itemName: "",
         pMin: pMinNumber,

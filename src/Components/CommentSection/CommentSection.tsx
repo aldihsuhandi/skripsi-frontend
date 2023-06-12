@@ -22,7 +22,7 @@ export const CommentSection = ({ postId, userData }: CommentSectionProps) => {
       replyTo: "POST",
       replyId: postId,
       pageNumber: 1,
-      numberOfItem: 5,
+      numberOfItem: 10,
     });
 
     if (commentResult && commentResult.resultContext.success) {
@@ -39,7 +39,7 @@ export const CommentSection = ({ postId, userData }: CommentSectionProps) => {
       replyTo: "POST",
       replyId: postId,
       pageNumber: selectedPage.selected + 1,
-      numberOfItem: 5,
+      numberOfItem: 10,
     });
 
     if (commentResult && commentResult.resultContext.success) {
@@ -53,7 +53,7 @@ export const CommentSection = ({ postId, userData }: CommentSectionProps) => {
       replyTo: "POST",
       replyId: postId,
       pageNumber: page + 1,
-      numberOfItem: 5,
+      numberOfItem: 10,
     });
 
     if (commentResult && commentResult.resultContext.success) {

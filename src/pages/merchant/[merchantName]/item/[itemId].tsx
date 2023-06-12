@@ -163,11 +163,11 @@ export default function MerchantItem() {
       <div className="flex flex-col">
         <div className="flex flex-row">
           {logo}{" "}
-          <span className="self-center text-xl font-bold text-purple-900">
+          <span className="self-right text-xl font-bold text-purple-900">
             {level}
           </span>
         </div>
-        <div className="self-center whitespace-pre text-normal-yellow">
+        <div className="self-right whitespace-pre text-normal-yellow">
           {description}
         </div>
       </div>
@@ -188,14 +188,14 @@ export default function MerchantItem() {
         {!isLoading && itemData && itemData.item ? (
           <div className="m-0 flex min-h-screen flex-col py-0 lg:mx-auto lg:max-w-screen-lg lg:py-11 xl:max-w-screen-xl 2xl:max-w-screen-2xl">
             {/* 1. Row isi most of the content, kek images, merchant, interest dkk */}
-            <div className="mx-auto flex flex-col lg:flex-row">
+            <div className="mx-auto flex flex-col items-center justify-around px-3 lg:flex-row lg:px-0">
               {/* 1.1. Images */}
               <div className="flex flex-col px-3">
                 {/* 1.1.1 Image(s) */}
                 <ItemImagesMultiple imageIds={itemData.item.itemImages} />
               </div>
               {/* 1.2. Title, Interest Level, Item Desc, Rating, Cat, Hob, Merchant Info */}
-              <div className="flex flex-col px-0 lg:mx-14 lg:min-w-[460px]">
+              <div className="flex flex-col px-0 lg:mx-14 lg:w-[900px]">
                 {/* 1.2.1 Title */}
                 <h3 className="mb-2 text-2xl font-bold">
                   {itemData.item.itemName}
@@ -232,7 +232,7 @@ export default function MerchantItem() {
                   <span className="font-bold">{itemData.item.hobby}</span>
                 </h4>
                 {/* 1.2.5 Interest Level (Bru Merchant doang) */}
-                <div className="flex flex-row justify-between">
+                <div className="grid grid-cols-5 gap-2 pt-4">
                   <InterestLevelComponent
                     logo={
                       <HiBuildingStorefront
@@ -267,7 +267,7 @@ export default function MerchantItem() {
                   />
                 </div>
                 {/* 1.2.6 Item Desc (if any) */}
-                <span className="font-bold">Description:</span>
+                <span className="pt-2 font-bold">Description:</span>
                 <h5>
                   {itemData.item.itemDescription.length !== 0
                     ? itemData.item.itemDescription

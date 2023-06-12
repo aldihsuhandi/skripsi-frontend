@@ -34,7 +34,7 @@ export const QueryReviewCall = async (
       body: {
         type: type,
         needReview: needReview,
-        numberOfItem: 5,
+        numberOfItem: 10,
         pageNumber: pageNumber,
         merchantName: merchantName,
       },
