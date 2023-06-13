@@ -96,7 +96,7 @@ export default function Home() {
           </p>
           <div className="m-0 min-h-screen lg:mx-auto lg:flex lg:max-w-screen-lg  xl:max-w-screen-xl 2xl:max-w-screen-2xl">
             {isLoading ? (
-              <>Loading Placeholder</>
+              <>Loading...</>
             ) : (
               <>
                 {renderResult({

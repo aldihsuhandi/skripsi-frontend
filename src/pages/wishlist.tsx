@@ -183,7 +183,7 @@ export default function Wishlist() {
             </div>
 
             {isLoading ? (
-              <>Loading Placeholder</>
+              <>Loading...</>
             ) : (
               <div className="flex flex-col">
                 <div className="grid grid-cols-2 gap-4 py-2 px-2 lg:grid-cols-5 lg:py-4">

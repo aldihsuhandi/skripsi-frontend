@@ -179,7 +179,7 @@ export default function Search() {
           )}
           <div>
             {isLoading ? (
-              <>Loading Placeholder</>
+              <>Loading...</>
             ) : (
               <>
                 {renderResult({
