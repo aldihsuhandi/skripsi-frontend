@@ -53,11 +53,11 @@ export default function Login() {
         <title>Login</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <main>
-        <div className="flex h-screen bg-bright-white">
-          <div className="m-0 grid h-full w-full rounded-lg bg-bright-white shadow-2xl sm:grid-cols-1 md:grid-cols-1 lg:m-auto lg:h-3/4 lg:w-3/5 lg:grid-cols-2">
-            <div className="flex auto-cols-auto items-center bg-gradient-to-br from-blue-800 to-purple-800 lg:rounded-l-lg">
-              <div className="px-4 py-6 text-white md:mx-6 md:p-12">
+      <main className="">
+        <div className="flex h-screen ">
+          <div className="m-0 grid  h-auto w-full rounded-lg sm:grid-cols-1 md:grid-cols-1 lg:m-auto lg:w-3/5 lg:grid-cols-2 lg:border lg:border-solid lg:border-gray-200 lg:shadow">
+            <div className="flex auto-cols-auto items-center bg-gradient-to-br from-blue-800 to-purple-800 lg:rounded-l-lg lg:py-10">
+              <div className="px-4 py-6 text-white md:mx-6 md:p-12 lg:py-20">
                 <img className="h-full w-full" src="/LOGO-w-text-small.png" />
                 <h1 className="mb-2 mt-2 text-2xl font-semibold">SHUMISHUMI</h1>
                 <h1 className="mb-6 text-xl font-light italic">
@@ -65,7 +65,7 @@ export default function Login() {
                 </h1>
               </div>
             </div>
-            <div className="right flex flex-col justify-evenly">
+            <div className="flex flex-col justify-evenly lg:py-20">
               <div className="py-10 text-center">
                 <section className="mx-auto flex w-3/4 flex-col gap-10">
                   <div className="title">
@@ -84,7 +84,7 @@ export default function Login() {
                       const user_Login_Data: LoginRequest = {
                         email: values.email,
                         password: values.password,
-                        remembered: values.remembered
+                        remembered: values.remembered,
                       };
 
                       const resultFromCall = await LoginCall(user_Login_Data);
@@ -183,9 +183,11 @@ export default function Login() {
                           <Field
                             name="remembered"
                             type="checkbox"
-                            className="align-middle text-center"
+                            className="text-center align-middle"
                           />
-                          <p className="text-gray-600 px-1 align-middle text-center">remember me</p>
+                          <p className="px-1 text-center align-middle text-gray-600">
+                            remember me
+                          </p>
                         </label>
 
                         <div className="input-button">

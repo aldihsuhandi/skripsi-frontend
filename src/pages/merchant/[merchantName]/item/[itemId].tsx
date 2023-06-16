@@ -279,7 +279,7 @@ export default function MerchantItem() {
                 />
               </div>
               {/* 1.3. Quantity/Stock, buttons add to card/wishlist ect */}
-              <div className="flex h-fit w-80 flex-col self-center rounded-lg shadow-xl lg:self-start">
+              <div className="flex h-fit w-80 flex-col self-center rounded-lg border-2 border-solid border-gray-200 shadow-xl lg:self-start">
                 {/* Quantity -- Stock, Button */}
                 <div className="m-auto flex flex-col self-center py-2">
                   <span className="self-center">Quantity</span>
