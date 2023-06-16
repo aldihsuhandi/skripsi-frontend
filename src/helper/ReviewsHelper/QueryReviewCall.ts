@@ -15,55 +15,49 @@ export const QueryReviewCall = async (
   merchantName?: string
 ) => {
   const sessionString = CheckExistSessionLocal();
+  const headers = {
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    sessionId: sessionString,
+    "Content-Type": "application/json",
+    "Accept-Type": "application/json",
+  };
+
   if (sessionString) {
-    const headers = {
-      clientId: CLIENT_ID,
-      clientSecret: CLIENT_SECRET,
-      sessionId: sessionString,
-      "Content-Type": "application/json",
-      "Accept-Type": "application/json",
-    };
-
-    const config = {
-      headers: headers,
-    };
-
-    const result = await PostCall<QueryReviewResult>({
-      url: BE_URL + "/review/query",
-      config: config,
-      body: {
-        type: type,
-        needReview: needReview,
-        numberOfItem: 10,
-        pageNumber: pageNumber,
-        merchantName: merchantName,
-      },
-    });
-
-    if (result) {
-      if (!result.resultContext.success) {
-        toast.error(
-          "There is an error while trying to query your reviews! Please try again later!",
-          {
-            position: "top-center",
-            autoClose: 10000,
-            hideProgressBar: false,
-            theme: "colored",
-          }
-        );
-      }
-    }
-
-    return result;
-  } else {
-    toast.error("You need to be logged in to query your reviews!", {
-      position: "top-center",
-      autoClose: 10000,
-      hideProgressBar: false,
-      theme: "colored",
-    });
-    return undefined;
+    Object.assign(headers, { sessionId: sessionString });
   }
+
+  const config = {
+    headers: headers,
+  };
+
+  const result = await PostCall<QueryReviewResult>({
+    url: BE_URL + "/review/query",
+    config: config,
+    body: {
+      type: type,
+      needReview: needReview,
+      numberOfItem: 10,
+      pageNumber: pageNumber,
+      merchantName: merchantName,
+    },
+  });
+
+  if (result) {
+    if (!result.resultContext.success) {
+      toast.error(
+        "There is an error while trying to query your reviews! Please try again later!",
+        {
+          position: "top-center",
+          autoClose: 10000,
+          hideProgressBar: false,
+          theme: "colored",
+        }
+      );
+    }
+  }
+
+  return result;
 };
 
 export const DetailReviewCall = async (id: string) => {
