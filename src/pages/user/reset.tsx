@@ -16,18 +16,7 @@ import { ForgotPassCall } from "@/helper/ForgotPassCall";
 import { toast } from "react-toastify";
 import classNames from "classnames";
 
-//di reset_password page ntar jgn lupa request/await/panggil si (apapun itulah) yg ada di dlm ResetPassQuerycall nya!!
-const initialValues: ForgotPassFormValues = {
-  email: "",
-  password: "",
-  confirmPassword: "",
-};
-
 const ResetPassSchema = Yup.object().shape({
-  email: Yup.string()
-    .required("Email is Required")
-    .email("Please enter a valid email"),
-
   password: Yup.string()
     .min(8, "Password minimum have length of 8")
     .matches(/[A-Z]/, "Password must have atleast 1 Uppercase letter")
@@ -51,7 +40,7 @@ export default function reset_password() {
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | undefined>(
     undefined
   );
-  const { e } = router.query;
+  const { q } = router.query;
 
   useEffect(() => {
     const queryEmailFunc = async (queried: string) => {
@@ -66,7 +55,7 @@ export default function reset_password() {
     };
 
     if (router.isReady) {
-      const email_e = urlFirstString(e);
+      const email_e = urlFirstString(q);
       if (email_e) {
         queryEmailFunc(email_e);
       }
@@ -77,7 +66,13 @@ export default function reset_password() {
         clearTimeout(timeoutId);
       }
     };
-  }, [timeoutId, e, router.isReady]);
+  }, [timeoutId, q, router.isReady]);
+
+  const initialValues: ForgotPassFormValues = {
+    email: resetQueried,
+    password: "",
+    confirmPassword: "",
+  };
 
   return (
     <>
@@ -109,122 +104,126 @@ export default function reset_password() {
                     </p>
                   </div>
 
-                  <Formik
-                    initialValues={initialValues}
-                    validationSchema={ResetPassSchema}
-                    onSubmit={async (values) => {
-                      const formDataResetPass: ForgotPassRequest = {
-                        email: values.email,
-                        password: values.password,
-                        confirmPassword: values.confirmPassword,
-                      };
+                  {resetQueried && (
+                    <Formik
+                      initialValues={initialValues}
+                      validationSchema={ResetPassSchema}
+                      onSubmit={async (values) => {
+                        const formDataResetPass: ForgotPassRequest = {
+                          email: values.email,
+                          password: values.password,
+                          confirmPassword: values.confirmPassword,
+                        };
 
-                      const resultFromCall: ForgotPassResult | undefined =
-                        await ForgotPassCall(formDataResetPass);
-                      if (resultFromCall) {
-                        if (resultFromCall.resultContext.success) {
-                          setIsSuccess(true);
-                          setResultMessage(
-                            "Your Password has been Successfully Reset! Redirecting to login page shortly!"
-                          );
-                          const timer = setTimeout(() => {
-                            router.push("/login");
-                          }, 2000);
-                          setTimeoutId(timer);
-                        } else {
-                          setResultMessage(
-                            resultFromCall.resultContext.resultMsg
-                          );
+                        const resultFromCall: ForgotPassResult | undefined =
+                          await ForgotPassCall(formDataResetPass);
+                        if (resultFromCall) {
+                          if (resultFromCall.resultContext.success) {
+                            setIsSuccess(true);
+                            setResultMessage(
+                              "Your Password has been Successfully Reset! Redirecting to login page shortly!"
+                            );
+                            const timer = setTimeout(() => {
+                              router.push("/login");
+                            }, 2000);
+                            setTimeoutId(timer);
+                          } else {
+                            setResultMessage(
+                              resultFromCall.resultContext.resultMsg
+                            );
+                          }
                         }
-                      }
-                    }}
-                  >
-                    {({ errors, touched }) => (
-                      <Form className="flex flex-col gap-5">
-                        {/*---> Email Input <---*/}
-                        <div className={styles.input_group}>
-                          <Field
-                            type="email"
-                            name="email"
-                            placeholder="email"
-                            className={styles.input_text}
-                          />
-                          <span className="icon flex items-center px-4">
-                            <HiAtSymbol size={25} />
-                          </span>
-                        </div>
-                        {/*---> Password Input <---*/}
-                        <div className={styles.input_group}>
-                          <Field
-                            type={`${show ? "text" : "password"}`}
-                            name="password"
-                            placeholder="password"
-                            className={styles.input_text}
-                          />
-                          <span
-                            className="icon flex items-center px-4"
-                            onClick={() => setShow(!show)}
-                          >
-                            <HiFingerPrint size={25} />
-                          </span>
-                        </div>
-                        {/*---> Confirm Password Input <---*/}
-                        <div className={styles.input_group}>
-                          <Field
-                            type={`${show ? "text" : "password"}`}
-                            name="confirmPassword"
-                            placeholder="confirm password"
-                            className={styles.input_text}
-                          />
-                          <span
-                            className="icon flex items-center px-4"
-                            onClick={() => setShow(!show)}
-                          >
-                            <HiFingerPrint size={25} />
-                          </span>
-                        </div>
-
-                        {errors.email && touched.email && (
-                          <div>
-                            <p className="text-red-600">{errors.email}</p>
+                      }}
+                    >
+                      {({ errors, touched }) => (
+                        <Form className="flex flex-col gap-5">
+                          {/*---> Email Input <---*/}
+                          <div className={styles.input_group}>
+                            <Field
+                              type="email"
+                              name="email{}"
+                              value={resetQueried}
+                              disabled
+                              className={styles.input_text}
+                            />
+                            <span className="icon flex items-center px-4">
+                              <HiAtSymbol size={25} />
+                            </span>
                           </div>
-                        )}
-
-                        {errors.password && touched.password && (
-                          <div>
-                            <p className="text-red-600">{errors.password}</p>
-                          </div>
-                        )}
-
-                        {errors.confirmPassword && touched.confirmPassword && (
-                          <div>
-                            <p className="text-red-600">
-                              {errors.confirmPassword}
-                            </p>
-                          </div>
-                        )}
-
-                        {resultMessage && (
-                          <div>
-                            <p
-                              className={classNames(
-                                { "text-green-500": isSuccess },
-                                { "text-red-500": !isSuccess }
-                              )}
+                          {/*---> Password Input <---*/}
+                          <div className={styles.input_group}>
+                            <Field
+                              type={`${show ? "text" : "password"}`}
+                              name="password"
+                              placeholder="password"
+                              className={styles.input_text}
+                            />
+                            <span
+                              className="icon flex items-center px-4"
+                              onClick={() => setShow(!show)}
                             >
-                              {resultMessage}
-                            </p>
+                              <HiFingerPrint size={25} />
+                            </span>
                           </div>
-                        )}
+                          {/*---> Confirm Password Input <---*/}
+                          <div className={styles.input_group}>
+                            <Field
+                              type={`${show ? "text" : "password"}`}
+                              name="confirmPassword"
+                              placeholder="confirm password"
+                              className={styles.input_text}
+                            />
+                            <span
+                              className="icon flex items-center px-4"
+                              onClick={() => setShow(!show)}
+                            >
+                              <HiFingerPrint size={25} />
+                            </span>
+                          </div>
 
-                        <div className="input-button">
-                          <button type="submit" className={styles.button}>
-                            Reset Password
-                          </button>
-                        </div>
-                      </Form>
-                    )}
-                  </Formik>
+                          {errors.email && touched.email && (
+                            <div>
+                              <p className="text-red-600">{errors.email}</p>
+                            </div>
+                          )}
+
+                          {errors.password && touched.password && (
+                            <div>
+                              <p className="text-red-600">{errors.password}</p>
+                            </div>
+                          )}
+
+                          {errors.confirmPassword &&
+                            touched.confirmPassword && (
+                              <div>
+                                <p className="text-red-600">
+                                  {errors.confirmPassword}
+                                </p>
+                              </div>
+                            )}
+
+                          {resultMessage && (
+                            <div>
+                              <p
+                                className={classNames(
+                                  { "text-green-500": isSuccess },
+                                  { "text-red-500": !isSuccess }
+                                )}
+                              >
+                                {resultMessage}
+                              </p>
+                            </div>
+                          )}
+
+                          <div className="input-button">
+                            <button type="submit" className={styles.button}>
+                              Reset Password
+                            </button>
+                          </div>
+                        </Form>
+                      )}
+                    </Formik>
+                  )}
                 </section>
               </div>
             </div>
