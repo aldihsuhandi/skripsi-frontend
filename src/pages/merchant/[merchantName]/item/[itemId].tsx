@@ -174,6 +174,27 @@ export default function MerchantItem() {
     );
   };
 
+  const handleCopyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast.success("URL copied to clipboard", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        theme: "colored",
+      });
+    } catch (error) {
+      toast.error("Failed to copy URL to clipboard:", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        theme: "colored",
+      });
+    }
+  };
+
+  const noop = () => {};
+
   return (
     <>
       <Head>
@@ -454,7 +475,10 @@ export default function MerchantItem() {
                       />
                     </button>
                   )}
-                  <div className="rounded bg-normal-blue px-1">
+                  <div
+                    className="cursor-pointer rounded bg-normal-blue px-1"
+                    onClick={isLoading ? noop : handleCopyToClipboard}
+                  >
                     <HiShare
                       className="text-white"
                       style={{ height: "1.7em", width: "1.7em" }}

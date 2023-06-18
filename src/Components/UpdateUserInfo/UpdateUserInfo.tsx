@@ -1,30 +1,20 @@
-import { HiUser, HiPhone, HiHome, HiFaceSmile } from "react-icons/hi2";
-import {
-  HiMail,
-  HiFolderAdd,
-  HiEmojiHappy,
-  HiFingerPrint,
-} from "react-icons/hi";
-import { StringToDateAndBack } from "@/helper";
-import Link from "next/link";
-import { ImageDownload, ProcessImgBE } from "@/helper";
+import { ImageDownload, ProcessImgBE, StringToDateAndBack } from "@/helper";
+import { UpdateProfileCall } from "@/helper/UpdateProfileCall";
 import {
   UpdateProfileFormValues,
   UpdateProfileRequest,
   UpdateProfileResult,
   UserSummary,
 } from "@/types/User";
-import React, { HTMLAttributes, useEffect, useRef, useState } from "react";
-import { Avatar } from "@/Components/Avatar";
-import * as Yup from "yup";
-import { useRouter } from "next/router";
-import Head from "next/head";
-import { Field, Form, Formik } from "formik";
-import { UpdateProfileCall } from "@/helper/UpdateProfileCall";
-import styles from "../../styles/Form.module.css";
 import classNames from "classnames";
-import { ImageUpload } from "@/helper/ImageUploadCall";
-import { ImageUploadResult } from "@/types/Image";
+import { Field, Form, Formik } from "formik";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { HTMLAttributes, useEffect, useRef, useState } from "react";
+import { HiEmojiHappy, HiFingerPrint, HiMail } from "react-icons/hi";
+import { HiPhone, HiUser } from "react-icons/hi2";
+import * as Yup from "yup";
+import styles from "../../styles/Form.module.css";
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024; //2MB
 const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
@@ -117,6 +107,10 @@ export const UpdateUserInfo = ({ oldUserData, ...props }: OldUserInfoProps) => {
     undefined
   );
 
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | undefined>(
+    undefined
+  );
+
   let phnNum = oldUserData.phoneNumber; //Bwt nampilin placeholdernya phone number
 
   useEffect(() => {
@@ -135,7 +129,13 @@ export const UpdateUserInfo = ({ oldUserData, ...props }: OldUserInfoProps) => {
       }
     }
     getUserPfp();
-  }, [oldUserData.profilePicture]);
+
+    return () => {
+      if (timeoutId !== undefined) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [timeoutId, oldUserData.profilePicture]);
 
   return (
     <div className="mx-auto sm:p-6 md:p-12">
@@ -144,21 +144,6 @@ export const UpdateUserInfo = ({ oldUserData, ...props }: OldUserInfoProps) => {
           initialValues={initialValues}
           validationSchema={updateProfileSchema}
           onSubmit={async (values) => {
-            // async function uploadImage() {
-            //   if (values.profilePicture) {
-            //     const uploadImgResult = await ImageUpload({
-            //       image: values.profilePicture,
-            //     });
-            //     console.log(uploadImgResult?.data.imageId + "dalem function");
-            //     console.log(
-            //       typeof uploadImgResult?.data.imageId + "dalem function"
-            //     );
-            //     setUploadImg(uploadImgResult?.data.imageId);
-            //     console.log(uploadImg + "setelah set");
-            //   }
-            // }
-            // await uploadImage();
-            // console.log(uploadImg);
             const formUpdateProfile: UpdateProfileRequest = {
               email: !values.email ? oldUserData.email : values.email,
               username: !values.username
@@ -185,15 +170,19 @@ export const UpdateUserInfo = ({ oldUserData, ...props }: OldUserInfoProps) => {
               canTelegram: values.canTelegram,
             };
 
-            // console.log(values?.province);
-
             const resultFromCall: UpdateProfileResult | undefined =
               await UpdateProfileCall(formUpdateProfile);
 
             if (resultFromCall) {
               if (resultFromCall.resultContext.success) {
                 setIsSuccess(true);
-                setResultMessage("Your Profile has Successfully been Updated!");
+                setResultMessage(
+                  "Your Profile has Successfully been Updated! \n Redirecting you to the profile page shortly"
+                );
+                const timer = setTimeout(() => {
+                  router.push("/UserProfile");
+                }, 2000);
+                setTimeoutId(timer);
               } else {
                 setResultMessage(resultFromCall.resultContext.resultMsg);
               }
