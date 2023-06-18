@@ -59,7 +59,19 @@ const RegisterSchema = Yup.object().shape({
 
   gender: Yup.string().required("You have to choose your gender!"),
 
-  dateOfBirth: Yup.date().required("You must input your birthday!"),
+  dateOfBirth: Yup.date()
+    .required("You must input your birthday!")
+    .max(new Date(), "Time travel is not invented yet!")
+    .test(
+      "is-of-age",
+      "M8, You must be atleast 18 years old",
+      function (value) {
+        const currentDate = new Date();
+        const minDate = new Date();
+        minDate.setFullYear(currentDate.getFullYear() - 18);
+        return value <= minDate;
+      }
+    ),
 
   phoneNumber: Yup.string()
     .required("Phone Number cannot be empty!")
@@ -369,6 +381,13 @@ export default function Register() {
                             component="div"
                             className="text-red-600"
                           />
+                          {errors.dateOfBirth && touched.dateOfBirth && (
+                            <div>
+                              <p className="text-red-600">
+                                {errors.dateOfBirth}
+                              </p>
+                            </div>
+                          )}
 
                           {/* {errors.dateOfBirth && touched.dateOfBirth ? <div><p className="text-red-600">{errors.dateOfBirth}</p></div> : null} */}
 
